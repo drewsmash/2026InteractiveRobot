@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 RT59 Interactive Robot</title>
+    
+    <style>
+        /* 1. Core Layout */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: "Segoe UI", Arial, sans-serif; 
+            background-color: #1e1e1e; 
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+        }
+        
+        /* 2. Header & Nav (Fixed top and bottom) */
+        header { 
+            background: #2d2d2d; 
+            padding: 15px 25px; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .project-name { 
+            margin: 0; 
+            font-size: 1.4rem; 
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .model-nav { 
+            background: #3d3d3d; 
+            padding: 12px 15px; 
+            display: flex; 
+            gap: 10px; 
+            justify-content: center;
+            overflow-x: auto;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .viewer-controls button { 
+            background: #0078d7; color: white; border: none; padding: 8px 15px; 
+            cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.9rem;
+        }
+        .viewer-controls button:hover { background: #005a9e; }
+        
+        .nav-btn { 
+            background: #555; color: white; border: 2px solid transparent; 
+            padding: 10px 20px; cursor: pointer; border-radius: 6px; font-size: 1rem; flex-shrink: 0;
+        }
+        .nav-btn:hover { background: #777; }
+        .nav-btn.active { background: #0078d7; border-color: #5ce1e6; box-shadow: 0 0 10px rgba(0, 120, 215, 0.5); }
+        .hidden { display: none !important; }
+
+        /* 3. The Viewer Area (Where the magic happens) */
+        #viewer { 
+            flex-grow: 1; /* Takes up all space between header and nav */
+            position: relative; 
+            width: 100%;
+            overflow: hidden;
+            display: grid; /* Grid allows us to stack the loader and image perfectly */
+            place-items: center;
+        }
+
+        /* Stack everything injected by the scripts into the exact center */
+        #viewer > * {
+            grid-area: 1 / 1; 
+        }
+
+        /* 4. Target the script-injected classes and images */
+        .vr { 
+            width: 100%; 
+            height: 100%; 
+            cursor: grab; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .vr:active { cursor: grabbing; }
+
+        /* Constrain the images so they are large but don't clip */
+        #viewer img, .vr img {
+            max-width: 95vw;
+            max-height: calc(100vh - 160px); /* Keeps it from overlapping the header/nav */
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+    </style>
+    
+    <script src="js/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/browserdetect.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/apple_core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/vr.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/wheelzoom.js" type="text/javascript"></script>
+    <script src="js/observers.js" type="text/javascript" defer></script>
+    <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1 class="project-name">Viewing Full Robot</h1>
+        <div class="viewer-controls">
+            <button id="btn-actual">Actual Size</button>
+            <button id="btn-fit" class="hidden">Fit to Screen</button>
+        </div>
+    </header>
+
+    <div id="viewer">
+        </div>
+
+    <div class="model-nav">
+        <button class="nav-btn active" data-model="robot/images" data-frames="[30, 8]" data-invert="[false, false]">Robot</button>
+        <button class="nav-btn" data-model="shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
+        <button class="nav-btn" data-model="tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
+        <button class="nav-btn" data-model="intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
+        <button class="nav-btn" data-model="indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
+    </div>
+
+</body>
+</html>
