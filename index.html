@@ -3,79 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 RT59 Interactive Robot</title>
+    <title>2026 RT59 Interactive Robot Viewer</title>
     
     <style>
+        /* =========================================
+           RT59 "Dark Tech" Theme - Ramtech Colors
+           Palette: Deep Space (#0a0a12), 
+                    Electric Blue (#00a8ff), 
+                    Neon Green (#00ff88), 
+                    Graphite (#2d2d3a)
+           ========================================= */
+
         /* 1. Core Layout */
         body { 
             margin: 0; 
             padding: 0; 
-            font-family: "Segoe UI", Arial, sans-serif; 
-            background-color: #1e1e1e; 
-            color: #ffffff;
+            font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace; /* Tech/Code font */
+            background-color: #0a0a12; /* Deep space background */
+            color: #e0e0e0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden; 
         }
         
-        /* 2. Header & Nav (Fixed top and bottom) */
+        /* 2. Header (Fixed top) */
         header { 
-            background: #2d2d2d; 
-            padding: 15px 25px; 
+            background: #1a1a2e; /* Slightly lighter deep blue */
+            padding: 10px 25px; 
             display: flex; 
-            flex-direction: column;
-            justify-content: center; 
+            justify-content: space-between; 
             align-items: center; 
-            gap: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
             z-index: 10;
             flex-shrink: 0;
+            border-bottom: 2px solid #00a8ff; /* Electric Blue accent */
         }
 
         .project-name { 
             margin: 0; 
-            font-size: 1.4rem; 
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-align: center;
+            font-size: 1.2rem; 
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff88; /* Neon Green highlight */
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
         }
 
+        /* 3. Navigation Bar (Fixed bottom) */
         .model-nav { 
-            background: #3d3d3d; 
-            padding: 12px 15px; 
+            background: #1a1a2e; 
+            padding: 15px; 
             display: flex; 
-            gap: 10px; 
+            gap: 12px; 
             justify-content: center;
             overflow-x: auto;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
             z-index: 10;
             flex-shrink: 0;
+            border-top: 2px solid #00a8ff; /* Electric Blue accent */
         }
 
-        /* Buttons */
+        /* 4. Styled Buttons */
+        .viewer-controls button, .nav-btn {
+            font-family: inherit;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer; 
+            border-radius: 4px; 
+            transition: all 0.2s ease-in-out;
+            outline: none;
+        }
+
+        /* Top controls (Fit/Actual) */
         .viewer-controls button { 
-            background: #0078d7; color: white; border: none; padding: 8px 15px; 
-            cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.9rem;
+            background: transparent;
+            color: #00a8ff;
+            border: 2px solid #00a8ff;
+            padding: 6px 15px; 
+            font-size: 0.8rem;
         }
-        .viewer-controls button:hover { background: #005a9e; }
+        .viewer-controls button:hover { 
+            background: rgba(0, 168, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+        }
         
+        /* Bottom navigation buttons */
         .nav-btn { 
-            background: #555; color: white; border: 2px solid transparent; 
-            padding: 10px 20px; cursor: pointer; border-radius: 6px; font-size: 1rem; flex-shrink: 0;
+            background: #2d2d3a; /* Graphite */
+            color: #c0c0c0;
+            border: 2px solid transparent; 
+            padding: 10px 20px; 
+            font-size: 0.9rem;
+            flex-shrink: 0;
         }
-        .nav-btn:hover { background: #777; }
-        .nav-btn.active { background: #0078d7; border-color: #5ce1e6; box-shadow: 0 0 10px rgba(0, 120, 215, 0.5); }
+        .nav-btn:hover { 
+            background: #3d3d4a; 
+            color: #fff;
+        }
+        /* Active State: The Electric Blue glow */
+        .nav-btn.active { 
+            background: #0078d7; 
+            color: #fff;
+            border-color: #5ce1e6; /* Cyan secondary accent */
+            box-shadow: 0 0 15px rgba(0, 120, 215, 0.8);
+            transform: translateY(-2px); /* Subtle lift */
+        }
         .hidden { display: none !important; }
 
-        /* 3. The Viewer Area (Where the magic happens) */
+        /* 5. The Viewer Area (Where the magic happens) */
         #viewer { 
             flex-grow: 1; /* Takes up all space between header and nav */
             position: relative; 
             width: 100%;
             overflow: hidden;
-            display: grid; /* Grid allows us to stack the loader and image perfectly */
+            display: grid; /* Stacks loader and image perfectly */
             place-items: center;
+            /* Subtle futuristic grid pattern on background */
+            background-image: 
+                linear-gradient(rgba(0, 168, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 168, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
 
         /* Stack everything injected by the scripts into the exact center */
@@ -83,7 +132,7 @@
             grid-area: 1 / 1; 
         }
 
-        /* 4. Target the script-injected classes and images */
+        /* Injected 'VR' container class styling */
         .vr { 
             width: 100%; 
             height: 100%; 
@@ -95,15 +144,18 @@
         
         .vr:active { cursor: grabbing; }
 
-        /* Constrain the images so they are large but don't clip */
+        /* Consrain the images and add depth to the render */
         #viewer img, .vr img {
             max-width: 95vw;
-            max-height: calc(100vh - 160px); /* Keeps it from overlapping the header/nav */
+            /* Dynamic height restriction allows for various aspect ratios without clipping */
+            max-height: calc(100vh - 160px); 
             width: auto !important;
             height: auto !important;
             object-fit: contain;
             user-select: none;
             -webkit-user-drag: none;
+            /* Glow effect for the robot itself */
+            filter: drop-shadow(0 0 15px rgba(0, 168, 255, 0.3));
         }
     </style>
     
@@ -114,6 +166,7 @@
     <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/wheelzoom.js" type="text/javascript"></script>
+    
     <script src="js/observers.js" type="text/javascript" defer></script>
     <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
 </head>
@@ -131,11 +184,11 @@
         </div>
 
     <div class="model-nav">
-        <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">Robot</button>
-        <button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
-        <button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
-        <button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
-        <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
+        <button class="nav-btn active" data-model="robot/images" data-frames="[30, 8]" data-invert="[false, false]">Robot</button>
+        <button class="nav-btn" data-model="shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
+        <button class="nav-btn" data-model="tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
+        <button class="nav-btn" data-model="intake/images" data-frames="[30, 1]" data-invert="[false, false]">Intake</button>
+        <button class="nav-btn" data-model="indexer/images" data-frames="[30, 1]" data-invert="[false, false]">Indexer</button>
     </div>
 
 </body>
