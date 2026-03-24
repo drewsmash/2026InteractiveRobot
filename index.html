@@ -6,20 +6,11 @@
     <title>2026 RT59 Interactive Robot Viewer</title>
     
     <style>
-        /* =========================================
-           RT59 "Dark Tech" Theme - Ramtech Colors
-           Palette: Deep Space (#0a0a12), 
-                    Electric Blue (#00a8ff), 
-                    Neon Green (#00ff88), 
-                    Graphite (#2d2d3a)
-           ========================================= */
-
-        /* 1. Core Layout */
         body { 
             margin: 0; 
             padding: 0; 
-            font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace; /* Tech/Code font */
-            background-color: #0a0a12; /* Deep space background */
+            font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
+            background-color: #0B1528; 
             color: #e0e0e0;
             height: 100vh;
             display: flex;
@@ -27,9 +18,8 @@
             overflow: hidden; 
         }
         
-        /* 2. Header (Fixed top) */
         header { 
-            background: #1a1a2e; /* Slightly lighter deep blue */
+            background: #132540; 
             padding: 10px 25px; 
             display: flex; 
             justify-content: space-between; 
@@ -37,7 +27,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.7);
             z-index: 10;
             flex-shrink: 0;
-            border-bottom: 2px solid #00a8ff; /* Electric Blue accent */
+            border-bottom: 2px solid #FFD700; 
         }
 
         .project-name { 
@@ -46,13 +36,12 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #00ff88; /* Neon Green highlight */
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+            color: #FFD700; 
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
         }
 
-        /* 3. Navigation Bar (Fixed bottom) */
         .model-nav { 
-            background: #1a1a2e; 
+            background: #132540; 
             padding: 15px; 
             display: flex; 
             gap: 12px; 
@@ -61,10 +50,9 @@
             box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
             z-index: 10;
             flex-shrink: 0;
-            border-top: 2px solid #00a8ff; /* Electric Blue accent */
+            border-top: 2px solid #FFD700; 
         }
 
-        /* 4. Styled Buttons */
         .viewer-controls button, .nav-btn {
             font-family: inherit;
             text-transform: uppercase;
@@ -76,63 +64,61 @@
             outline: none;
         }
 
-        /* Top controls (Fit/Actual) */
         .viewer-controls button { 
             background: transparent;
-            color: #00a8ff;
-            border: 2px solid #00a8ff;
+            color: #FFD700;
+            border: 2px solid #FFD700;
             padding: 6px 15px; 
             font-size: 0.8rem;
         }
+        
         .viewer-controls button:hover { 
-            background: rgba(0, 168, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+            background: #FFD700;
+            color: #0B1528;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
-        /* Bottom navigation buttons */
         .nav-btn { 
-            background: #2d2d3a; /* Graphite */
-            color: #c0c0c0;
+            background: #1D3459; 
+            color: #A0B0C0;
             border: 2px solid transparent; 
             padding: 10px 20px; 
             font-size: 0.9rem;
             flex-shrink: 0;
         }
+        
         .nav-btn:hover { 
-            background: #3d3d4a; 
+            background: #284675; 
             color: #fff;
         }
-        /* Active State: The Electric Blue glow */
+        
         .nav-btn.active { 
-            background: #0078d7; 
-            color: #fff;
-            border-color: #5ce1e6; /* Cyan secondary accent */
-            box-shadow: 0 0 15px rgba(0, 120, 215, 0.8);
-            transform: translateY(-2px); /* Subtle lift */
+            background: #FFD700; 
+            color: #0B1528;
+            border-color: #FFF2A8; 
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px); 
         }
+        
         .hidden { display: none !important; }
 
-        /* 5. The Viewer Area (Where the magic happens) */
         #viewer { 
-            flex-grow: 1; /* Takes up all space between header and nav */
+            flex-grow: 1; 
             position: relative; 
             width: 100%;
             overflow: hidden;
-            display: grid; /* Stacks loader and image perfectly */
+            display: grid; 
             place-items: center;
-            /* Subtle futuristic grid pattern on background */
             background-image: 
-                linear-gradient(rgba(0, 168, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 168, 255, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
         }
 
-        /* Stack everything injected by the scripts into the exact center */
         #viewer > * {
             grid-area: 1 / 1; 
         }
 
-        /* Injected 'VR' container class styling */
         .vr { 
             width: 100%; 
             height: 100%; 
@@ -144,18 +130,15 @@
         
         .vr:active { cursor: grabbing; }
 
-        /* Consrain the images and add depth to the render */
         #viewer img, .vr img {
             max-width: 95vw;
-            /* Dynamic height restriction allows for various aspect ratios without clipping */
             max-height: calc(100vh - 160px); 
             width: auto !important;
             height: auto !important;
             object-fit: contain;
             user-select: none;
             -webkit-user-drag: none;
-            /* Glow effect for the robot itself */
-            filter: drop-shadow(0 0 15px rgba(0, 168, 255, 0.3));
+            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
         }
     </style>
     
@@ -181,14 +164,14 @@
     </header>
 
     <div id="viewer">
-        </div>
+    </div>
 
     <div class="model-nav">
         <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">Robot</button>
         <button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
         <button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
-        <button class="nav-btn" data-model="Intake/images" data-frames="[30, 1]" data-invert="[false, false]">Intake</button>
-        <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 1]" data-invert="[false, false]">Indexer</button>
+        <button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
+        <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
     </div>
 
 </body>
