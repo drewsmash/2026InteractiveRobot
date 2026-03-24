@@ -26,6 +26,7 @@
            HEADER STYLES
            ========================================= */
         header { 
+            position: relative; /* REQUIRED for centering the middle logo */
             background: #1A212D; 
             padding: 12px 25px; 
             display: flex; 
@@ -42,7 +43,7 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            flex-wrap: wrap; /* Helps on extremely narrow phones */
+            flex-wrap: wrap; 
         }
 
         .header-logo {
@@ -60,6 +61,25 @@
             letter-spacing: 1.5px;
             color: #FFD700; 
             text-align: center;
+        }
+
+        /* --- CENTER LOGO STYLES --- */
+        .header-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .ramtech-logo {
+            height: 45px !important; 
+            width: auto !important;
+            max-width: 200px !important;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
         }
 
         .viewer-controls button { 
@@ -111,7 +131,7 @@
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            flex-shrink: 0; /* FIX 1: Prevents items from squishing on mobile */
+            flex-shrink: 0; 
         }
 
         .nav-label {
@@ -191,7 +211,6 @@
         }
 
         #viewer > * {
-            /* FIX 2: Restores dead-center alignment for desktop */
             position: absolute; 
             top: 0;
             left: 0;
@@ -214,7 +233,6 @@
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
-            /* FIX 3: Prevents distortion by only using max boundaries */
             max-width: 95% !important;
             max-height: 95% !important;
             width: auto !important;
@@ -233,6 +251,18 @@
                 flex-direction: column;
                 gap: 15px;
                 padding: 15px 10px;
+            }
+
+            /* Moves the Ramtech logo to the very top on phones */
+            .header-center {
+                position: static;
+                transform: none;
+                order: -1; 
+                margin-bottom: -5px;
+            }
+
+            .ramtech-logo {
+                height: 35px !important;
             }
 
             .project-name { font-size: 1.1rem; }
@@ -270,6 +300,11 @@
             <img src="Rico_logoSingleColorTrans.png" alt="RICO Logo" class="header-logo">
             <h1 class="project-name">RT59 | Viewing System</h1>
         </div>
+
+        <div class="header-center">
+            <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
+        </div>
+
         <div class="viewer-controls">
             <button id="btn-actual">Actual Size</button>
             <button id="btn-fit" class="hidden">Fit to Screen</button>
