@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 RT59 Interactive Robot Viewer</title>
     
     <style>
@@ -13,6 +13,8 @@
             background-color: #0B1528; 
             color: #e0e0e0;
             height: 100vh;
+            /* iOS Safari fix for 100vh */
+            height: 100dvh; 
             display: flex;
             flex-direction: column;
             overflow: hidden; 
@@ -38,6 +40,7 @@
             letter-spacing: 2px;
             color: #FFD700; 
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+            text-align: center;
         }
 
         .model-nav { 
@@ -47,10 +50,18 @@
             gap: 12px; 
             justify-content: center;
             overflow-x: auto;
+            /* Smooth scrolling for phones */
+            -webkit-overflow-scrolling: touch; 
             box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
             z-index: 10;
             flex-shrink: 0;
             border-top: 2px solid #FFD700; 
+        }
+
+        /* Hide scrollbar for the bottom nav but keep it scrollable */
+        .model-nav::-webkit-scrollbar {
+            height: 0px;
+            background: transparent;
         }
 
         .viewer-controls button, .nav-btn {
@@ -62,6 +73,7 @@
             border-radius: 4px; 
             transition: all 0.2s ease-in-out;
             outline: none;
+            white-space: nowrap; /* Prevents text inside buttons from wrapping */
         }
 
         .viewer-controls button { 
@@ -131,14 +143,41 @@
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
-            max-width: 95vw;
-            max-height: calc(100vh - 160px); 
+            /* Changed from vw/vh to % so it strictly obeys the #viewer container */
+            max-width: 95%;
+            max-height: 95%; 
             width: auto !important;
             height: auto !important;
             object-fit: contain;
             user-select: none;
             -webkit-user-drag: none;
             filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
+        }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS
+           ========================================= */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column; /* Stacks the title and button */
+                gap: 12px;
+                padding: 15px 10px;
+            }
+
+            .project-name {
+                font-size: 1rem;
+            }
+
+            .model-nav {
+                padding: 12px 10px;
+                justify-content: flex-start; /* Aligns to left so user knows to swipe */
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
         }
     </style>
     
