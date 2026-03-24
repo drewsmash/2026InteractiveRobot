@@ -3,68 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 RT59 Interactive Robot Viewer</title>
+    <title>RT59 | Viewing System</title>
     
     <style>
         body { 
             margin: 0; 
             padding: 0; 
             font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
-            background-color: #0B1528; 
+            background-color: #11151C; /* Slightly deeper, more neutral dark background to match mockup */
             color: #e0e0e0;
             height: 100vh;
-            /* iOS Safari fix for 100vh */
             height: 100dvh; 
             display: flex;
             flex-direction: column;
             overflow: hidden; 
         }
         
+        /* =========================================
+           HEADER STYLES
+           ========================================= */
         header { 
-            background: #132540; 
-            padding: 10px 25px; 
+            background: #1A212D; 
+            padding: 12px 25px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.7);
             z-index: 10;
             flex-shrink: 0;
-            border-bottom: 2px solid #FFD700; 
+            border-bottom: 1px solid #FFD700; 
+        }
+
+        /* Container for Logo + Title */
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            height: 35px; /* Scales the RICO logo perfectly in the header */
+            width: auto;
+            object-fit: contain;
         }
 
         .project-name { 
             margin: 0; 
-            font-size: 1.2rem; 
-            font-weight: 900;
+            font-size: 1.3rem; 
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             color: #FFD700; 
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-            text-align: center;
         }
 
-        .model-nav { 
-            background: #132540; 
-            padding: 15px; 
-            display: flex; 
-            gap: 12px; 
-            justify-content: center;
-            overflow-x: auto;
-            /* Smooth scrolling for phones */
-            -webkit-overflow-scrolling: touch; 
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-            z-index: 10;
-            flex-shrink: 0;
-            border-top: 2px solid #FFD700; 
-        }
-
-        /* Hide scrollbar for the bottom nav but keep it scrollable */
-        .model-nav::-webkit-scrollbar {
-            height: 0px;
-            background: transparent;
-        }
-
-        .viewer-controls button, .nav-btn {
+        /* Top Right Buttons */
+        .viewer-controls button { 
             font-family: inherit;
             text-transform: uppercase;
             font-weight: bold;
@@ -73,47 +66,113 @@
             border-radius: 4px; 
             transition: all 0.2s ease-in-out;
             outline: none;
-            white-space: nowrap; /* Prevents text inside buttons from wrapping */
-        }
-
-        .viewer-controls button { 
             background: transparent;
             color: #FFD700;
             border: 2px solid #FFD700;
-            padding: 6px 15px; 
+            padding: 8px 18px; 
             font-size: 0.8rem;
         }
         
         .viewer-controls button:hover { 
             background: #FFD700;
-            color: #0B1528;
+            color: #11151C;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
-        
+
+        /* =========================================
+           NAVIGATION BAR STYLES
+           ========================================= */
+        .model-nav { 
+            background: #1A212D; 
+            padding: 15px 20px; 
+            display: flex; 
+            gap: 20px; 
+            justify-content: center;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+            z-index: 10;
+            flex-shrink: 0;
+            border-top: 1px solid #FFD700; 
+        }
+
+        .model-nav::-webkit-scrollbar {
+            height: 0px;
+            background: transparent;
+        }
+
+        /* Wrapper for Label + Button */
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* The small text above the buttons */
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #FFD700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* Make the label blue if the button below it is active */
+        .nav-item:has(.active) .nav-label {
+            color: #00a8ff;
+            text-shadow: 0 0 8px rgba(0, 168, 255, 0.4);
+        }
+
         .nav-btn { 
-            background: #1D3459; 
+            font-family: inherit;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer; 
+            border-radius: 6px; 
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            background: #2A3441; 
             color: #A0B0C0;
             border: 2px solid transparent; 
-            padding: 10px 20px; 
-            font-size: 0.9rem;
-            flex-shrink: 0;
+            padding: 10px 25px; 
+            font-size: 0.95rem;
+            min-width: 120px; /* Keeps buttons uniform size */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .nav-btn:hover { 
-            background: #284675; 
+            background: #3B485A; 
             color: #fff;
         }
         
+        /* The Blue Active State */
         .nav-btn.active { 
-            background: #FFD700; 
-            color: #0B1528;
-            border-color: #FFF2A8; 
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            background: #0078d7; 
+            color: #ffffff;
+            border-color: #00a8ff; 
+            box-shadow: 0 0 15px rgba(0, 120, 215, 0.6);
             transform: translateY(-2px); 
+        }
+
+        /* Specific styling for the logo inside the button */
+        .nav-logo {
+            height: 20px;
+            width: auto;
+            object-fit: contain;
+            /* Optional: adds a tiny drop shadow to make the yellow pop on the blue */
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
         }
         
         .hidden { display: none !important; }
 
+        /* =========================================
+           VIEWER CORE STYLES
+           ========================================= */
         #viewer { 
             flex-grow: 1; 
             position: relative; 
@@ -121,6 +180,7 @@
             overflow: hidden;
             display: grid; 
             place-items: center;
+            /* Kept your subtle grid background */
             background-image: 
                 linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
@@ -143,7 +203,6 @@
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
-            /* Changed from vw/vh to % so it strictly obeys the #viewer container */
             max-width: 95%;
             max-height: 95%; 
             width: auto !important;
@@ -159,25 +218,26 @@
            ========================================= */
         @media (max-width: 768px) {
             header {
-                flex-direction: column; /* Stacks the title and button */
-                gap: 12px;
+                flex-direction: column;
+                gap: 15px;
                 padding: 15px 10px;
             }
 
-            .project-name {
-                font-size: 1rem;
-            }
+            .project-name { font-size: 1.1rem; }
+            .header-logo { height: 28px; }
 
             .model-nav {
                 padding: 12px 10px;
-                justify-content: flex-start; /* Aligns to left so user knows to swipe */
-                gap: 8px;
+                justify-content: flex-start; 
+                gap: 12px;
             }
 
             .nav-btn {
                 padding: 8px 16px;
-                font-size: 0.8rem;
+                font-size: 0.85rem;
+                min-width: 100px;
             }
+            .nav-logo { height: 16px; }
         }
     </style>
     
@@ -195,7 +255,10 @@
 <body>
 
     <header>
-        <h1 class="project-name">Viewing Full Robot</h1>
+        <div class="header-left">
+            <img src="Rico_logoSingleColorTrans.png" alt="RICO Logo" class="header-logo">
+            <h1 class="project-name">RT59 | Viewing System</h1>
+        </div>
         <div class="viewer-controls">
             <button id="btn-actual">Actual Size</button>
             <button id="btn-fit" class="hidden">Fit to Screen</button>
@@ -203,14 +266,37 @@
     </header>
 
     <div id="viewer">
-    </div>
+        </div>
 
     <div class="model-nav">
-        <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">Robot</button>
-        <button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
-        <button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
-        <button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
-        <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
+        
+        <div class="nav-item">
+            <span class="nav-label">Main Assembly</span>
+            <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">
+                <img src="Rico_logoSingleColorTrans.png" alt="RICO" class="nav-logo">
+            </button>
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-label">Shooter</span>
+            <button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-label">Tunnel</span>
+            <button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-label">Intake</span>
+            <button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-label">Indexer</span>
+            <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
+        </div>
+
     </div>
 
 </body>
