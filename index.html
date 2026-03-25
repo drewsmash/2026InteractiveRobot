@@ -119,6 +119,26 @@
     <script src="js/wheelzoom.js" type="text/javascript"></script>
     <script src="js/observers.js" type="text/javascript" defer></script>
     <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
+
+    <script type="text/javascript">
+        if (typeof AC !== 'undefined' && AC.VR) {
+            // 1. Slow down the intro animation (Default was 1 second)
+            AC.VR.options.introDuration = 2.5; 
+            
+            // 2. Set Auto-Spin Direction (+1 goes forward, -1 goes backward)
+            AC.VR.prototype.gotoNextFrame = function() {
+                this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
+            };
+
+            // 3. Slow down the Auto-Spin Speed (Higher ms = slower spin)
+            AC.VR.prototype.play = function(){
+                if (this.playing) return;
+                this.playing = true;
+                // Bumping to 85ms for smooth, unmistakably forward spin
+                this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
+            };
+        }
+    </script>
 </head>
 <body>
 
@@ -182,15 +202,17 @@
 
             function startSpinning() {
                 if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
-                    threeSixty._vr.play(); // Triggers the native Apple QuickTime spin!
+                    if (threeSixty._vr.grabbing) {
+                        resetIdleTimer();
+                    } else {
+                        threeSixty._vr.play(); 
+                    }
                 }
             }
 
             function stopSpinning() {
                 if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
-                    threeSixty._vr.pause(); // Triggers native pause
-                    
-                    // Forces the VR engine to forget it was spinning, preventing an instant-resume glitch
+                    threeSixty._vr.pause(); 
                     if (threeSixty._vr.onGrabStart) {
                         threeSixty._vr.onGrabStart.playing = false; 
                     }
@@ -219,8 +241,8 @@
                 }
             }
 
-            // HUMAN DETECTION: Capture events before the vr.js file processes them
-            ['mousedown', 'touchstart', 'wheel', 'mousemove', 'touchmove'].forEach(evt => {
+            // HUMAN DETECTION
+            ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
                 viewerContainer.addEventListener(evt, (e) => {
                     if (e.isTrusted && autoSpinMode) {
                         resetIdleTimer();
@@ -228,7 +250,6 @@
                 }, { passive: true, capture: true });
             });
 
-            // Toggles
             spinBtn.addEventListener('click', toggleAutoSpinMode);
 
             document.addEventListener('keydown', (e) => {
@@ -238,14 +259,12 @@
                 }
             });
 
-            // Prevent glitching when swapping models
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (autoSpinMode) resetIdleTimer();
                 });
             });
 
-            // Kick off the initial load timer safely
             let initCheck = setInterval(() => {
                 if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
                     clearInterval(initCheck);
@@ -287,31 +306,32 @@
                 }
             };
 
-            const buttons = document.querySelectorAll('.nav-btn');
             const titleEl = document.getElementById('panel-title');
             const leftEl = document.getElementById('panel-left-content');
             const rightEl = document.getElementById('panel-right-content');
             
-            const toggleMobileBtn = document.getElementById('mobile-info-btn');
-            const overlay = document.getElementById('info-overlay');
-
             function updatePanels(modelName) {
-                const data = subsystemData[modelName];
-                if(data) {
+                const data = subsystemData[modelName] || subsystemData["Robot"];
+                if(data && titleEl && leftEl && rightEl) {
                     titleEl.innerHTML = data.title;
                     leftEl.innerHTML = data.leftContent;
                     rightEl.innerHTML = data.rightContent;
                 }
             }
 
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    let modelName = btn.getAttribute('data-model').split('/')[0];
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    let modelFolder = btn.getAttribute('data-model');
+                    let modelName = modelFolder.split('/')[0];
                     updatePanels(modelName);
-                });
+                }, { capture: true });
             });
 
             updatePanels('Robot');
+
+            // --- 3. MOBILE DRAWER TOGGLE ---
+            const toggleMobileBtn = document.getElementById('mobile-info-btn');
+            const overlay = document.getElementById('info-overlay');
 
             if(toggleMobileBtn) {
                 toggleMobileBtn.addEventListener('click', () => {
