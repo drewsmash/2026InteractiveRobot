@@ -52,7 +52,7 @@ AC.VR.SpinIntro = function(vr){
 };
 
 AC.VR.options = {
-	imageIndexOffset: 1,        // (number)   maps the position [0,0] to image 001.jpg, etc.
+	imageIndexOffset: 14,        // (number)   maps the position [0,0] to image 001.jpg, etc.
 	loaders: 3,                 // (number)   how many concurrent image loaders
 	initialLoad: 4,             // (number)   images to load initially per row (4 = every 90 degrees)
 	noCache: false,             // (boolean)  append a random query string to the image URLs?
