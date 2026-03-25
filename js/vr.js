@@ -73,11 +73,11 @@ AC.VR.options = {
 	maxThrowDuration: 1.5,      // (number)   maximum throw duration in seconds
 
 	spinnable: true,            // (boolean)  add spinners to on axes marked as infinite?
-	minSpinDuration: 4,         // (number)   minimum time in seconds the VR will take to rotate 360 degrees
+	minSpinDuration: 3,         // (number)   minimum time in seconds the VR will take to rotate 360 degrees
 
 	intro: AC.VR.SpinIntro,     // (function) function that returns the intro sequence (array of position arrays)
 	introSpins: .8,            // (number)   times the VR rotates 360 degrees in the intro
-	introDuration: 5,           // (number)   intro duration in seconds
+	introDuration: 2,           // (number)   intro duration in seconds
 
 	mobileTotalFrames: null     // (mixed)    total frames to show on a mobile device (number or array)
 };
