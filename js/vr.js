@@ -61,8 +61,8 @@ AC.VR.options = {
 
 	infiniteAxis: [true,false], // (array)    defines which axes can spin infinitely
 
-	autoPlay: false,            // (boolean)  begin auto spin right away?
-	fps: 25,                    // (number)   frames per second (used for the intro, auto spinning, and throwing)
+	autoPlay: true,            // (boolean)  begin auto spin right away?
+	fps: 30,                    // (number)   frames per second (used for the intro, auto spinning, and throwing)
 
 	grabbable: true,            // (boolean)  can the user grab the VR to manually spin it?
 	grabRotateDistance: 1000,   // (number)   pixels the cursor must travel to view a full axis
