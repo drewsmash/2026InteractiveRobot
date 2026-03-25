@@ -127,7 +127,7 @@
             
             // 2. Set Auto-Spin Direction (+1 goes forward, -1 goes backward)
             AC.VR.prototype.gotoNextFrame = function() {
-                this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
+                this.gotoPos([ this.currentPos[0] - 1, this.currentPos[1] ]);
             };
 
             // 3. Slow down the Auto-Spin Speed (Higher ms = slower spin)
