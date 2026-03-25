@@ -56,7 +56,7 @@ AC.VR.options = {
 	loaders: 3,                 // (number)   how many concurrent image loaders
 	initialLoad: 4,             // (number)   images to load initially per row (4 = every 90 degrees)
 	noCache: false,             // (boolean)  append a random query string to the image URLs?
-	initialPos: [1,14],          // (mixed)    initial VR position (number or array)
+	initialPos: 14,          // (mixed)    initial VR position (number or array)
 	invert: [false,false],      // (mixed)    invert the x/y axes?
 
 	infiniteAxis: [true,false], // (array)    defines which axes can spin infinitely
