@@ -23,7 +23,7 @@
         }
         
         /* =========================================
-           HEADER STYLES
+           HEADER STYLES 
            ========================================= */
         header { 
             background: #1A212D; 
@@ -81,78 +81,36 @@
             align-items: center;
         }
 
-        /* Top Right Controls */
         .viewer-controls button { 
-            font-family: inherit;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            cursor: pointer; 
-            border-radius: 4px; 
-            transition: all 0.2s ease-in-out;
-            outline: none;
-            background: transparent;
-            color: #FFD700;
-            border: 2px solid #FFD700;
-            padding: 8px 18px; 
-            font-size: 0.8rem;
+            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+            cursor: pointer; border-radius: 4px; transition: all 0.2s ease-in-out; outline: none;
+            background: transparent; color: #FFD700; border: 2px solid #FFD700; padding: 8px 18px; font-size: 0.8rem;
         }
         
-        .viewer-controls button:hover { 
-            background: #FFD700;
-            color: #11151C;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
+        .viewer-controls button:hover { background: #FFD700; color: #11151C; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
 
-        /* Active state for the Smart Auto-Spin Button */
         #btn-spin.active-mode {
-            background: #00ff88;
-            color: #11151C;
-            border-color: #00ff88;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+            background: #00ff88; color: #11151C; border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
         }
 
-        /* Add keyboard shortcut hint for desktop */
         @media (min-width: 769px) {
-            #btn-spin::after {
-                content: " (Space)";
-                font-size: 0.65rem;
-                opacity: 0.7;
-                margin-left: 5px;
-            }
+            #btn-spin::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; }
         }
 
         /* =========================================
            NAVIGATION BAR STYLES
            ========================================= */
         .model-nav { 
-            background: #1A212D; 
-            padding: 15px 20px; 
-            display: flex; 
-            gap: 20px; 
-            justify-content: center;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; 
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-            z-index: 10;
-            flex-shrink: 0;
-            border-top: 1px solid #FFD700; 
+            background: #1A212D; padding: 15px 20px; display: flex; gap: 20px; justify-content: center;
+            overflow-x: auto; -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+            z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
         }
 
         .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
 
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; 
-        }
-
-        .nav-label {
-            font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px;
-            text-transform: uppercase; white-space: nowrap;
-        }
-
-        .nav-item:has(.active) .nav-label {
-            color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4);
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+        .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+        .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
 
         .nav-btn { 
             font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
@@ -162,40 +120,26 @@
         }
         
         .nav-btn:hover { background: #3B485A; color: #fff; }
-        .nav-btn.active { 
-            background: #0078d7; color: #ffffff; border-color: #00a8ff; 
-            box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); 
-        }
+        .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
 
-        .nav-logo {
-            height: 20px !important; width: auto !important; max-width: 80px !important;
-            object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
-        }
+        .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
         
         .hidden { display: none !important; }
 
         /* =========================================
            VIEWER CORE 
            ========================================= */
-        #main-content {
-            flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; 
-        }
+        #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
         #viewer { 
-            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; 
-            justify-content: center; align-items: center;
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
         }
 
-        #viewer > * {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-        }
+        #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
-        .vr { 
-            width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center;
-        }
+        .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
@@ -206,16 +150,9 @@
         /* =========================================
            INFO OVERLAYS (Base Styles)
            ========================================= */
-        .info-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box;
-        }
-
+        .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
         .side-panel { box-sizing: border-box; pointer-events: auto; }
-
-        .side-panel h2 {
-            color: #FFD700; font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-            padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .side-panel h2 { color: #FFD700; font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         .side-panel p { font-size: 0.85rem; line-height: 1.6; color: #A0B0C0; margin-bottom: 15px; }
         .side-panel ul { padding-left: 20px; font-size: 0.85rem; color: #e0e0e0; line-height: 1.6; }
         .side-panel li { margin-bottom: 10px; }
@@ -235,19 +172,13 @@
            ========================================= */
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; gap: 15px; padding: 15px 10px; }
-            .header-center { order: -1; margin-bottom: -5px; }
-            .header-left { justify-content: center; }
-            .header-right { justify-content: center; } 
+            .header-center { order: -1; margin-bottom: -5px; } .header-left, .header-right { justify-content: center; }
             
-            .ramtech-logo { height: 45px !important; }
-            .project-name { font-size: 1.1rem; }
-            .header-logo { height: 28px !important; }
+            .ramtech-logo { height: 45px !important; } .project-name { font-size: 1.1rem; } .header-logo { height: 28px !important; }
             
             .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
-            .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; }
-            .nav-logo { height: 16px !important; }
+            .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
 
-            /* Mobile Specs Drawer Overlay */
             .info-overlay {
                 background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px;
                 overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; 
@@ -257,7 +188,6 @@
             
             .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
 
-            /* Floating View Specs Button */
             #mobile-info-btn {
                 display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25; background: #0078d7; color: white; border: 2px solid #00a8ff;
                 padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
@@ -316,75 +246,67 @@
     </div>
 
     <div class="model-nav">
-        
         <div class="nav-item">
             <span class="nav-label">Main Assembly</span>
             <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">
                 <img src="Rico_logoSingleColorTrans.png" alt="RICO" class="nav-logo">
             </button>
         </div>
-
-        <div class="nav-item">
-            <span class="nav-label">Shooter</span>
-            <button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button>
-        </div>
-
-        <div class="nav-item">
-            <span class="nav-label">Tunnel</span>
-            <button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button>
-        </div>
-
-        <div class="nav-item">
-            <span class="nav-label">Intake</span>
-            <button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button>
-        </div>
-
-        <div class="nav-item">
-            <span class="nav-label">Indexer</span>
-            <button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button>
-        </div>
-        
-        <div class="nav-item">
-            <span class="nav-label">Swerve Wheel</span>
-            <button class="nav-btn" data-model="Wheel/images" data-frames="[30, 8]" data-invert="[false, false]">Swerve Wheel</button>
-        </div>
-
+        <div class="nav-item"><span class="nav-label">Shooter</span><button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button></div>
+        <div class="nav-item"><span class="nav-label">Tunnel</span><button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button></div>
+        <div class="nav-item"><span class="nav-label">Intake</span><button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button></div>
+        <div class="nav-item"><span class="nav-label">Indexer</span><button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button></div>
+        <div class="nav-item"><span class="nav-label">Swerve Wheel</span><button class="nav-btn" data-model="Wheel/images" data-frames="[30, 8]" data-invert="[false, false]">Swerve Wheel</button></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- 1. Smart Idle Auto-Spin Logic ---
+            // --- 1. THE "GHOST DRAG" AUTO-SPIN LOGIC ---
             const spinBtn = document.getElementById('btn-spin');
             const viewerContainer = document.getElementById('viewer');
             
-            let autoSpinMode = true; // Is the feature turned on globally?
-            let isActivelySpinning = false; // Is it currently rotating right now?
+            let autoSpinMode = true; 
+            let isActivelySpinning = false; 
             let idleTimer = null;
             let spinInterval = null;
             
             const idleDelay = 3000; // Wait 3 seconds of no interaction before spinning
-            const spinSpeedInMilliseconds = 80; 
+            const spinSpeedInMilliseconds = 50; // Triggers "ghost drag" every 50ms
+            let ghostX = 500; // Starting coordinate for our invisible mouse
 
-            // Starts the physical rotation
+            // The function that physically rotates the robot
             function startSpinning() {
                 if (autoSpinMode && !isActivelySpinning) {
                     isActivelySpinning = true;
+                    
                     spinInterval = setInterval(() => {
-                        const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39, which: 39, bubbles: true });
-                        document.dispatchEvent(rightArrowEvent);
-                        if(typeof threeSixty !== 'undefined' && threeSixty.nextFrame) { threeSixty.nextFrame(); }
+                        // Find the exact image wrapper SolidWorks is using
+                        const target = document.querySelector('.vr') || document.querySelector('#viewer img') || viewerContainer;
+                        if (!target) return;
+
+                        // 1. Invisible mouse clicks down
+                        target.dispatchEvent(new MouseEvent('mousedown', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
+                        
+                        // 2. Invisible mouse moves left by 10 pixels to spin robot right
+                        ghostX -= 10; 
+                        
+                        // 3. Invisible mouse drags and lets go
+                        document.dispatchEvent(new MouseEvent('mousemove', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
+                        document.dispatchEvent(new MouseEvent('mouseup', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
+
+                        // Reset position so our ghost mouse doesn't fall off the screen
+                        if (ghostX < 100) ghostX = 500;
+                        
                     }, spinSpeedInMilliseconds);
                 }
             }
 
-            // Stops the physical rotation immediately
             function stopSpinning() {
                 isActivelySpinning = false;
                 clearInterval(spinInterval);
             }
 
-            // Resets the 3-second countdown clock
             function resetIdleTimer() {
                 stopSpinning();
                 clearTimeout(idleTimer);
@@ -393,7 +315,6 @@
                 }
             }
 
-            // Toggles the entire Auto-Spin feature ON or OFF
             function toggleAutoSpinMode() {
                 autoSpinMode = !autoSpinMode;
                 if (autoSpinMode) {
@@ -408,37 +329,38 @@
                 }
             }
 
-            // Listen for any user interaction on the viewer to pause spinning
-            ['mousedown', 'mousemove', 'touchstart', 'touchmove', 'wheel'].forEach(evt => {
-                viewerContainer.addEventListener(evt, () => {
-                    if (autoSpinMode) resetIdleTimer();
+            // HUMAN DETECTION: Stop spinning if a REAL human grabs the robot
+            ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
+                viewerContainer.addEventListener(evt, (e) => {
+                    // e.isTrusted ensures we only pause if a real person did it, not our ghost mouse!
+                    if (e.isTrusted) {
+                        if (autoSpinMode) resetIdleTimer();
+                    }
                 }, { passive: true });
             });
 
-            // Toggle via Button Click
+            // Button and Keyboard Triggers
             spinBtn.addEventListener('click', toggleAutoSpinMode);
 
-            // Toggle via Spacebar 
             document.addEventListener('keydown', (e) => {
-                // Ignore spacebar if they are typing in an input (just in case you add search later)
                 if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault(); // Stops the page from scrolling down
+                    e.preventDefault(); 
                     toggleAutoSpinMode();
                 }
             });
 
-            // Reset the timer when they change models so it doesn't spin instantly while loading
+            // Prevent glitching when swapping models
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (autoSpinMode) resetIdleTimer();
                 });
             });
 
-            // Start the initial countdown
+            // Kick off the initial spin delay
             resetIdleTimer();
 
 
-            // --- 2. Subsystem Data Logic ---
+            // --- 2. SUBSYSTEM DATA LOGIC ---
             const subsystemData = {
                 "Robot": {
                     title: "RICO - Main Assembly",
