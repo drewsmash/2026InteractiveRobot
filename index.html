@@ -10,120 +10,57 @@
            CORE LAYOUT
            ========================================= */
         body { 
-            margin: 0; 
-            padding: 0; 
-            font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
-            background-color: #11151C; 
-            color: #e0e0e0;
-            height: 100vh;
-            height: 100dvh; 
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; 
+            margin: 0; padding: 0; font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
+            background-color: #11151C; color: #e0e0e0; height: 100vh; height: 100dvh; 
+            display: flex; flex-direction: column; overflow: hidden; 
         }
         
         /* =========================================
-           HEADER STYLES 
+           HEADER STYLES
            ========================================= */
         header { 
-            background: #1A212D; 
-            padding: 15px 25px; 
-            display: grid; 
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
-            z-index: 10;
-            flex-shrink: 0;
-            border-bottom: 2px solid #FFD700; 
+            background: #1A212D; padding: 15px 25px; display: grid; grid-template-columns: 1fr auto 1fr;
+            align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.7); z-index: 10; flex-shrink: 0; border-bottom: 2px solid #FFD700; 
         }
+        .header-left { display: flex; align-items: center; justify-content: flex-start; gap: 15px; flex-wrap: wrap; }
+        .header-logo { height: 35px !important; width: auto !important; max-width: 150px !important; object-fit: contain; }
+        .project-name { margin: 0; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #FFD700; }
+        
+        .header-center { display: flex; align-items: center; justify-content: center; }
+        .ramtech-logo { height: 100px !important; width: auto !important; max-width: 250px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 15px;
-            flex-wrap: wrap; 
-        }
-
-        .header-logo {
-            height: 35px !important; 
-            width: auto !important;
-            max-width: 150px !important; 
-            object-fit: contain;
-        }
-
-        .project-name { 
-            margin: 0; 
-            font-size: 1.3rem; 
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #FFD700; 
-        }
-
-        .header-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ramtech-logo {
-            height: 100px !important; 
-            width: auto !important;
-            max-width: 250px !important;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-        }
-
-        .header-right {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
+        .header-right { display: flex; justify-content: flex-end; align-items: center; }
 
         .viewer-controls button { 
-            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
-            cursor: pointer; border-radius: 4px; transition: all 0.2s ease-in-out; outline: none;
-            background: transparent; color: #FFD700; border: 2px solid #FFD700; padding: 8px 18px; font-size: 0.8rem;
+            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; 
+            border-radius: 4px; transition: all 0.2s ease-in-out; outline: none; background: transparent; color: #FFD700;
+            border: 2px solid #FFD700; padding: 8px 18px; font-size: 0.8rem;
         }
-        
         .viewer-controls button:hover { background: #FFD700; color: #11151C; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
 
-        #btn-spin.active-mode {
-            background: #00ff88; color: #11151C; border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
-        }
-
-        @media (min-width: 769px) {
-            #btn-spin::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; }
-        }
+        #btn-spin.active-mode { background: #00ff88; color: #11151C; border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
+        @media (min-width: 769px) { #btn-spin::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } }
 
         /* =========================================
            NAVIGATION BAR STYLES
            ========================================= */
         .model-nav { 
-            background: #1A212D; padding: 15px 20px; display: flex; gap: 20px; justify-content: center;
-            overflow-x: auto; -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-            z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
+            background: #1A212D; padding: 15px 20px; display: flex; gap: 20px; justify-content: center; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
         }
-
         .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
-
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
         .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
         .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
 
         .nav-btn { 
-            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
-            cursor: pointer; border-radius: 6px; transition: all 0.2s ease-in-out; outline: none;
-            background: #2A3441; color: #A0B0C0; border: 2px solid transparent; padding: 10px 25px; 
-            font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
+            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 6px; 
+            transition: all 0.2s ease-in-out; outline: none; background: #2A3441; color: #A0B0C0; border: 2px solid transparent; 
+            padding: 10px 25px; font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
         }
-        
         .nav-btn:hover { background: #3B485A; color: #fff; }
         .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
-
         .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
-        
         .hidden { display: none !important; }
 
         /* =========================================
@@ -133,22 +70,16 @@
 
         #viewer { 
             flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
-            background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
         }
-
         #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
         .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
-
-        #viewer img, .vr img {
-            max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important;
-            object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
-        }
+        #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
         /* =========================================
-           INFO OVERLAYS (Base Styles)
+           INFO OVERLAYS 
            ========================================= */
         .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
         .side-panel { box-sizing: border-box; pointer-events: auto; }
@@ -158,41 +89,23 @@
         .side-panel li { margin-bottom: 10px; }
         .side-panel b { color: #00a8ff; } 
 
-        /* --- DESKTOP FLOATING PANELS --- */
         @media (min-width: 769px) {
-            .side-panel {
-                position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            }
+            .side-panel { position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
             .left-panel { left: 20px; } .right-panel { right: 20px; } #mobile-info-btn { display: none; }
         }
 
-        /* =========================================
-           MOBILE RESPONSIVENESS & DRAWER
-           ========================================= */
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; gap: 15px; padding: 15px 10px; }
             .header-center { order: -1; margin-bottom: -5px; } .header-left, .header-right { justify-content: center; }
-            
             .ramtech-logo { height: 45px !important; } .project-name { font-size: 1.1rem; } .header-logo { height: 28px !important; }
-            
             .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
             .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
 
-            .info-overlay {
-                background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px;
-                overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; 
-                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
-            }
+            .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
             .info-overlay.open { transform: translateY(0); visibility: visible; }
-            
             .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
 
-            #mobile-info-btn {
-                display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25; background: #0078d7; color: white; border: 2px solid #00a8ff;
-                padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s;
-            }
+            #mobile-info-btn { display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25; background: #0078d7; color: white; border: 2px solid #00a8ff; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s; }
             #mobile-info-btn:active { transform: scale(0.95); }
         }
     </style>
@@ -225,20 +138,17 @@
     </header>
 
     <div id="main-content">
-        <div id="viewer">
-            </div>
+        <div id="viewer"></div>
 
         <div id="info-overlay" class="info-overlay">
             <div class="side-panel left-panel">
                 <h2 id="panel-title">Main Assembly</h2>
-                <div id="panel-left-content">
-                    </div>
+                <div id="panel-left-content"></div>
             </div>
             
             <div class="side-panel right-panel">
                 <h2>Technical Specs</h2>
-                <div id="panel-right-content">
-                    </div>
+                <div id="panel-right-content"></div>
             </div>
         </div>
 
@@ -262,49 +172,29 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- 1. THE "GHOST DRAG" AUTO-SPIN LOGIC ---
+            // --- 1. NATIVE AUTO-SPIN LOGIC ---
             const spinBtn = document.getElementById('btn-spin');
             const viewerContainer = document.getElementById('viewer');
             
             let autoSpinMode = true; 
-            let isActivelySpinning = false; 
             let idleTimer = null;
-            let spinInterval = null;
-            
-            const idleDelay = 3000; // Wait 3 seconds of no interaction before spinning
-            const spinSpeedInMilliseconds = 50; // Triggers "ghost drag" every 50ms
-            let ghostX = 500; // Starting coordinate for our invisible mouse
+            const idleDelay = 3000; // 3 seconds before spinning resumes
 
-            // The function that physically rotates the robot
             function startSpinning() {
-                if (autoSpinMode && !isActivelySpinning) {
-                    isActivelySpinning = true;
-                    
-                    spinInterval = setInterval(() => {
-                        // Find the exact image wrapper SolidWorks is using
-                        const target = document.querySelector('.vr') || document.querySelector('#viewer img') || viewerContainer;
-                        if (!target) return;
-
-                        // 1. Invisible mouse clicks down
-                        target.dispatchEvent(new MouseEvent('mousedown', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
-                        
-                        // 2. Invisible mouse moves left by 10 pixels to spin robot right
-                        ghostX -= 10; 
-                        
-                        // 3. Invisible mouse drags and lets go
-                        document.dispatchEvent(new MouseEvent('mousemove', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
-                        document.dispatchEvent(new MouseEvent('mouseup', { clientX: ghostX, pageX: ghostX, clientY: 500, pageY: 500, bubbles: true }));
-
-                        // Reset position so our ghost mouse doesn't fall off the screen
-                        if (ghostX < 100) ghostX = 500;
-                        
-                    }, spinSpeedInMilliseconds);
+                if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    threeSixty._vr.play(); // Triggers the native Apple QuickTime spin!
                 }
             }
 
             function stopSpinning() {
-                isActivelySpinning = false;
-                clearInterval(spinInterval);
+                if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    threeSixty._vr.pause(); // Triggers native pause
+                    
+                    // Forces the VR engine to forget it was spinning, preventing an instant-resume glitch
+                    if (threeSixty._vr.onGrabStart) {
+                        threeSixty._vr.onGrabStart.playing = false; 
+                    }
+                }
             }
 
             function resetIdleTimer() {
@@ -329,17 +219,16 @@
                 }
             }
 
-            // HUMAN DETECTION: Stop spinning if a REAL human grabs the robot
-            ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
+            // HUMAN DETECTION: Capture events before the vr.js file processes them
+            ['mousedown', 'touchstart', 'wheel', 'mousemove', 'touchmove'].forEach(evt => {
                 viewerContainer.addEventListener(evt, (e) => {
-                    // e.isTrusted ensures we only pause if a real person did it, not our ghost mouse!
-                    if (e.isTrusted) {
-                        if (autoSpinMode) resetIdleTimer();
+                    if (e.isTrusted && autoSpinMode) {
+                        resetIdleTimer();
                     }
-                }, { passive: true });
+                }, { passive: true, capture: true });
             });
 
-            // Button and Keyboard Triggers
+            // Toggles
             spinBtn.addEventListener('click', toggleAutoSpinMode);
 
             document.addEventListener('keydown', (e) => {
@@ -356,9 +245,13 @@
                 });
             });
 
-            // Kick off the initial spin delay
-            resetIdleTimer();
-
+            // Kick off the initial load timer safely
+            let initCheck = setInterval(() => {
+                if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    clearInterval(initCheck);
+                    resetIdleTimer();
+                }
+            }, 500);
 
             // --- 2. SUBSYSTEM DATA LOGIC ---
             const subsystemData = {
