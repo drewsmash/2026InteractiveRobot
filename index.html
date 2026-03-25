@@ -152,7 +152,7 @@
                 if (this.playing) return;
                 this.playing = true;
                 // Running at 50ms for a smooth 20fps playback speed
-                this.playInterval = setInterval(this.gotoNextFrame.bind(this), 130); 
+                this.playInterval = setInterval(this.gotoNextFrame.bind(this), 115); 
             };
         }
     </script>
@@ -219,7 +219,7 @@
             
             let autoSpinMode = true; 
             let idleTimer = null;
-            const idleDelay = 5000; 
+            const idleDelay = 8000; 
 
             function startSpinning() {
                 if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
