@@ -23,12 +23,12 @@
         }
         
         /* =========================================
-           HEADER STYLES (Fixed with CSS Grid)
+           HEADER STYLES
            ========================================= */
         header { 
             background: #1A212D; 
             padding: 15px 25px; 
-            /* Grid ensures the center stays dead-center while expanding to fit the logo */
+            /* Grid ensures the center stays dead-center */
             display: grid; 
             grid-template-columns: 1fr auto 1fr;
             align-items: center; 
@@ -43,6 +43,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 15px;
+            flex-wrap: wrap; 
         }
 
         .header-logo {
@@ -61,7 +62,6 @@
             color: #FFD700; 
         }
 
-        /* --- CENTER LOGO STYLES --- */
         .header-center {
             display: flex;
             align-items: center;
@@ -76,32 +76,9 @@
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
         }
 
-        /* Top Right Controls */
-        .viewer-controls {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .viewer-controls button { 
-            font-family: inherit;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            cursor: pointer; 
-            border-radius: 4px; 
-            transition: all 0.2s ease-in-out;
-            outline: none;
-            background: transparent;
-            color: #FFD700;
-            border: 2px solid #FFD700;
-            padding: 8px 18px; 
-            font-size: 0.8rem;
-        }
-        
-        .viewer-controls button:hover { 
-            background: #FFD700;
-            color: #11151C;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        .header-right {
+            /* Empty div to balance the grid and keep the center logo centered */
+            display: block;
         }
 
         /* =========================================
@@ -192,14 +169,22 @@
         .hidden { display: none !important; }
 
         /* =========================================
-           VIEWER CORE STYLES
+           VIEWER CORE & INFO OVERLAYS
            ========================================= */
+        #main-content {
+            flex: 1; 
+            position: relative;
+            min-height: 0;
+            min-width: 0;
+            width: 100%;
+            display: flex;
+        }
+
         #viewer { 
             flex: 1; 
-            min-height: 0; 
-            min-width: 0;
             position: relative; 
             width: 100%;
+            height: 100%;
             overflow: hidden;
             display: flex; 
             justify-content: center;
@@ -212,80 +197,104 @@
 
         #viewer > * {
             position: absolute; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
         }
 
         .vr { 
-            width: 100%; 
-            height: 100%; 
-            cursor: grab; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100%; height: 100%; cursor: grab; 
+            display: flex; justify-content: center; align-items: center;
         }
-        
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
-            max-width: 95% !important;
-            max-height: 95% !important;
-            width: auto !important;
-            height: auto !important;
-            object-fit: contain;
-            user-select: none;
-            -webkit-user-drag: none;
+            max-width: 95% !important; max-height: 95% !important;
+            width: auto !important; height: auto !important;
+            object-fit: contain; user-select: none; -webkit-user-drag: none;
             filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
         }
 
+        /* --- DESKTOP FLOATING PANELS --- */
+        @media (min-width: 769px) {
+            .info-overlay {
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                pointer-events: none; 
+                z-index: 5;
+            }
+            .side-panel {
+                position: absolute; top: 20px; bottom: 20px; width: 280px;
+                background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px;
+                padding: 20px; overflow-y: auto; pointer-events: auto;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .left-panel { left: 20px; }
+            .right-panel { right: 20px; }
+            #mobile-info-btn { display: none; }
+        }
+
+        /* Styling the Text inside Panels */
+        .side-panel h2 {
+            color: #FFD700; font-size: 1.1rem; margin-top: 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .side-panel p {
+            font-size: 0.85rem; line-height: 1.6; color: #A0B0C0; margin-bottom: 15px;
+        }
+        .side-panel ul {
+            padding-left: 20px; font-size: 0.85rem; color: #e0e0e0; line-height: 1.6;
+        }
+        .side-panel li { margin-bottom: 10px; }
+        .side-panel b { color: #00a8ff; } 
+
         /* =========================================
-           MOBILE RESPONSIVENESS
+           MOBILE RESPONSIVENESS & DRAWER
            ========================================= */
         @media (max-width: 768px) {
             header {
-                /* Switches from Grid to Flexbox for vertical stacking on phones */
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
                 padding: 15px 10px;
             }
-
-            .header-center {
-                order: -1; 
-            }
-
-            .header-left {
-                justify-content: center;
-            }
-
-            .viewer-controls {
-                justify-content: center;
-            }
-
-            .ramtech-logo {
-                height: 45px !important;
-            }
-
+            .header-center { order: -1; margin-bottom: -5px; }
+            .header-left { justify-content: center; }
+            .header-right { display: none; } /* Hide blank div on mobile */
+            
+            .ramtech-logo { height: 45px !important; }
             .project-name { font-size: 1.1rem; }
             .header-logo { height: 28px !important; }
-
-            .model-nav {
-                padding: 12px 10px;
-                justify-content: flex-start; 
-                gap: 12px;
-            }
-
-            .nav-btn {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-                min-width: 100px;
-            }
+            
+            .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
+            .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; }
             .nav-logo { height: 16px !important; }
+
+            /* Mobile Specs Drawer Overlay */
+            .info-overlay {
+                position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(17, 21, 28, 0.98);
+                display: flex; flex-direction: column; z-index: 20; padding: 25px 20px;
+                overflow-y: auto;
+                transform: translateY(100%); 
+                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .info-overlay.open { transform: translateY(0); }
+            
+            .side-panel {
+                width: 100%; position: static; background: none; border: none; 
+                padding: 0; margin-bottom: 30px; box-shadow: none; pointer-events: auto;
+            }
+
+            /* Floating View Specs Button */
+            #mobile-info-btn {
+                display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25;
+                background: #0078d7; color: white; border: 2px solid #00a8ff;
+                padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit;
+                text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s;
+            }
+            #mobile-info-btn:active { transform: scale(0.95); }
         }
     </style>
     
@@ -311,10 +320,29 @@
             <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
         </div>
 
+        <div class="header-right"></div>
     </header>
 
-    <div id="viewer">
+    <div id="main-content">
+        <div id="viewer">
+            </div>
+
+        <div id="info-overlay" class="info-overlay">
+            <div class="side-panel left-panel">
+                <h2 id="panel-title">Main Assembly</h2>
+                <div id="panel-left-content">
+                    </div>
+            </div>
+            
+            <div class="side-panel right-panel">
+                <h2>Technical Specs</h2>
+                <div id="panel-right-content">
+                    </div>
+            </div>
         </div>
+
+        <button id="mobile-info-btn">View Specs</button>
+    </div>
 
     <div class="model-nav">
         
@@ -351,6 +379,93 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Binder Information Database
+            const subsystemData = {
+                "Robot": {
+                    title: "RICO - Main Assembly",
+                    leftContent: "<p>Rico's chassis is rectangular when stowed, forming a perfect 21.5\" x 33\" square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity, utilizing vertical 1x1 tubes for unobstructed camera placement.</p>",
+                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Deflectors:</b> 1/16\" polycarb plates</li><li><b>Cameras:</b> 4x ArduCam OV9281</li></ul>"
+                },
+                "Shooter": {
+                    title: "Shooter & Turret",
+                    leftContent: "<p>A flywheel mechanism capable of firing approximately 6 balls per second. A rotating turret provides independent horizontal aiming.</p><p>Adjustable hood and flywheel speeds control the launch angle and distance, improving accuracy from anywhere on the field without repositioning the drivetrain.</p>",
+                    rightContent: "<ul><li><b>Turret Motor:</b> 1x Kraken X44 (52:1 Ratio)</li><li><b>Rotation:</b> 720° continuous via cable sleeve</li><li><b>Flywheel Motors:</b> 2x Kraken X60 (3:1 Ratio)</li><li><b>Flywheel:</b> 6\" aluminum with O-rings</li><li><b>Hood Range:</b> 41° (270:1 reduction)</li></ul>"
+                },
+                "Tunnel": {
+                    title: "Tunnel & Tower",
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer section and organizes it into a single horizontal row to prevent jamming.</p><p>The tower then shifts the fuel from horizontal to vertical motion, launching it smoothly into the shooter assembly.</p>",
+                    rightContent: "<ul><li><b>Tunnel Motor:</b> 1x Kraken X60</li><li><b>Tunnel System:</b> 3 belts moving at 20 ft/s</li><li><b>Tower Wheels:</b> 2x4\" and 4x2\" Stealth Wheels</li><li><b>Surface Speed:</b> Maintained at 20 ft/s throughout</li></ul>"
+                },
+                "Intake": {
+                    title: "Intake Assembly",
+                    leftContent: "<p>A single pivot mechanism designed to gather fuel from the floor immediately after contact to reduce chasing time.</p><p>The gear rack driven pivot allows for controlled deployment, agitation, and stowing within a 92° range of motion.</p>",
+                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 Ratio)</li><li><b>Roller Motors:</b> 2x Kraken X44</li><li><b>Rollers:</b> 2\" HDPE with CatTongue tape</li><li><b>Surface Speed:</b> 12.5 ft/s</li></ul>"
+                },
+                "Indexer": {
+                    title: "Indexer Mechanism",
+                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of downward-inclined, lightweight carbon fiber rods.</p><p>The roller bed pivots for maintenance access, while mecanum wheels act as agitators to guarantee streamlined fuel flow.</p>",
+                    rightContent: "<ul><li><b>Roller Motors:</b> Shared with intake (2x Kraken X44)</li><li><b>Roller Speed:</b> 6.5 ft/s</li><li><b>Structure:</b> PET-CF brace blocks</li><li><b>Agitators:</b> Mecanum wheels</li></ul>"
+                },
+                "Wheel": {
+                    title: "Swerve Drivetrain",
+                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes to navigate around fuel easily.</p><p>The X1 Ratio set improves torque to reduce power consumption, paired with custom 3D printed treads to improve grip over the bump.</p>",
+                    rightContent: "<ul><li><b>Module:</b> WCP X2S (Lightest in catalog)</li><li><b>Drive Motor:</b> 1x Kraken X60 per module</li><li><b>Steer Motor:</b> 1x Kraken X44 per module</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                }
+            };
+
+            // DOM Elements
+            const buttons = document.querySelectorAll('.nav-btn');
+            const titleEl = document.getElementById('panel-title');
+            const leftEl = document.getElementById('panel-left-content');
+            const rightEl = document.getElementById('panel-right-content');
+            
+            // Mobile UI Elements
+            const toggleBtn = document.getElementById('mobile-info-btn');
+            const overlay = document.getElementById('info-overlay');
+
+            // Function to swap data
+            function updatePanels(modelName) {
+                const data = subsystemData[modelName];
+                if(data) {
+                    titleEl.innerHTML = data.title;
+                    leftEl.innerHTML = data.leftContent;
+                    rightEl.innerHTML = data.rightContent;
+                }
+            }
+
+            // Attach listeners to navigation buttons
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Extract the folder name to use as the database key
+                    let modelName = btn.getAttribute('data-model').split('/')[0];
+                    updatePanels(modelName);
+                });
+            });
+
+            // Initialize on first load
+            updatePanels('Robot');
+
+            // Mobile Overlay Logic
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    overlay.classList.toggle('open');
+                    toggleBtn.textContent = overlay.classList.contains('open') ? 'Close Specs' : 'View Specs';
+                    
+                    // Change button color to match state
+                    if(overlay.classList.contains('open')) {
+                        toggleBtn.style.background = '#FFD700';
+                        toggleBtn.style.color = '#11151C';
+                    } else {
+                        toggleBtn.style.background = '#0078d7';
+                        toggleBtn.style.color = 'white';
+                    }
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
