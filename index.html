@@ -76,7 +76,50 @@
         }
 
         .header-right {
-            display: block;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        /* Top Right Controls */
+        .viewer-controls button { 
+            font-family: inherit;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer; 
+            border-radius: 4px; 
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            background: transparent;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 8px 18px; 
+            font-size: 0.8rem;
+        }
+        
+        .viewer-controls button:hover { 
+            background: #FFD700;
+            color: #11151C;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Active state for the Smart Auto-Spin Button */
+        #btn-spin.active-mode {
+            background: #00ff88;
+            color: #11151C;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Add keyboard shortcut hint for desktop */
+        @media (min-width: 769px) {
+            #btn-spin::after {
+                content: " (Space)";
+                font-size: 0.65rem;
+                opacity: 0.7;
+                margin-left: 5px;
+            }
         }
 
         /* =========================================
@@ -96,72 +139,37 @@
             border-top: 1px solid #FFD700; 
         }
 
-        .model-nav::-webkit-scrollbar {
-            height: 0px;
-            background: transparent;
-        }
+        .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
 
         .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0; 
+            display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; 
         }
 
         .nav-label {
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #FFD700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px;
+            text-transform: uppercase; white-space: nowrap;
         }
 
         .nav-item:has(.active) .nav-label {
-            color: #00a8ff;
-            text-shadow: 0 0 8px rgba(0, 168, 255, 0.4);
+            color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4);
         }
 
         .nav-btn { 
-            font-family: inherit;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            cursor: pointer; 
-            border-radius: 6px; 
-            transition: all 0.2s ease-in-out;
-            outline: none;
-            background: #2A3441; 
-            color: #A0B0C0;
-            border: 2px solid transparent; 
-            padding: 10px 25px; 
-            font-size: 0.95rem;
-            min-width: 120px; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+            cursor: pointer; border-radius: 6px; transition: all 0.2s ease-in-out; outline: none;
+            background: #2A3441; color: #A0B0C0; border: 2px solid transparent; padding: 10px 25px; 
+            font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
         }
         
-        .nav-btn:hover { 
-            background: #3B485A; 
-            color: #fff;
-        }
-        
+        .nav-btn:hover { background: #3B485A; color: #fff; }
         .nav-btn.active { 
-            background: #0078d7; 
-            color: #ffffff;
-            border-color: #00a8ff; 
-            box-shadow: 0 0 15px rgba(0, 120, 215, 0.6);
-            transform: translateY(-2px); 
+            background: #0078d7; color: #ffffff; border-color: #00a8ff; 
+            box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); 
         }
 
         .nav-logo {
-            height: 20px !important;
-            width: auto !important;
-            max-width: 80px !important;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+            height: 20px !important; width: auto !important; max-width: 80px !important;
+            object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
         }
         
         .hidden { display: none !important; }
@@ -170,69 +178,42 @@
            VIEWER CORE 
            ========================================= */
         #main-content {
-            flex: 1; 
-            position: relative;
-            min-height: 0;
-            min-width: 0;
-            width: 100%;
-            display: flex;
-            /* CRITICAL FIX: This acts as scissors, perfectly clipping the hidden drawer 
-               so it physically cannot push the navigation buttons down */
-            overflow: hidden; 
+            flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; 
         }
 
         #viewer { 
-            flex: 1; 
-            position: relative; 
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            display: flex; 
-            justify-content: center;
-            align-items: center;
-            background-image: 
-                linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; 
+            justify-content: center; align-items: center;
+            background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
         }
 
         #viewer > * {
-            position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
         }
 
         .vr { 
-            width: 100%; height: 100%; cursor: grab; 
-            display: flex; justify-content: center; align-items: center;
+            width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center;
         }
         .vr:active { cursor: grabbing; }
 
         #viewer img, .vr img {
-            max-width: 95% !important; max-height: 95% !important;
-            width: auto !important; height: auto !important;
-            object-fit: contain; user-select: none; -webkit-user-drag: none;
-            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
+            max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important;
+            object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
         }
 
         /* =========================================
            INFO OVERLAYS (Base Styles)
            ========================================= */
         .info-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Lets clicks pass through to the robot */
-            z-index: 5;
-            box-sizing: border-box;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box;
         }
 
-        .side-panel {
-            box-sizing: border-box;
-            pointer-events: auto; /* So users can scroll the text */
-        }
+        .side-panel { box-sizing: border-box; pointer-events: auto; }
 
         .side-panel h2 {
-            color: #FFD700; font-size: 1.1rem; margin-top: 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            color: #FFD700; font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.3);
             padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
         }
         .side-panel p { font-size: 0.85rem; line-height: 1.6; color: #A0B0C0; margin-bottom: 15px; }
@@ -243,15 +224,10 @@
         /* --- DESKTOP FLOATING PANELS --- */
         @media (min-width: 769px) {
             .side-panel {
-                position: absolute; top: 20px; bottom: 20px; width: 280px;
-                background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px;
-                padding: 20px; overflow-y: auto; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             }
-            .left-panel { left: 20px; }
-            .right-panel { right: 20px; }
-            #mobile-info-btn { display: none; }
+            .left-panel { left: 20px; } .right-panel { right: 20px; } #mobile-info-btn { display: none; }
         }
 
         /* =========================================
@@ -261,7 +237,7 @@
             header { display: flex; flex-direction: column; gap: 15px; padding: 15px 10px; }
             .header-center { order: -1; margin-bottom: -5px; }
             .header-left { justify-content: center; }
-            .header-right { display: none; } 
+            .header-right { justify-content: center; } 
             
             .ramtech-logo { height: 45px !important; }
             .project-name { font-size: 1.1rem; }
@@ -273,29 +249,18 @@
 
             /* Mobile Specs Drawer Overlay */
             .info-overlay {
-                background: rgba(17, 21, 28, 0.98);
-                display: flex; flex-direction: column; z-index: 20; padding: 25px 20px;
-                overflow-y: auto; pointer-events: auto;
-                transform: translateY(100%); 
-                visibility: hidden; /* Fully hides from the layout when closed */
+                background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px;
+                overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; 
                 transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
             }
-            .info-overlay.open { 
-                transform: translateY(0); 
-                visibility: visible;
-            }
+            .info-overlay.open { transform: translateY(0); visibility: visible; }
             
-            .side-panel {
-                width: 100%; position: static; background: none; border: none; 
-                padding: 0; margin-bottom: 30px; box-shadow: none; 
-            }
+            .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
 
             /* Floating View Specs Button */
             #mobile-info-btn {
-                display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25;
-                background: #0078d7; color: white; border: 2px solid #00a8ff;
-                padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit;
-                text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
+                display: block; position: absolute; bottom: 20px; right: 20px; z-index: 25; background: #0078d7; color: white; border: 2px solid #00a8ff;
+                padding: 12px 24px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s;
             }
             #mobile-info-btn:active { transform: scale(0.95); }
@@ -324,7 +289,9 @@
             <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
         </div>
 
-        <div class="header-right"></div>
+        <div class="header-right viewer-controls">
+            <button id="btn-spin" class="active-mode">Auto-Spin: ON</button>
+        </div>
     </header>
 
     <div id="main-content">
@@ -386,6 +353,92 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. Smart Idle Auto-Spin Logic ---
+            const spinBtn = document.getElementById('btn-spin');
+            const viewerContainer = document.getElementById('viewer');
+            
+            let autoSpinMode = true; // Is the feature turned on globally?
+            let isActivelySpinning = false; // Is it currently rotating right now?
+            let idleTimer = null;
+            let spinInterval = null;
+            
+            const idleDelay = 3000; // Wait 3 seconds of no interaction before spinning
+            const spinSpeedInMilliseconds = 80; 
+
+            // Starts the physical rotation
+            function startSpinning() {
+                if (autoSpinMode && !isActivelySpinning) {
+                    isActivelySpinning = true;
+                    spinInterval = setInterval(() => {
+                        const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39, which: 39, bubbles: true });
+                        document.dispatchEvent(rightArrowEvent);
+                        if(typeof threeSixty !== 'undefined' && threeSixty.nextFrame) { threeSixty.nextFrame(); }
+                    }, spinSpeedInMilliseconds);
+                }
+            }
+
+            // Stops the physical rotation immediately
+            function stopSpinning() {
+                isActivelySpinning = false;
+                clearInterval(spinInterval);
+            }
+
+            // Resets the 3-second countdown clock
+            function resetIdleTimer() {
+                stopSpinning();
+                clearTimeout(idleTimer);
+                if (autoSpinMode) {
+                    idleTimer = setTimeout(startSpinning, idleDelay);
+                }
+            }
+
+            // Toggles the entire Auto-Spin feature ON or OFF
+            function toggleAutoSpinMode() {
+                autoSpinMode = !autoSpinMode;
+                if (autoSpinMode) {
+                    spinBtn.classList.add('active-mode');
+                    spinBtn.textContent = 'Auto-Spin: ON';
+                    resetIdleTimer();
+                } else {
+                    spinBtn.classList.remove('active-mode');
+                    spinBtn.textContent = 'Auto-Spin: OFF';
+                    stopSpinning();
+                    clearTimeout(idleTimer);
+                }
+            }
+
+            // Listen for any user interaction on the viewer to pause spinning
+            ['mousedown', 'mousemove', 'touchstart', 'touchmove', 'wheel'].forEach(evt => {
+                viewerContainer.addEventListener(evt, () => {
+                    if (autoSpinMode) resetIdleTimer();
+                }, { passive: true });
+            });
+
+            // Toggle via Button Click
+            spinBtn.addEventListener('click', toggleAutoSpinMode);
+
+            // Toggle via Spacebar 
+            document.addEventListener('keydown', (e) => {
+                // Ignore spacebar if they are typing in an input (just in case you add search later)
+                if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault(); // Stops the page from scrolling down
+                    toggleAutoSpinMode();
+                }
+            });
+
+            // Reset the timer when they change models so it doesn't spin instantly while loading
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (autoSpinMode) resetIdleTimer();
+                });
+            });
+
+            // Start the initial countdown
+            resetIdleTimer();
+
+
+            // --- 2. Subsystem Data Logic ---
             const subsystemData = {
                 "Robot": {
                     title: "RICO - Main Assembly",
@@ -424,7 +477,7 @@
             const leftEl = document.getElementById('panel-left-content');
             const rightEl = document.getElementById('panel-right-content');
             
-            const toggleBtn = document.getElementById('mobile-info-btn');
+            const toggleMobileBtn = document.getElementById('mobile-info-btn');
             const overlay = document.getElementById('info-overlay');
 
             function updatePanels(modelName) {
@@ -445,17 +498,17 @@
 
             updatePanels('Robot');
 
-            if(toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
+            if(toggleMobileBtn) {
+                toggleMobileBtn.addEventListener('click', () => {
                     overlay.classList.toggle('open');
-                    toggleBtn.textContent = overlay.classList.contains('open') ? 'Close Specs' : 'View Specs';
+                    toggleMobileBtn.textContent = overlay.classList.contains('open') ? 'Close Specs' : 'View Specs';
                     
                     if(overlay.classList.contains('open')) {
-                        toggleBtn.style.background = '#FFD700';
-                        toggleBtn.style.color = '#11151C';
+                        toggleMobileBtn.style.background = '#FFD700';
+                        toggleMobileBtn.style.color = '#11151C';
                     } else {
-                        toggleBtn.style.background = '#0078d7';
-                        toggleBtn.style.color = 'white';
+                        toggleMobileBtn.style.background = '#0078d7';
+                        toggleMobileBtn.style.color = 'white';
                     }
                 });
             }
