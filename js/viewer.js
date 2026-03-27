@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 1. ENGINE OVERRIDE (Fixes the fast spin)
+    // 1. ENGINE OVERRIDE & LOADING INTERCEPTOR
     // =========================================
-    // We override the default vr.js play() function here to slow it down to 85ms
+    window.imagesLoaded = 0;
+    window.totalImagesToLoad = 240; 
+
     if (typeof AC !== 'undefined' && AC.VR) {
         AC.VR.options.introDuration = 2.5; 
         
@@ -16,6 +18,36 @@ document.addEventListener('DOMContentLoaded', () => {
             this.playing = true;
             this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
         };
+
+        // NEW: Safely intercept the Image Loader inside the Apple Engine
+        if (AC.VR.Loader) {
+            const originalImageDidLoad = AC.VR.Loader.prototype.imageDidLoad;
+            AC.VR.Loader.prototype.imageDidLoad = function(image) {
+                // Call Apple's original function so it actually builds the robot
+                if (originalImageDidLoad) originalImageDidLoad.apply(this, arguments);
+                
+                if (window.totalImagesToLoad > 0) {
+                    window.imagesLoaded++;
+                    const progressBar = document.getElementById('progress-fill');
+                    const progressText = document.getElementById('progress-text');
+                    const loadingScreen = document.getElementById('loading-screen');
+                    
+                    if (progressBar && loadingScreen && loadingScreen.style.display !== 'none') {
+                        let percent = Math.min(100, Math.round((window.imagesLoaded / window.totalImagesToLoad) * 100));
+                        progressBar.style.width = percent + '%';
+                        progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
+                        
+                        // When done, fade it out smoothly
+                        if (window.imagesLoaded >= window.totalImagesToLoad) {
+                            setTimeout(() => {
+                                loadingScreen.style.opacity = '0';
+                                setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
+                            }, 200);
+                        }
+                    }
+                }
+            };
+        }
     }
 
 
@@ -26,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "2026_rico": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                // Notice the [30, 8] matrix arrays are safely stored here!
                 { id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], useLogo: true },
                 { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], useLogo: false },
                 { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], useLogo: false },
@@ -125,9 +156,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
                 document.getElementById('panel-right-content').innerHTML = specs.rightContent;
 
+                // --- RESET AND TRIGGER THE LOADING SCREEN ---
+                window.imagesLoaded = 0;
+                window.totalImagesToLoad = sub.frames[0] * sub.frames[1];
+                const loadingScreen = document.getElementById('loading-screen');
+                const progressFill = document.getElementById('progress-fill');
+                const progressText = document.getElementById('progress-text');
+                
+                if (loadingScreen && progressFill && progressText) {
+                    progressFill.style.width = '0%';
+                    progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
+                    loadingScreen.style.display = 'flex';
+                    loadingScreen.offsetHeight; // Forces the browser to repaint visually
+                    loadingScreen.style.opacity = '1';
+                }
+
                 // Send the exact [30, 8] matrix directly to the threesixty.js engine!
+                // Added a tiny 50ms delay to guarantee the loading screen pops up before the engine freezes the browser
                 if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
-                    threeSixty.loadModel(sub.path, sub.frames, [false, false]);
+                    setTimeout(() => {
+                        threeSixty.loadModel(sub.path, sub.frames, [false, false]);
+                    }, 50);
                 }
 
                 if (autoSpinMode) resetIdleTimer();
