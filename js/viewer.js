@@ -1,5 +1,5 @@
 /*!
- * SOLIDWORKS Visualize (Pre)Viewer - Optimized & Rewritten for RT59
+ * SOLIDWORKS Visualize (Pre)Viewer - Optimized & Rewritten for RT59 (Multi-Year)
  */
 
 // =========================================
@@ -21,7 +21,7 @@ if (typeof AC !== 'undefined' && AC.VR) {
         this.playInterval = setInterval(this.gotoNextFrame.bind(this), 115); 
     };
 
-    // Network Interceptor
+    // Network Interceptor for the Loading Bar
     const originalImageDidLoad = AC.VR.prototype.imageDidLoad;
     AC.VR.prototype.imageDidLoad = function(img) {
         if (originalImageDidLoad) originalImageDidLoad.apply(this, arguments);
