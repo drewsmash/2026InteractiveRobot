@@ -1,10 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="115" fill="#11151C"/>
-  
-  <rect x="24" y="24" width="464" height="464" rx="100" fill="none" stroke="#FFD700" stroke-width="12"/>
-  
-  <polygon points="256,60 420,150 420,360 256,450 90,360 90,150" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.1"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        opacity: .1;
+        stroke: #fff;
+        stroke-width: 4px;
+      }
 
-  <text x="256" y="240" font-family="'Arial Black', Impact, sans-serif" font-size="100" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="central">RAM TECH</text>
-  <text x="256" y="360" font-family="'Arial Black', Impact, sans-serif" font-size="140" font-weight="bold" fill="#FFD700" text-anchor="middle" dominant-baseline="central">59</text>
+      .st0, .st1 {
+        fill: none;
+      }
+
+      .st0, .st2, .st3 {
+        isolation: isolate;
+      }
+
+      .st1 {
+        stroke: gold;
+        stroke-width: 12px;
+      }
+
+      .st2 {
+        fill: #fff;
+        font-family: Arial-Black, 'Arial Black';
+        font-size: 144px;
+        font-weight: 800;
+      }
+
+      .st4 {
+        fill: #11151c;
+      }
+
+      .st3 {
+        fill: gold;
+        font-family: Arial-BoldMT, Arial;
+        font-size: 140px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <rect class="st4" width="512" height="512" rx="115" ry="115"/>
+  <rect class="st1" x="24" y="24" width="464" height="464" rx="100" ry="100"/>
+  <polygon class="st0" points="256 60 420 150 420 360 256 450 90 360 90 150 256 60"/>
+  <text class="st2" transform="translate(33.9 224.2) scale(.5 1)"><tspan x="0" y="0">RAM TECH</tspan></text>
+  <text class="st3" transform="translate(178.1 360)"><tspan x="0" y="0">59</tspan></text>
 </svg>
