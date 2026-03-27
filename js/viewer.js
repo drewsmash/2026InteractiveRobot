@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 // Notice the [30, 8] matrix arrays are safely stored here!
-                { id: "Robot", label: "Main Assembly", path: "Robot/images", frames: [30, 8], useLogo: true },
-                { id: "Shooter", label: "Shooter", path: "Shooter/images", frames: [30, 8], useLogo: false },
-                { id: "Tunnel", label: "Tunnel", path: "Tunnel/images", frames: [30, 8], useLogo: false },
-                { id: "Intake", label: "Intake", path: "Intake/images", frames: [30, 8], useLogo: false },
-                { id: "Indexer", label: "Indexer", path: "Indexer/images", frames: [30, 8], useLogo: false },
-                { id: "Wheel", label: "Swerve Wheel", path: "Wheel/images", frames: [30, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], useLogo: true },
+                { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], useLogo: false },
+                { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], useLogo: false },
+                { id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], useLogo: false },
+                { id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], useLogo: false },
+                { id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], useLogo: false }
             ],
             specs: {
                 "Robot": {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "2025_offseason": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2025/Robot/images", frames: [30, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [30, 8], useLogo: false }
             ],
             specs: {
                 "Robot": {
