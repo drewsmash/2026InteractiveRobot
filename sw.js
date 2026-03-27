@@ -19,6 +19,9 @@ self.addEventListener('fetch', (event) => {
                     }
                     return networkResponse;
                 });
+            }).catch(() => {
+                // Failsafe for when there is strictly zero internet and it isn't cached yet
+                return new Response('Offline'); 
             });
         })
     );

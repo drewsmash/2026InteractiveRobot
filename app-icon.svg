@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="115" fill="#11151C"/>
+  
+  <rect x="24" y="24" width="464" height="464" rx="100" fill="none" stroke="#FFD700" stroke-width="12"/>
+  
+  <polygon points="256,60 420,150 420,360 256,450 90,360 90,150" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.1"/>
+
+  <text x="256" y="240" font-family="'Arial Black', Impact, sans-serif" font-size="100" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="central">RAM TECH</text>
+  <text x="256" y="360" font-family="'Arial Black', Impact, sans-serif" font-size="140" font-weight="bold" fill="#FFD700" text-anchor="middle" dominant-baseline="central">59</text>
+</svg>

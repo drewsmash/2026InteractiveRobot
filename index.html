@@ -7,16 +7,12 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#11151C">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="RT59 Viewer">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="app-icon.svg">
 
     <style>
-        /* =========================================
-           CORE LAYOUT
-           ========================================= */
         body { 
             margin: 0; padding: 0; font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
             background-color: #11151C; color: #e0e0e0; height: 100vh; height: 100dvh; 
@@ -24,9 +20,6 @@
             user-select: none; -webkit-user-select: none;
         }
         
-        /* =========================================
-           HEADER & DROPDOWN
-           ========================================= */
         header { 
             background: #1A212D; padding: 15px 25px; display: grid; grid-template-columns: 1fr auto 1fr;
             align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.7); z-index: 10; flex-shrink: 0; border-bottom: 2px solid #FFD700; 
@@ -44,7 +37,7 @@
         .robot-selector option { background: #1A212D; color: #e0e0e0; font-weight: bold; }
         
         .header-center { display: flex; align-items: center; justify-content: center; }
-        .ramtech-logo { height: 100px !important; width: auto !important; max-width: 250px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .ramtech-logo { height: 75px !important; width: auto !important; max-width: 300px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
         .header-right { display: flex; justify-content: flex-end; align-items: center; }
 
@@ -61,9 +54,6 @@
             .mobile-floating-controls { display: none !important; }
         }
 
-        /* =========================================
-           BOTTOM NAVIGATION
-           ========================================= */
         .model-nav { 
             background: #1A212D; padding: 15px 20px; display: flex; gap: 20px; justify-content: center; overflow-x: auto;
             -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
@@ -82,9 +72,6 @@
         .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
         .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
 
-        /* =========================================
-           VIEWER CORE & LOADING SCREEN
-           ========================================= */
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
         #viewer { 
@@ -106,9 +93,6 @@
         .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
         .progress-fill { height: 100%; width: 0%; background: #00ff88; box-shadow: 0 0 10px rgba(0, 255, 136, 0.8); transition: width 0.1s linear; }
 
-        /* =========================================
-           INFO OVERLAYS 
-           ========================================= */
         .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
         .side-panel { box-sizing: border-box; pointer-events: auto; }
         .side-panel h2 { color: #FFD700; font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
@@ -122,9 +106,6 @@
             .left-panel { left: 20px; } .right-panel { right: 20px; } #mobile-info-btn { display: none; }
         }
 
-        /* =========================================
-           MOBILE RESPONSIVENESS
-           ========================================= */
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; gap: 15px; padding: 15px 10px; }
             .header-center { order: -1; margin-bottom: -5px; } .header-left, .header-right { justify-content: center; }
@@ -151,7 +132,8 @@
     <script src="js/vr.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
-    
+    <script src="js/wheelzoom.js" type="text/javascript"></script>
+    <script src="js/observers.js" type="text/javascript" defer></script>
     <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
 </head>
 <body>
@@ -159,6 +141,7 @@
     <header>
         <div class="header-left">
             <img id="header-logo" src="Rico_logoSingleColorTrans.png" alt="Robot Logo" class="header-logo">
+            
             <select id="robot-selector" class="robot-selector">
                 <option value="2026_rico">2026 RICO</option>
                 <option value="2025_offseason">2025 Offseason</option>
@@ -166,7 +149,7 @@
         </div>
 
         <div class="header-center">
-            <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
+            <img src="ramtech-header.svg" alt="Ramtech Logo" class="ramtech-logo">
         </div>
 
         <div class="header-right viewer-controls">
@@ -209,11 +192,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(registration => {
-                    console.log('App ServiceWorker registered successfully!');
-                }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW fail: ', err));
             });
         }
     </script>
