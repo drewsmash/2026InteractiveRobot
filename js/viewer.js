@@ -19,15 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
             this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
         };
 
-        // NEW: Safely intercept the Image Loader inside the Apple Engine
+        // THE FIX: We must intercept Apple's "onLoad" function, not "imageDidLoad"!
         if (AC.VR.Loader) {
-            const originalImageDidLoad = AC.VR.Loader.prototype.imageDidLoad;
-            AC.VR.Loader.prototype.imageDidLoad = function(image) {
-                // Call Apple's original function so it actually builds the robot
-                if (originalImageDidLoad) originalImageDidLoad.apply(this, arguments);
+            const originalOnLoad = AC.VR.Loader.prototype.onLoad;
+            
+            AC.VR.Loader.prototype.onLoad = function(event) {
+                // 1. Run Apple's original code so the image actually gets added to the 3D engine
+                if (originalOnLoad) originalOnLoad.apply(this, arguments);
                 
+                // 2. Run our Custom Loading Bar logic
                 if (window.totalImagesToLoad > 0) {
                     window.imagesLoaded++;
+                    
                     const progressBar = document.getElementById('progress-fill');
                     const progressText = document.getElementById('progress-text');
                     const loadingScreen = document.getElementById('loading-screen');
@@ -37,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         progressBar.style.width = percent + '%';
                         progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
                         
-                        // When done, fade it out smoothly
+                        // When fully loaded, hide the black screen to reveal the images!
                         if (window.imagesLoaded >= window.totalImagesToLoad) {
                             setTimeout(() => {
                                 loadingScreen.style.opacity = '0';
@@ -146,17 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             btn.addEventListener('click', () => {
-                // Update active state UI
                 navContainer.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                // Update Spec Panels
                 const specs = data.specs[sub.id] || { title: sub.label, leftContent: "Data coming soon.", rightContent: "" };
                 document.getElementById('panel-title').innerHTML = specs.title;
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
                 document.getElementById('panel-right-content').innerHTML = specs.rightContent;
 
-                // --- RESET AND TRIGGER THE LOADING SCREEN ---
                 window.imagesLoaded = 0;
                 window.totalImagesToLoad = sub.frames[0] * sub.frames[1];
                 const loadingScreen = document.getElementById('loading-screen');
@@ -167,12 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     progressFill.style.width = '0%';
                     progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
                     loadingScreen.style.display = 'flex';
-                    loadingScreen.offsetHeight; // Forces the browser to repaint visually
+                    loadingScreen.offsetHeight; 
                     loadingScreen.style.opacity = '1';
                 }
 
-                // Send the exact [30, 8] matrix directly to the threesixty.js engine!
-                // Added a tiny 50ms delay to guarantee the loading screen pops up before the engine freezes the browser
                 if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
                     setTimeout(() => {
                         threeSixty.loadModel(sub.path, sub.frames, [false, false]);
@@ -187,12 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
             navContainer.appendChild(item);
         });
 
-        // Trigger load for the first subsystem automatically
         const firstBtn = navContainer.querySelector('.nav-btn');
         if (firstBtn) firstBtn.click();
     }
 
-    // Listen for dropdown changes
     robotSelector.addEventListener('change', (e) => {
         loadRobotProfile(e.target.value);
     });
@@ -204,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const spinBtns = document.querySelectorAll('.btn-spin');
     const viewerContainer = document.getElementById('viewer');
     
-    let autoSpinMode = false; // Starts OFF
+    let autoSpinMode = false; 
     let idleTimer = null;
     const idleDelay = 8000; 
 
@@ -256,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Wait until the old Apple files boot up before doing anything
     let initCheck = setInterval(() => {
         if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
             clearInterval(initCheck);
@@ -264,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 250);
 
-    // Interactions
     ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
         viewerContainer.addEventListener(evt, (e) => {
             if (e.isTrusted && autoSpinMode) {
@@ -281,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleAutoSpinMode();
         }
     });
-
 
     // =========================================
     // 5. MOBILE DRAWER TOGGLE
