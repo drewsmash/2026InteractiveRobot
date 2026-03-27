@@ -75,7 +75,7 @@
         .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
 
         /* =========================================
-           VIEWER CORE
+           VIEWER CORE & LOADING SCREEN
            ========================================= */
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
@@ -88,6 +88,16 @@
         .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
         #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+
+        /* THE GLOWING LOADING SCREEN */
+        #loading-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
+            z-index: 4; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease;
+        }
+        .loading-box { width: 80%; max-width: 400px; text-align: center; }
+        .progress-text { color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 168, 255, 0.5); }
+        .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
+        .progress-fill { height: 100%; width: 0%; background: #00ff88; box-shadow: 0 0 10px rgba(0, 255, 136, 0.8); transition: width 0.1s linear; }
 
         /* =========================================
            INFO OVERLAYS 
@@ -159,6 +169,15 @@
 
     <div id="main-content">
         <div id="viewer"></div>
+
+        <div id="loading-screen" style="display: none;">
+            <div class="loading-box">
+                <div id="progress-text" class="progress-text">DOWNLOADING HD ASSETS... 0%</div>
+                <div class="progress-bar-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
 
         <div id="info-overlay" class="info-overlay">
             <div class="side-panel left-panel">
