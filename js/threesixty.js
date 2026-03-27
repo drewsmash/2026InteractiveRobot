@@ -34,7 +34,7 @@ threeSixty = {
         this.currentModel = modelFolder;
         this.currentFrames = frames || [30, 8];
         this.currentInvert = invert || [false, false];
-        this._vr = new AC.VR('viewer', modelFolder + '/Frame######.png', this.currentFrames, {
+        this._vr = new AC.VR('viewer', modelFolder + '/Frame######.jpg', this.currentFrames, {
             invert: this.currentInvert
         });
     },
