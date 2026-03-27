@@ -38,11 +38,9 @@
         }
         .viewer-controls button:hover { background: #FFD700; color: #11151C; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
 
-        /* Desktop Spin Button Styles */
         .btn-spin.active-mode { background: #00ff88 !important; color: #11151C !important; border-color: #00ff88 !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
         @media (min-width: 769px) { 
             #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
-            /* Hide the mobile control container on desktop */
             .mobile-floating-controls { display: none !important; }
         }
 
@@ -69,7 +67,7 @@
         .hidden { display: none !important; }
 
         /* =========================================
-           VIEWER CORE 
+           VIEWER CORE & REAL-TIME PROGRESS BAR
            ========================================= */
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
@@ -82,6 +80,34 @@
         .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
         #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+
+        /* The Custom Loading Screen */
+        #loading-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #11151C; /* Hides default text and empty space */
+            z-index: 4; /* Below info panels, above viewer */
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .loading-box { width: 80%; max-width: 400px; text-align: center; }
+        
+        .progress-text {
+            color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px;
+            margin-bottom: 15px; text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+        }
+
+        .progress-bar-container {
+            width: 100%; height: 6px; background: #1A212D; border-radius: 10px; 
+            overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%; width: 0%; background: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+            transition: width 0.1s linear;
+        }
 
         /* =========================================
            INFO OVERLAYS 
@@ -108,23 +134,15 @@
             .ramtech-logo { height: 45px !important; } .project-name { font-size: 1.1rem; } .header-logo { height: 28px !important; }
             .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
             .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
+            
+            #btn-spin-desktop { display: none !important; }
 
             .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
             .info-overlay.open { transform: translateY(0); visibility: visible; }
             .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
 
-            /* Container to hold both buttons next to each other on mobile */
-            .mobile-floating-controls {
-                position: absolute; bottom: 20px; right: 20px; z-index: 25;
-                display: flex; gap: 10px; align-items: center; justify-content: flex-end;
-            }
-
-            .btn-spin, #mobile-info-btn { 
-                background: #0078d7; color: white; border: 2px solid #00a8ff; 
-                padding: 10px 18px; border-radius: 30px; font-weight: bold; font-family: inherit; 
-                text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; 
-                box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s; white-space: nowrap;
-            }
+            .mobile-floating-controls { position: absolute; bottom: 20px; right: 20px; z-index: 25; display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+            .btn-spin, #mobile-info-btn { background: #0078d7; color: white; border: 2px solid #00a8ff; padding: 10px 18px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s; white-space: nowrap; }
             .btn-spin:active, #mobile-info-btn:active { transform: scale(0.95); }
         }
     </style>
@@ -140,16 +158,47 @@
     <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
 
     <script type="text/javascript">
+        window.imagesLoaded = 0;
+        window.totalImagesToLoad = 240; // Default fallback for first load
+
         if (typeof AC !== 'undefined' && AC.VR) {
             AC.VR.options.introDuration = 2.5; 
             AC.VR.prototype.gotoNextFrame = function() {
-                this.gotoPos([ this.currentPos[0] - 1, this.currentPos[1] ]);
+                this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
             };
             AC.VR.prototype.play = function(){
                 if (this.playing) return;
                 this.playing = true;
-                // Running at 115ms based on your custom preference
                 this.playInterval = setInterval(this.gotoNextFrame.bind(this), 115); 
+            };
+
+            // Intercept image payloads to run our real-time progress bar!
+            const originalImageDidLoad = AC.VR.prototype.imageDidLoad;
+            AC.VR.prototype.imageDidLoad = function(img) {
+                // Let the VR engine do its thing
+                if (originalImageDidLoad) originalImageDidLoad.apply(this, arguments);
+                
+                // Update our UI
+                if (window.totalImagesToLoad > 0) {
+                    window.imagesLoaded++;
+                    const progressBar = document.getElementById('progress-fill');
+                    const progressText = document.getElementById('progress-text');
+                    const loadingScreen = document.getElementById('loading-screen');
+                    
+                    if (progressBar && loadingScreen && loadingScreen.style.display !== 'none') {
+                        let percent = Math.min(100, Math.round((window.imagesLoaded / window.totalImagesToLoad) * 100));
+                        progressBar.style.width = percent + '%';
+                        progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
+                        
+                        // Close the loading screen the millisecond everything arrives
+                        if (window.imagesLoaded >= window.totalImagesToLoad) {
+                            setTimeout(() => {
+                                loadingScreen.style.opacity = '0';
+                                setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
+                            }, 200);
+                        }
+                    }
+                }
             };
         }
     </script>
@@ -173,6 +222,15 @@
 
     <div id="main-content">
         <div id="viewer"></div>
+
+        <div id="loading-screen">
+            <div class="loading-box">
+                <div id="progress-text" class="progress-text">DOWNLOADING HD ASSETS... 0%</div>
+                <div class="progress-bar-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
 
         <div id="info-overlay" class="info-overlay">
             <div class="side-panel left-panel">
@@ -213,10 +271,9 @@
             const spinBtns = document.querySelectorAll('.btn-spin');
             const viewerContainer = document.getElementById('viewer');
             
-            // STARTS OFF BY DEFAULT
             let autoSpinMode = false; 
             let idleTimer = null;
-            const idleDelay = 8000; // Your custom 8-second delay
+            const idleDelay = 8000; 
 
             function startSpinning() {
                 if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
@@ -247,7 +304,6 @@
 
             function toggleAutoSpinMode() {
                 autoSpinMode = !autoSpinMode;
-                // Syncs the color and text of both buttons instantly
                 spinBtns.forEach(btn => {
                     if (autoSpinMode) {
                         btn.classList.add('active-mode');
@@ -274,7 +330,6 @@
                 }, { passive: true, capture: true });
             });
 
-            // Make BOTH buttons work
             spinBtns.forEach(btn => btn.addEventListener('click', toggleAutoSpinMode));
 
             document.addEventListener('keydown', (e) => {
@@ -282,12 +337,6 @@
                     e.preventDefault(); 
                     toggleAutoSpinMode();
                 }
-            });
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (autoSpinMode) resetIdleTimer();
-                });
             });
 
             let initCheck = setInterval(() => {
@@ -344,11 +393,37 @@
                 }
             }
 
+            // Setup the very first exact frame count load on boot
+            const firstActiveBtn = document.querySelector('.nav-btn.active') || document.querySelector('.nav-btn');
+            if (firstActiveBtn) {
+                let defaultFramesAttr = JSON.parse(firstActiveBtn.getAttribute('data-frames') || '[30, 8]');
+                window.totalImagesToLoad = defaultFramesAttr[0] * defaultFramesAttr[1];
+            }
+
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
+                    // Update exact target frame math for Loading Screen
+                    window.imagesLoaded = 0;
+                    let framesAttr = JSON.parse(btn.getAttribute('data-frames') || '[30, 8]');
+                    window.totalImagesToLoad = framesAttr[0] * framesAttr[1];
+                    
+                    // Show Loading Screen Immediately
+                    const loadingScreen = document.getElementById('loading-screen');
+                    const progressFill = document.getElementById('progress-fill');
+                    const progressText = document.getElementById('progress-text');
+                    
+                    progressFill.style.width = '0%';
+                    progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
+                    loadingScreen.style.display = 'flex';
+                    loadingScreen.offsetHeight; // Forces browser reflow
+                    loadingScreen.style.opacity = '1';
+
+                    // Update UI text panels
                     let modelFolder = btn.getAttribute('data-model');
                     let modelName = modelFolder.split('/')[0];
                     updatePanels(modelName);
+                    
+                    if (autoSpinMode) resetIdleTimer();
                 }, { capture: true });
             });
 
