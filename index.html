@@ -96,6 +96,348 @@
 
         @media (min-width: 769px) {
             .side-panel { position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            .left-panel { left: 20px; } .right-panel { right: 20px; } #mobile-info-btn { display: none; }
+        }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS & DRAWER
+           ========================================= */
+        @media (max-width: 768px) {
+            header { display: flex; flex-direction: column; gap: 15px; padding: 15px 10px; }
+            .header-center { order: -1; margin-bottom: -5px; } .header-left, .header-right { justify-content: center; }
+            .ramtech-logo { height: 45px !important; } .project-name { font-size: 1.1rem; } .header-logo { height: 28px !important; }
+            .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
+            .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
+
+            .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
+            .info-overlay.open { transform: translateY(0); visibility: visible; }
+            .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
+
+            /* Container to hold both buttons next to each other on mobile */
+            .mobile-floating-controls {
+                position: absolute; bottom: 20px; right: 20px; z-index: 25;
+                display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+            }
+
+            .btn-spin, #mobile-info-btn { 
+                background: #0078d7; color: white; border: 2px solid #00a8ff; 
+                padding: 10px 18px; border-radius: 30px; font-weight: bold; font-family: inherit; 
+                text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; 
+                box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s; white-space: nowrap;
+            }
+            .btn-spin:active, #mobile-info-btn:active { transform: scale(0.95); }
+        }
+    </style>
+    
+    <script src="js/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/browserdetect.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/apple_core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/vr.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/wheelzoom.js" type="text/javascript"></script>
+    <script src="js/observers.js" type="text/javascript" defer></script>
+    <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
+
+    <script type="text/javascript">
+        if (typeof AC !== 'undefined' && AC.VR) {
+            AC.VR.options.introDuration = 2.5; 
+            AC.VR.prototype.gotoNextFrame = function() {
+                this.gotoPos([ this.currentPos[0] - 1, this.currentPos[1] ]);
+            };
+            AC.VR.prototype.play = function(){
+                if (this.playing) return;
+                this.playing = true;
+                // Running at 115ms based on your custom preference
+                this.playInterval = setInterval(this.gotoNextFrame.bind(this), 115); 
+            };
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="Rico_logoSingleColorTrans.png" alt="RICO Logo" class="header-logo">
+            <h1 class="project-name">RT59 | Viewing System</h1>
+        </div>
+
+        <div class="header-center">
+            <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
+        </div>
+
+        <div class="header-right viewer-controls">
+            <button id="btn-spin-desktop" class="btn-spin">Auto-Spin: OFF</button>
+        </div>
+    </header>
+
+    <div id="main-content">
+        <div id="viewer"></div>
+
+        <div id="info-overlay" class="info-overlay">
+            <div class="side-panel left-panel">
+                <h2 id="panel-title">Main Assembly</h2>
+                <div id="panel-left-content"></div>
+            </div>
+            
+            <div class="side-panel right-panel">
+                <h2>Technical Specs</h2>
+                <div id="panel-right-content"></div>
+            </div>
+        </div>
+
+        <div class="mobile-floating-controls">
+            <button id="btn-spin-mobile" class="btn-spin">Auto-Spin: OFF</button>
+            <button id="mobile-info-btn">View Specs</button>
+        </div>
+    </div>
+
+    <div class="model-nav">
+        <div class="nav-item">
+            <span class="nav-label">Main Assembly</span>
+            <button class="nav-btn active" data-model="Robot/images" data-frames="[30, 8]" data-invert="[false, false]">
+                <img src="Rico_logoSingleColorTrans.png" alt="RICO" class="nav-logo">
+            </button>
+        </div>
+        <div class="nav-item"><span class="nav-label">Shooter</span><button class="nav-btn" data-model="Shooter/images" data-frames="[30, 8]" data-invert="[false, false]">Shooter</button></div>
+        <div class="nav-item"><span class="nav-label">Tunnel</span><button class="nav-btn" data-model="Tunnel/images" data-frames="[30, 8]" data-invert="[false, false]">Tunnel</button></div>
+        <div class="nav-item"><span class="nav-label">Intake</span><button class="nav-btn" data-model="Intake/images" data-frames="[30, 8]" data-invert="[false, false]">Intake</button></div>
+        <div class="nav-item"><span class="nav-label">Indexer</span><button class="nav-btn" data-model="Indexer/images" data-frames="[30, 8]" data-invert="[false, false]">Indexer</button></div>
+        <div class="nav-item"><span class="nav-label">Swerve Wheel</span><button class="nav-btn" data-model="Wheel/images" data-frames="[30, 8]" data-invert="[false, false]">Swerve Wheel</button></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. NATIVE AUTO-SPIN LOGIC ---
+            const spinBtns = document.querySelectorAll('.btn-spin');
+            const viewerContainer = document.getElementById('viewer');
+            
+            // STARTS OFF BY DEFAULT
+            let autoSpinMode = false; 
+            let idleTimer = null;
+            const idleDelay = 8000; // Your custom 8-second delay
+
+            function startSpinning() {
+                if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    if (threeSixty._vr.grabbing) {
+                        resetIdleTimer();
+                    } else {
+                        threeSixty._vr.play(); 
+                    }
+                }
+            }
+
+            function stopSpinning() {
+                if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    threeSixty._vr.pause(); 
+                    if (threeSixty._vr.onGrabStart) {
+                        threeSixty._vr.onGrabStart.playing = false; 
+                    }
+                }
+            }
+
+            function resetIdleTimer() {
+                stopSpinning();
+                clearTimeout(idleTimer);
+                if (autoSpinMode) {
+                    idleTimer = setTimeout(startSpinning, idleDelay);
+                }
+            }
+
+            function toggleAutoSpinMode() {
+                autoSpinMode = !autoSpinMode;
+                // Syncs the color and text of both buttons instantly
+                spinBtns.forEach(btn => {
+                    if (autoSpinMode) {
+                        btn.classList.add('active-mode');
+                        btn.textContent = 'Auto-Spin: ON';
+                    } else {
+                        btn.classList.remove('active-mode');
+                        btn.textContent = 'Auto-Spin: OFF';
+                    }
+                });
+
+                if (autoSpinMode) {
+                    resetIdleTimer();
+                } else {
+                    stopSpinning();
+                    clearTimeout(idleTimer);
+                }
+            }
+
+            ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
+                viewerContainer.addEventListener(evt, (e) => {
+                    if (e.isTrusted && autoSpinMode) {
+                        resetIdleTimer();
+                    }
+                }, { passive: true, capture: true });
+            });
+
+            // Make BOTH buttons work
+            spinBtns.forEach(btn => btn.addEventListener('click', toggleAutoSpinMode));
+
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault(); 
+                    toggleAutoSpinMode();
+                }
+            });
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (autoSpinMode) resetIdleTimer();
+                });
+            });
+
+            let initCheck = setInterval(() => {
+                if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
+                    clearInterval(initCheck);
+                    if (autoSpinMode) resetIdleTimer();
+                }
+            }, 500);
+
+            // --- 2. SUBSYSTEM DATA LOGIC ---
+            const subsystemData = {
+                "Robot": {
+                    title: "RICO - Main Assembly",
+                    leftContent: "<p>Rico's 21.5\" x 33\" chassis is rectangular when stowed, forming a perfect square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity, utilizing vertical 1x1 tubes for unobstructed camera placement.</p>",
+                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Deflectors:</b> 1/16\" polycarb plates</li><li><b>Cameras:</b> 4x ArduCam OV9281</li></ul>"
+                },
+                "Shooter": {
+                    title: "Shooter & Turret",
+                    leftContent: "<p>A flywheel mechanism capable of firing approximately 6 balls per second. A rotating turret provides independent horizontal aiming.</p><p>Adjustable hood and flywheel speeds control the launch angle and distance, improving accuracy from anywhere on the field without repositioning the drivetrain.</p>",
+                    rightContent: "<ul><li><b>Turret Motor:</b> 1x Kraken X44 (52:1 Ratio)</li><li><b>Rotation:</b> 720° continuous via cable sleeve</li><li><b>Flywheel Motors:</b> 2x Kraken X60 (3:1 Ratio)</li><li><b>Flywheel:</b> 6\" aluminum with O-rings</li><li><b>Hood Range:</b> 41° (270:1 reduction)</li></ul>"
+                },
+                "Tunnel": {
+                    title: "Tunnel & Tower",
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer section and organizes it into a single horizontal row to prevent jamming.</p><p>The tower then shifts the fuel from horizontal to vertical motion, launching it smoothly into the shooter assembly.</p>",
+                    rightContent: "<ul><li><b>Tunnel Motor:</b> 1x Kraken X60</li><li><b>Tunnel System:</b> 3 belts moving at 20 ft/s</li><li><b>Tower Wheels:</b> 2x4\" and 4x2\" Stealth Wheels</li><li><b>Surface Speed:</b> Maintained at 20 ft/s throughout</li></ul>"
+                },
+                "Intake": {
+                    title: "Intake Assembly",
+                    leftContent: "<p>A single pivot mechanism designed to gather fuel from the floor immediately after contact to reduce chasing time.</p><p>The gear rack driven pivot allows for controlled deployment, agitation, and stowing within a 92° range of motion.</p>",
+                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 Ratio)</li><li><b>Roller Motors:</b> 2x Kraken X44</li><li><b>Rollers:</b> 2\" HDPE with CatTongue tape</li><li><b>Surface Speed:</b> 12.5 ft/s</li></ul>"
+                },
+                "Indexer": {
+                    title: "Indexer Mechanism",
+                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of downward-inclined, lightweight carbon fiber rods.</p><p>The roller bed pivots for maintenance access, while mecanum wheels act as agitators to guarantee streamlined fuel flow.</p>",
+                    rightContent: "<ul><li><b>Roller Motors:</b> Shared with intake (2x Kraken X44)</li><li><b>Roller Speed:</b> 6.5 ft/s</li><li><b>Structure:</b> PET-CF brace blocks</li><li><b>Agitators:</b> Mecanum wheels</li></ul>"
+                },
+                "Wheel": {
+                    title: "Swerve Drivetrain",
+                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes to navigate around fuel easily.</p><p>The X1 Ratio set improves torque to reduce power consumption, paired with custom 3D printed treads to improve grip over the bump.</p>",
+                    rightContent: "<ul><li><b>Module:</b> WCP X2S (Lightest in catalog)</li><li><b>Drive Motor:</b> 1x Kraken X60 per module</li><li><b>Steer Motor:</b> 1x Kraken X44 per module</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                }
+            };
+
+            const titleEl = document.getElementById('panel-title');
+            const leftEl = document.getElementById('panel-left-content');
+            const rightEl = document.getElementById('panel-right-content');
+            
+            function updatePanels(modelName) {
+                const data = subsystemData[modelName] || subsystemData["Robot"];
+                if(data && titleEl && leftEl && rightEl) {
+                    titleEl.innerHTML = data.title;
+                    leftEl.innerHTML = data.leftContent;
+                    rightEl.innerHTML = data.rightContent;
+                }
+            }
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    let modelFolder = btn.getAttribute('data-model');
+                    let modelName = modelFolder.split('/')[0];
+                    updatePanels(modelName);
+                }, { capture: true });
+            });
+
+            updatePanels('Robot');
+
+            // --- 3. MOBILE DRAWER TOGGLE ---
+            const toggleMobileBtn = document.getElementById('mobile-info-btn');
+            const overlay = document.getElementById('info-overlay');
+
+            if(toggleMobileBtn) {
+                toggleMobileBtn.addEventListener('click', () => {
+                    overlay.classList.toggle('open');
+                    toggleMobileBtn.textContent = overlay.classList.contains('open') ? 'Close Specs' : 'View Specs';
+                    
+                    if(overlay.classList.contains('open')) {
+                        toggleMobileBtn.style.background = '#FFD700';
+                        toggleMobileBtn.style.color = '#11151C';
+                    } else {
+                        toggleMobileBtn.style.background = '#0078d7';
+                        toggleMobileBtn.style.color = 'white';
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>            border: 2px solid #FFD700; padding: 8px 18px; font-size: 0.8rem;
+        }
+        .viewer-controls button:hover { background: #FFD700; color: #11151C; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+
+        /* Desktop Spin Button Styles */
+        .btn-spin.active-mode { background: #00ff88 !important; color: #11151C !important; border-color: #00ff88 !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
+        @media (min-width: 769px) { 
+            #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
+            /* Hide the mobile control container on desktop */
+            .mobile-floating-controls { display: none !important; }
+        }
+
+        /* =========================================
+           NAVIGATION BAR STYLES
+           ========================================= */
+        .model-nav { 
+            background: #1A212D; padding: 15px 20px; display: flex; gap: 20px; justify-content: center; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
+        }
+        .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+        .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+        .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
+
+        .nav-btn { 
+            font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 6px; 
+            transition: all 0.2s ease-in-out; outline: none; background: #2A3441; color: #A0B0C0; border: 2px solid transparent; 
+            padding: 10px 25px; font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
+        }
+        .nav-btn:hover { background: #3B485A; color: #fff; }
+        .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
+        .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
+        .hidden { display: none !important; }
+
+        /* =========================================
+           VIEWER CORE 
+           ========================================= */
+        #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
+
+        #viewer { 
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
+            background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
+        }
+        #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+
+        .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
+        .vr:active { cursor: grabbing; }
+        #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+
+        /* =========================================
+           INFO OVERLAYS 
+           ========================================= */
+        .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
+        .side-panel { box-sizing: border-box; pointer-events: auto; }
+        .side-panel h2 { color: #FFD700; font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .side-panel p { font-size: 0.85rem; line-height: 1.6; color: #A0B0C0; margin-bottom: 15px; }
+        .side-panel ul { padding-left: 20px; font-size: 0.85rem; color: #e0e0e0; line-height: 1.6; }
+        .side-panel li { margin-bottom: 10px; }
+        .side-panel b { color: #00a8ff; } 
+
+        @media (min-width: 769px) {
+            .side-panel { position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
             .left-panel { left: 20px; } .right-panel { right: 20px; } 
         }
 
