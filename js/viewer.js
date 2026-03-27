@@ -1,69 +1,18 @@
-/*!
- * SOLIDWORKS Visualize (Pre)Viewer - Optimized & Rewritten for RT59 (Multi-Year)
- */
-
-// =========================================
-// 1. ENGINE OVERRIDES (Fixes Speed & Progress Bar)
-// =========================================
-window.imagesLoaded = 0;
-window.totalImagesToLoad = 240; 
-
-if (typeof AC !== 'undefined' && AC.VR) {
-    AC.VR.options.introDuration = 2.5; 
-    
-    AC.VR.prototype.gotoNextFrame = function() {
-        this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
-    };
-    
-    AC.VR.prototype.play = function(){
-        if (this.playing) return;
-        this.playing = true;
-        this.playInterval = setInterval(this.gotoNextFrame.bind(this), 115); 
-    };
-
-    // Network Interceptor for the Loading Bar
-    const originalImageDidLoad = AC.VR.prototype.imageDidLoad;
-    AC.VR.prototype.imageDidLoad = function(img) {
-        if (originalImageDidLoad) originalImageDidLoad.apply(this, arguments);
-        
-        if (window.totalImagesToLoad > 0) {
-            window.imagesLoaded++;
-            const progressBar = document.getElementById('progress-fill');
-            const progressText = document.getElementById('progress-text');
-            const loadingScreen = document.getElementById('loading-screen');
-            
-            if (progressBar && loadingScreen && loadingScreen.style.display !== 'none') {
-                let percent = Math.min(100, Math.round((window.imagesLoaded / window.totalImagesToLoad) * 100));
-                progressBar.style.width = percent + '%';
-                progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
-                
-                if (window.imagesLoaded >= window.totalImagesToLoad) {
-                    setTimeout(() => {
-                        loadingScreen.style.opacity = '0';
-                        setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
-                    }, 200);
-                }
-            }
-        }
-    };
-}
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 2. THE ROBOT DATABASE
+    // 1. THE MULTI-YEAR DATABASE
     // =========================================
     const robotDatabase = {
         "2026_rico": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "Robot/images", frames: [30, 8], useLogo: true },
-                { id: "Shooter", label: "Shooter", path: "Shooter/images", frames: [30, 8], useLogo: false },
-                { id: "Tunnel", label: "Tunnel", path: "Tunnel/images", frames: [30, 8], useLogo: false },
-                { id: "Intake", label: "Intake", path: "Intake/images", frames: [30, 8], useLogo: false },
-                { id: "Indexer", label: "Indexer", path: "Indexer/images", frames: [30, 8], useLogo: false },
-                { id: "Wheel", label: "Swerve Wheel", path: "Wheel/images", frames: [30, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "Robot/images", frames: 30, useLogo: true },
+                { id: "Shooter", label: "Shooter", path: "Shooter/images", frames: 30, useLogo: false },
+                { id: "Tunnel", label: "Tunnel", path: "Tunnel/images", frames: 30, useLogo: false },
+                { id: "Intake", label: "Intake", path: "Intake/images", frames: 30, useLogo: false },
+                { id: "Indexer", label: "Indexer", path: "Indexer/images", frames: 30, useLogo: false },
+                { id: "Wheel", label: "Swerve Wheel", path: "Wheel/images", frames: 30, useLogo: false }
             ],
             specs: {
                 "Robot": {
@@ -101,19 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         "2025_offseason": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2025/Robot/images", frames: [30, 8], useLogo: false },
-                { id: "Elevator", label: "Elevator", path: "2025/Elevator/images", frames: [30, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "2025/Robot/images", frames: 30, useLogo: false }
             ],
             specs: {
                 "Robot": {
                     title: "2025 Offseason Assembly",
                     leftContent: "<p>Placeholder text for the 2025 offseason robot.</p>",
                     rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
-                },
-                "Elevator": {
-                    title: "Elevator Mechanism",
-                    leftContent: "<p>Lifts objects vertically.</p>",
-                    rightContent: "<ul><li><b>Motors:</b> TBD</li></ul>"
                 }
             }
         }
@@ -121,7 +64,189 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // 3. DYNAMIC UI GENERATOR
+    // 2. THE CUSTOM 360 ENGINE
+    // =========================================
+    const viewerImg = document.getElementById('viewer-image');
+    const viewerContainer = document.getElementById('viewer');
+    const loadingScreen = document.getElementById('loading-screen');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const spinBtns = document.querySelectorAll('.btn-spin');
+
+    let imageCache = [];
+    let currentFrame = 1;
+    let totalFrames = 30;
+    
+    // Drag Physics State
+    let isDragging = false;
+    let startX = 0;
+    const pixelsPerFrame = 15; // How far mouse must move to trigger next frame
+    
+    // Auto-Spin State
+    let autoSpinMode = false; 
+    let spinLoop = null;
+    let idleTimer = null;
+    const spinSpeedMs = 85; 
+    const idleDelayMs = 4000; 
+
+    // Formatting string: Folder/Frame000001.png
+    function getFramePath(folder, index) {
+        let paddedIndex = index.toString().padStart(6, '0');
+        return `${folder}/Frame${paddedIndex}.png`; // Change to .jpg here if needed!
+    }
+
+    function updateImageDisplay() {
+        if (imageCache[currentFrame - 1]) {
+            viewerImg.src = imageCache[currentFrame - 1].src;
+        }
+    }
+
+    // The Bulletproof Preloader
+    function loadModelImages(folderPath, frameCount) {
+        stopSpinning();
+        clearTimeout(idleTimer);
+        viewerImg.style.opacity = '0'; 
+        
+        loadingScreen.style.display = 'flex';
+        loadingScreen.offsetHeight; 
+        loadingScreen.style.opacity = '1';
+        progressFill.style.width = '0%';
+        progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
+
+        totalFrames = frameCount;
+        imageCache = [];
+        let loadedCount = 0;
+
+        for (let i = 1; i <= totalFrames; i++) {
+            let img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                let percent = Math.round((loadedCount / totalFrames) * 100);
+                progressFill.style.width = percent + '%';
+                progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
+
+                if (loadedCount === totalFrames) {
+                    currentFrame = 1;
+                    updateImageDisplay();
+                    viewerImg.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
+                    }, 300);
+
+                    if (autoSpinMode) resetIdleTimer();
+                }
+            };
+            img.onerror = () => {
+                console.error("Failed to load: " + img.src);
+                loadedCount++; 
+            };
+            img.src = getFramePath(folderPath, i);
+            imageCache.push(img);
+        }
+    }
+
+    // --- Interaction Physics ---
+    function startDrag(e) {
+        isDragging = true;
+        startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+        stopSpinning();
+        clearTimeout(idleTimer);
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault(); 
+
+        let currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+        let deltaX = currentX - startX;
+        
+        if (Math.abs(deltaX) > pixelsPerFrame) {
+            if (deltaX > 0) {
+                currentFrame--; // Drag right, spin left
+            } else {
+                currentFrame++; // Drag left, spin right
+            }
+
+            // Loop logic
+            if (currentFrame > totalFrames) currentFrame = 1;
+            if (currentFrame < 1) currentFrame = totalFrames;
+
+            updateImageDisplay();
+            startX = currentX; 
+        }
+    }
+
+    function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        if (autoSpinMode) resetIdleTimer();
+    }
+
+    viewerContainer.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', drag);
+    window.addEventListener('mouseup', endDrag);
+    viewerContainer.addEventListener('touchstart', startDrag, {passive: false});
+    window.addEventListener('touchmove', drag, {passive: false});
+    window.addEventListener('touchend', endDrag);
+
+    // --- Auto-Spin Logic ---
+    function startSpinning() {
+        if (autoSpinMode && !spinLoop && !isDragging) {
+            spinLoop = setInterval(() => {
+                currentFrame++;
+                if (currentFrame > totalFrames) currentFrame = 1;
+                updateImageDisplay();
+            }, spinSpeedMs);
+        }
+    }
+
+    function stopSpinning() {
+        clearInterval(spinLoop);
+        spinLoop = null;
+    }
+
+    function resetIdleTimer() {
+        stopSpinning();
+        clearTimeout(idleTimer);
+        if (autoSpinMode) {
+            idleTimer = setTimeout(startSpinning, idleDelayMs);
+        }
+    }
+
+    function toggleAutoSpinMode() {
+        autoSpinMode = !autoSpinMode;
+        spinBtns.forEach(btn => {
+            if (autoSpinMode) {
+                btn.classList.add('active-mode');
+                btn.textContent = 'Auto-Spin: ON';
+            } else {
+                btn.classList.remove('active-mode');
+                btn.textContent = 'Auto-Spin: OFF';
+            }
+        });
+
+        if (autoSpinMode) {
+            resetIdleTimer();
+        } else {
+            stopSpinning();
+            clearTimeout(idleTimer);
+        }
+    }
+
+    spinBtns.forEach(btn => btn.addEventListener('click', toggleAutoSpinMode));
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+            e.preventDefault(); 
+            toggleAutoSpinMode();
+        }
+    });
+
+
+    // =========================================
+    // 3. UI GENERATOR & CONTROLLER
     // =========================================
     const robotSelector = document.getElementById('robot-selector');
     const navContainer = document.getElementById('dynamic-nav-container');
@@ -134,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.logo) headerLogo.src = data.logo;
         navContainer.innerHTML = '';
 
-        data.subsystems.forEach((sub, index) => {
+        data.subsystems.forEach((sub) => {
             const item = document.createElement('div');
             item.className = 'nav-item';
 
@@ -160,25 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
                 document.getElementById('panel-right-content').innerHTML = specs.rightContent;
 
-                window.imagesLoaded = 0;
-                window.totalImagesToLoad = sub.frames[0] * sub.frames[1];
-                const loadingScreen = document.getElementById('loading-screen');
-                const progressFill = document.getElementById('progress-fill');
-                const progressText = document.getElementById('progress-text');
-                
-                if (progressFill && progressText && loadingScreen) {
-                    progressFill.style.width = '0%';
-                    progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
-                    loadingScreen.style.display = 'flex';
-                    loadingScreen.offsetHeight; 
-                    loadingScreen.style.opacity = '1';
-                }
-
-                if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
-                    threeSixty.loadModel(sub.path, sub.frames, [false, false]);
-                }
-
-                if (autoSpinMode) resetIdleTimer();
+                loadModelImages(sub.path, sub.frames);
             });
 
             item.appendChild(span);
@@ -186,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navContainer.appendChild(item);
         });
 
+        // Trigger load for the first subsystem
         const firstBtn = navContainer.querySelector('.nav-btn');
         if (firstBtn) firstBtn.click();
     }
@@ -194,92 +302,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loadRobotProfile(e.target.value);
     });
 
+    // Start App
     loadRobotProfile(robotSelector.value);
 
 
     // =========================================
-    // 4. AUTO-SPIN LOGIC
-    // =========================================
-    const spinBtns = document.querySelectorAll('.btn-spin');
-    const viewerContainer = document.getElementById('viewer');
-    
-    let autoSpinMode = false; 
-    let idleTimer = null;
-    const idleDelay = 8000; 
-
-    function startSpinning() {
-        if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            if (threeSixty._vr.grabbing) {
-                resetIdleTimer();
-            } else {
-                threeSixty._vr.play(); 
-            }
-        }
-    }
-
-    function stopSpinning() {
-        if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            threeSixty._vr.pause(); 
-            if (threeSixty._vr.onGrabStart) {
-                threeSixty._vr.onGrabStart.playing = false; 
-            }
-        }
-    }
-
-    function resetIdleTimer() {
-        stopSpinning();
-        clearTimeout(idleTimer);
-        if (autoSpinMode) {
-            idleTimer = setTimeout(startSpinning, idleDelay);
-        }
-    }
-
-    function toggleAutoSpinMode() {
-        autoSpinMode = !autoSpinMode;
-        spinBtns.forEach(btn => {
-            if (autoSpinMode) {
-                btn.classList.add('active-mode');
-                btn.textContent = 'Auto-Spin: ON';
-            } else {
-                btn.classList.remove('active-mode');
-                btn.textContent = 'Auto-Spin: OFF';
-            }
-        });
-
-        if (autoSpinMode) {
-            resetIdleTimer();
-        } else {
-            stopSpinning();
-            clearTimeout(idleTimer);
-        }
-    }
-
-    ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
-        viewerContainer.addEventListener(evt, (e) => {
-            if (e.isTrusted && autoSpinMode) {
-                resetIdleTimer();
-            }
-        }, { passive: true, capture: true });
-    });
-
-    spinBtns.forEach(btn => btn.addEventListener('click', toggleAutoSpinMode));
-
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-            e.preventDefault(); 
-            toggleAutoSpinMode();
-        }
-    });
-
-    let initCheck = setInterval(() => {
-        if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            clearInterval(initCheck);
-            if (autoSpinMode) resetIdleTimer();
-        }
-    }, 500);
-
-    // =========================================
-    // 5. MOBILE DRAWER TOGGLE
+    // 4. MOBILE DRAWER TOGGLE
     // =========================================
     const toggleMobileBtn = document.getElementById('mobile-info-btn');
     const overlay = document.getElementById('info-overlay');
