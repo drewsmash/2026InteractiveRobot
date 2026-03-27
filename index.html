@@ -75,32 +75,19 @@
         .nav-logo { height: 20px !important; width: auto !important; max-width: 80px !important; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
 
         /* =========================================
-           CUSTOM VIEWER CORE
+           VIEWER CORE
            ========================================= */
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
         #viewer { 
             flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
-            cursor: grab;
         }
-        #viewer:active { cursor: grabbing; }
-        
-        #viewer-image { 
-            max-width: 95%; max-height: 95%; width: auto; height: auto; object-fit: contain; 
-            -webkit-user-drag: none; pointer-events: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); 
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
-        /* Loading Screen */
-        #loading-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
-            z-index: 4; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease;
-        }
-        .loading-box { width: 80%; max-width: 400px; text-align: center; }
-        .progress-text { color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 168, 255, 0.5); }
-        .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
-        .progress-fill { height: 100%; width: 0%; background: #00ff88; box-shadow: 0 0 10px rgba(0, 255, 136, 0.8); transition: width 0.1s linear; }
+        .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
+        .vr:active { cursor: grabbing; }
+        #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
         /* =========================================
            INFO OVERLAYS 
@@ -140,9 +127,15 @@
             .btn-spin:active, #mobile-info-btn:active { transform: scale(0.95); }
         }
     </style>
-
-    <script src="js/viewer.js" defer></script>
-
+    
+    <script src="js/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/browserdetect.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/apple_core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/vr.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
 </head>
 <body>
 
@@ -154,34 +147,25 @@
                 <option value="2025_offseason">2025 Offseason</option>
             </select>
         </div>
+
         <div class="header-center">
             <img src="Ramtech_logo.png" alt="Ramtech Logo" class="ramtech-logo">
         </div>
+
         <div class="header-right viewer-controls">
             <button id="btn-spin-desktop" class="btn-spin">Auto-Spin: OFF</button>
         </div>
     </header>
 
     <div id="main-content">
-        
-        <div id="viewer">
-            <img id="viewer-image" src="" alt="3D Model">
-        </div>
-
-        <div id="loading-screen">
-            <div class="loading-box">
-                <div id="progress-text" class="progress-text">DOWNLOADING HD ASSETS... 0%</div>
-                <div class="progress-bar-container">
-                    <div id="progress-fill" class="progress-fill"></div>
-                </div>
-            </div>
-        </div>
+        <div id="viewer"></div>
 
         <div id="info-overlay" class="info-overlay">
             <div class="side-panel left-panel">
                 <h2 id="panel-title">Main Assembly</h2>
                 <div id="panel-left-content"></div>
             </div>
+            
             <div class="side-panel right-panel">
                 <h2>Technical Specs</h2>
                 <div id="panel-right-content"></div>
