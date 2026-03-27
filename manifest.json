@@ -1,0 +1,21 @@
+{
+  "name": "Ram Tech 59 Viewing System",
+  "short_name": "RT59 Viewer",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#11151C",
+  "theme_color": "#11151C",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
