@@ -1,7 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 1. THE MULTI-YEAR DATABASE
+    // 1. ENGINE OVERRIDE (Fixes the fast spin)
+    // =========================================
+    // We override the default vr.js play() function here to slow it down to 85ms
+    if (typeof AC !== 'undefined' && AC.VR) {
+        AC.VR.options.introDuration = 2.5; 
+        
+        AC.VR.prototype.gotoNextFrame = function() {
+            this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
+        };
+        
+        AC.VR.prototype.play = function(){
+            if (this.playing) return;
+            this.playing = true;
+            this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
+        };
+    }
+
+
+    // =========================================
+    // 2. THE MULTI-YEAR DATABASE
     // =========================================
     const robotDatabase = {
         "2026_rico": {
@@ -65,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // 2. DYNAMIC UI GENERATOR
+    // 3. DYNAMIC UI GENERATOR
     // =========================================
     const robotSelector = document.getElementById('robot-selector');
     const navContainer = document.getElementById('dynamic-nav-container');
@@ -129,12 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadRobotProfile(e.target.value);
     });
 
-    // Start App
-    loadRobotProfile(robotSelector.value);
-
 
     // =========================================
-    // 3. SAFE EXTERNAL AUTO-SPIN 
+    // 4. SAFE EXTERNAL AUTO-SPIN 
     // =========================================
     const spinBtns = document.querySelectorAll('.btn-spin');
     const viewerContainer = document.getElementById('viewer');
@@ -191,13 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Wait until VR Engine boots up
+    // Wait until the old Apple files boot up before doing anything
     let initCheck = setInterval(() => {
         if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
             clearInterval(initCheck);
-            if (autoSpinMode) resetIdleTimer();
+            loadRobotProfile(robotSelector.value);
         }
-    }, 500);
+    }, 250);
 
     // Interactions
     ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
@@ -219,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // 4. MOBILE DRAWER TOGGLE
+    // 5. MOBILE DRAWER TOGGLE
     // =========================================
     const toggleMobileBtn = document.getElementById('mobile-info-btn');
     const overlay = document.getElementById('info-overlay');
