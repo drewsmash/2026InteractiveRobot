@@ -1,10 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Helper function to forcefully hide the loading screen if it gets stuck
+    window.forceHideLoadingScreen = function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        const progressText = document.getElementById('progress-text');
+        if (loadingScreen && loadingScreen.style.display !== 'none') {
+            if (progressText) progressText.innerText = 'READY.';
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
+        }
+    };
+
     // =========================================
     // 1. ENGINE OVERRIDE & LOADING INTERCEPTOR
     // =========================================
     window.imagesLoaded = 0;
-    window.totalImagesToLoad = 246; 
+    window.totalImagesToLoad = 240; 
+    window.loadingFailsafe = null; // The new timer variable
 
     if (typeof AC !== 'undefined' && AC.VR) {
         AC.VR.options.introDuration = 2.5; 
@@ -19,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
         };
 
-        // THE FIX: We must intercept Apple's "onLoad" function, not "imageDidLoad"!
         if (AC.VR.Loader) {
             const originalOnLoad = AC.VR.Loader.prototype.onLoad;
             
@@ -40,8 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         progressBar.style.width = percent + '%';
                         progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
                         
+                        // CLEAR AND RESET THE FAILSAFE TIMER
+                        clearTimeout(window.loadingFailsafe);
+                        window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 1500);
+                        
                         // When fully loaded, hide the black screen to reveal the images!
                         if (window.imagesLoaded >= window.totalImagesToLoad) {
+                            clearTimeout(window.loadingFailsafe); // Turn off the timer since it finished perfectly
                             setTimeout(() => {
                                 loadingScreen.style.opacity = '0';
                                 setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
@@ -121,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             specs: {
                 "Robot": {
-                    title: "2025 Offseason Assembly",
+                    title: "2023 Season Assembly",
                     leftContent: "<p>Placeholder text for the 2023 robot.</p>",
                     rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
                 }
@@ -183,6 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadingScreen.offsetHeight; 
                     loadingScreen.style.opacity = '1';
                 }
+
+                // Turn on the Failsafe the exact moment the button is clicked, just in case 0 images load
+                clearTimeout(window.loadingFailsafe);
+                window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 3000);
 
                 if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
                     setTimeout(() => {
