@@ -133,7 +133,16 @@ document.addEventListener('DOMContentLoaded', () => {
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], useLogo: false }
+                { 
+                    id: "Robot", 
+                    label: "Main Assembly", 
+                    path: "2023/Robot/images", 
+                    frames: [38, 8], 
+                    // ---> ADDED MOBILE VARS HERE <---
+                    mobilePath: "2023/Robot/Mobile/images",
+                    mobileFrames: [30, 8],
+                    useLogo: false 
+                }
             ],
             specs: {
                 "Robot": {
@@ -186,8 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
                 document.getElementById('panel-right-content').innerHTML = specs.rightContent;
 
+                // ---> ADDED MOBILE DETECTOR HERE <---
+                const isMobile = window.innerWidth <= 768;
+                const targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
+                const targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
+
                 window.imagesLoaded = 0;
-                window.totalImagesToLoad = sub.frames[0] * sub.frames[1];
+                window.totalImagesToLoad = targetFrames[0] * targetFrames[1]; // Using the target frames
                 const loadingScreen = document.getElementById('loading-screen');
                 const progressFill = document.getElementById('progress-fill');
                 const progressText = document.getElementById('progress-text');
@@ -206,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
                     setTimeout(() => {
-                        threeSixty.loadModel(sub.path, sub.frames, [false, false]);
+                        // Pass the target path and target frames to the engine
+                        threeSixty.loadModel(targetPath, targetFrames, [false, false]);
                     }, 50);
                 }
 
