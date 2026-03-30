@@ -117,11 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [30, 8], useLogo: false }
             ],
             specs: {
                 "Robot": {
-                    title: "2025 Offseason Assembly",
+                    title: "2023 Offseason Assembly",
                     leftContent: "<p>Placeholder text for the 2023 robot.</p>",
                     rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
                 }
