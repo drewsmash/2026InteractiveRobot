@@ -205,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const v2d = document.getElementById('viewer');
         const v3d = document.getElementById('viewer-3d');
         const spinner3d = document.getElementById('spinner-3d');
+        const modelElement = document.getElementById('model-element');
 
         if (val === '3D_LIVE') {
             if (v2d) v2d.style.display = 'none';
@@ -212,10 +213,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 v3d.style.display = 'flex';
                 if (spinner3d) spinner3d.style.display = 'flex';
                 
-                // Simulated load time for the 3D viewer (1.5 seconds)
-                setTimeout(() => {
-                    if (spinner3d) spinner3d.style.display = 'none';
-                }, 1500); 
+                if (modelElement) {
+                    if (!modelElement.src) {
+                        modelElement.addEventListener('load', () => {
+                            if (spinner3d) spinner3d.style.display = 'none';
+                            modelElement.style.opacity = '1';
+                        }, { once: true });
+                        // IMPORTANT: Replace this placeholder path with your actual .glb path
+                        modelElement.src = "2026/Robot/3D/rico.glb"; 
+                    } else if (modelElement.style.opacity === '1') {
+                        if (spinner3d) spinner3d.style.display = 'none';
+                    }
+                }
             }
         } else {
             if (v3d) v3d.style.display = 'none';
