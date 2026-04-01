@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const modelViewerReadyPromise = window.modelViewerReady || Promise.resolve(
+        typeof customElements !== 'undefined' && !!customElements.get('model-viewer')
+    );
 
     window.forceHideLoadingScreen = function() {
         const loadingScreen = document.getElementById('loading-screen');
@@ -161,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = document.querySelectorAll('.btn-spin:not(#btn-hd-desktop):not(#btn-hd-mobile)');
 
-    function executeModelLoad(sub) {
+    async function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
         const isMobile = window.innerWidth <= 768;
         
@@ -182,6 +185,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     modelElement.style.opacity = '0';
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
 
+                    try {
+                        await modelViewerReadyPromise;
+                    } catch (error) {
+                        console.error('model-viewer failed to initialize:', error);
+                        if (spinner3d) {
+                            spinner3d.innerHTML = `
+                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D VIEWER FAILED TO LOAD</div>
+                                <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
+                                    The browser could not load the <b>model-viewer</b> component.<br>
+                                    This usually means the page is offline, the CDN request was blocked, or an old service worker cached a bad response.
+                                </div>
+                            `;
+                        }
+                        return;
+                    }
+
+                    if (typeof customElements !== 'undefined' && !customElements.get('model-viewer')) {
+                        if (spinner3d) {
+                            spinner3d.innerHTML = `
+                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D VIEWER UNAVAILABLE</div>
+                                <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
+                                    The <b>model-viewer</b> web component did not register correctly, so the 3D canvas never started.
+                                </div>
+                            `;
+                        }
+                        return;
+                    }
+
                     const onModelLoad = () => {
                         if (spinner3d) spinner3d.style.display = 'none';
                         modelElement.style.opacity = '1';
@@ -191,9 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error loading 3D model:', error);
                         if (spinner3d) {
                             spinner3d.innerHTML = `
-                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">LOCAL FILE BLOCKED</div>
+                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D MODEL FAILED TO LOAD</div>
                                 <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
-                                    Browser security rules blocked your file, or <b>rico.glb</b> is missing.<br>
+                                    Browser security rules blocked your file, or <b>${sub.src}</b> is missing.<br>
                                     Loading Demo Astronaut automatically.<br><br>
                                     <span style="color: #FFD700; font-weight: bold;">(You MUST run via a Local Web Server to see your own files)</span>
                                 </div>
