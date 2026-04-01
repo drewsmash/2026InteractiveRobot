@@ -214,12 +214,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (spinner3d) spinner3d.style.display = 'flex';
                 
                 if (modelElement) {
-                    if (!modelElement.src) {
+                    if (!modelElement.getAttribute('src')) {
                         modelElement.addEventListener('load', () => {
                             if (spinner3d) spinner3d.style.display = 'none';
                             modelElement.style.opacity = '1';
                         }, { once: true });
-                        // IMPORTANT: Replace this placeholder path with your actual .glb path
+                        
+                        modelElement.addEventListener('error', (error) => {
+                            console.error('Error loading 3D model:', error);
+                            if (spinner3d) spinner3d.innerHTML = '<div class="loader-text" style="color: #ff4444;">ERROR: 3D MODEL NOT FOUND</div><div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px;">Check the console or verify your .glb file exists at the path.</div>';
+                        }, { once: true });
+
+                        // Changed to a live test model to prove the viewer works!
+                        // Once you see the astronaut, change this back to your "2026/Robot/3D/rico.glb" path.
                         modelElement.src = "2026/Robot/3D/rico.glb"; 
                     } else if (modelElement.style.opacity === '1') {
                         if (spinner3d) spinner3d.style.display = 'none';
