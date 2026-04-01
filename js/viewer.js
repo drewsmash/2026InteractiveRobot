@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "2026/3D/rico.glb" }
+                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "2026/Robot/3D/rico.glb" }
             ],
             specs: {
                 "FullRobot": {
@@ -175,6 +175,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (modelElement) {
                     modelElement.style.opacity = '0';
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
+
+                    // --- SECURITY FAILSAFE ---
+                    // If you run this from file:/// without a server, the browser strictly blocks Google's 3D module script.
+                    // This failsafe detects if the module was blocked and explicitly tells you to use Live Server.
+                    setTimeout(() => {
+                        if (!customElements.get('model-viewer')) {
+                            if (spinner3d) spinner3d.innerHTML = `
+                                <div class="loader-text" style="color: #ff4444; text-align: center; font-size: 1.1rem; line-height: 1.4;">ERROR: 3D SCRIPT BLOCKED</div>
+                                <div style="color: #A0B0C0; font-size: 0.85rem; margin-top: 15px; text-align:center; padding: 0 20px; line-height: 1.6;">
+                                    Your browser completely blocked the 3D engine. This always happens when opening the site directly from your hard drive.<br><br>
+                                    <span style="color: #FFD700; font-weight: bold;">You MUST run this site through a Local Web Server!</span><br>
+                                    (In VS Code, right click index.html and select "Open with Live Server")
+                                </div>`;
+                        }
+                    }, 1500);
 
                     modelElement.addEventListener('load', () => {
                         if (spinner3d) spinner3d.style.display = 'none';
