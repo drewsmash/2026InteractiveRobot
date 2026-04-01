@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon" href="app-icon.png">
 
     <style>
-        /* NEW: Global Font Scaler */
+        /* Global Font Scaler */
         html {
             font-size: clamp(14px, 1vw, 22px); 
         }
@@ -32,7 +32,7 @@
         }
         .header-left { display: flex; align-items: center; justify-content: flex-start; gap: 15px; flex-wrap: wrap; }
         
-        /* UPDATED: Fluid Logos */
+        /* Fluid Logos */
         .header-logo { height: clamp(28px, 4vh, 55px) !important; width: auto !important; max-width: 150px !important; object-fit: contain; }
         .ramtech-logo { height: clamp(50px, 8vh, 120px) !important; width: auto !important; max-width: 300px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
         
@@ -69,7 +69,7 @@
         .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
         .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
 
-        /* UPDATED: Fluid Nav Buttons */
+        /* Fluid Nav Buttons */
         .nav-btn { 
             font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 6px; 
             transition: all 0.2s ease-in-out; outline: none; background: #2A3441; color: #A0B0C0; border: 2px solid transparent; 
@@ -90,7 +90,9 @@
 
         .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
-        #viewer img, .vr img { max-width: 95% !important; max-height: 95% !important; width: auto !important; height: auto !important; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+        
+        /* THE ULTIMATE IMAGE SCALE FIX IS RIGHT HERE: width: 100% and height: 100% */
+        #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 95% !important; max-height: 95% !important; object-fit: contain !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
         #loading-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
@@ -109,7 +111,7 @@
         .side-panel li { margin-bottom: 10px; }
         .side-panel b { color: #00a8ff; } 
 
-        /* UPDATED: Fluid Side Panels for Desktop */
+        /* Fluid Side Panels for Desktop */
         @media (min-width: 769px) { 
             #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
             .mobile-floating-controls { display: none !important; }
