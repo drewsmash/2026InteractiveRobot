@@ -1,4 +1,4 @@
-threeSixty = {
+var threeSixty = {
     currentModel: '',
     currentFrames: [30, 8],
     currentInvert: [false, false],
@@ -24,8 +24,9 @@ threeSixty = {
         }
     },
 
-    // Natively handles dynamic frames and file extensions
-    loadModel: function (modelFolder, frames, invert, ext) {
+    loadModel: function (modelFolder, frames, invert) {
+        var self = this; 
+        
         if (this._vr) {
             this.willHide();
             var viewerEl = document.getElementById('viewer');
@@ -35,64 +36,39 @@ threeSixty = {
         this.currentModel = modelFolder;
         this.currentFrames = frames || [30, 8];
         this.currentInvert = invert || [false, false];
-        
-        // Fallback to .jpg if no format is provided
-        var format = ext || '.jpg'; 
-
-        this._vr = new AC.VR('viewer', modelFolder + '/Frame######' + format, this.currentFrames, {
-            invert: this.currentInvert
-        });
-    },
-
-    didShow: function() {
-        this.init();
-    },
-    
-    willHide: function() {
-        recycleObjectValueForKey(this, "_vr");
-    },
-    
-    shouldCache: function() {
-        return false;
-    }
-};
-
-if (!window.isLoaded) {
-    window.addEventListener("load", function() {
-        threeSixty.init();
-    }, false);
-}
-        this.currentModel = modelFolder;
-        this.currentFrames = frames; // <-- Strictly uses the database array now!
-        this.currentInvert = invert || [false, false];
 
         // ==========================================
         // THE NATIVE AUTO-DETECTOR
         // ==========================================
-        const formatsToTest = ['.webp', '.jpg', '.png'];
-        let formatIndex = 0;
+        var formatsToTest = ['.webp', '.jpg', '.png'];
+        var formatIndex = 0;
 
         function testFormat() {
             if (formatIndex >= formatsToTest.length) {
+                // Failsafe: Default to .jpg so it doesn't hang forever
                 self.startEngine('.jpg');
                 return;
             }
 
-            const testExt = formatsToTest[formatIndex];
-            const img = new Image();
+            var testExt = formatsToTest[formatIndex];
+            var img = new Image();
 
-            img.onload = () => {
+            img.onload = function() {
+                // Format found! Boot the engine.
                 self.startEngine(testExt);
             };
 
-            img.onerror = () => {
+            img.onerror = function() {
+                // Failed, try the next format
                 formatIndex++;
                 testFormat();
             };
 
-            img.src = modelFolder + '/Frame000000' + testExt;
+            // Ping Frame 1 (Solidworks defaults to starting at 000001)
+            img.src = modelFolder + '/Frame000001' + testExt;
         }
 
+        // Kick off the ping test
         testFormat();
     },
 
@@ -107,7 +83,11 @@ if (!window.isLoaded) {
     },
     
     willHide: function() {
-        recycleObjectValueForKey(this, "_vr");
+        if (this._vr && typeof recycleObjectValueForKey !== 'undefined') {
+            recycleObjectValueForKey(this, "_vr");
+        } else {
+            this._vr = null;
+        }
     },
     
     shouldCache: function() {
