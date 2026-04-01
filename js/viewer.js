@@ -127,6 +127,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
                 }
             }
+        },
+        "3D_LIVE": {
+            logo: "Rico_logoSingleColorTrans.png",
+            subsystems: [
+                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "2026/3D/rico.glb" }
+            ],
+            specs: {
+                "FullRobot": {
+                    title: "3D Interactive Model",
+                    leftContent: "<p>Explore the fully interactive 3D model of our robot.</p><p>Use your mouse or touch to rotate, zoom, and pan around the assembly.</p>",
+                    rightContent: "<ul><li><b>Rotate:</b> Left Click + Drag</li><li><b>Zoom:</b> Mouse Wheel</li><li><b>Pan:</b> Right Click + Drag</li></ul>"
+                }
+            }
         }
     };
 
@@ -146,27 +159,77 @@ document.addEventListener('DOMContentLoaded', () => {
         currentActiveSubsystem = sub;
         const isMobile = window.innerWidth <= 768;
         
-        let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
-        let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
-        let targetExt = (isMobile && sub.mobileExt) ? sub.mobileExt : (sub.ext || ".jpg");
+        const v2d = document.getElementById('viewer');
+        const v3d = document.getElementById('viewer-3d');
+        const spinner3d = document.getElementById('spinner-3d');
+        const modelElement = document.getElementById('model-element');
 
-        if (isHDModeEnabled && sub.hdPath) {
-            targetPath = sub.hdPath;
-            targetFrames = sub.hdFrames;
-            targetExt = sub.hdExt || targetExt;
-        }
+        if (sub.is3D) {
+            if (v2d) v2d.style.display = 'none';
+            if (v3d) {
+                v3d.style.display = 'flex';
+                if (spinner3d) spinner3d.style.display = 'flex';
+                
+                hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+                
+                if (modelElement) {
+                    modelElement.style.opacity = '0';
+                    if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
 
-        window.imagesLoaded = 0;
-        window.totalImagesToLoad = targetFrames[0] * targetFrames[1]; 
-        
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-            loadingScreen.style.display = 'flex';
-            loadingScreen.style.opacity = '1';
-        }
+                    modelElement.addEventListener('load', () => {
+                        if (spinner3d) spinner3d.style.display = 'none';
+                        modelElement.style.opacity = '1';
+                    }, { once: true });
+                    
+                    modelElement.addEventListener('error', (error) => {
+                        console.error('Error loading 3D model:', error);
+                        
+                        // Fallback to online demo model
+                        modelElement.addEventListener('load', () => {
+                            if (spinner3d) {
+                                spinner3d.innerHTML = '<div class="loader-text" style="color: #ffaa00; text-align: center;">VIEWER WORKS!<br>BUT LOCAL FILE WAS BLOCKED</div><div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px; text-align:center; padding: 0 20px; line-height: 1.4;">We loaded a demo model because your browser blocked the local .glb file.<br><b>You MUST use a Local Web Server to load local 3D files!</b></div><button onclick="document.getElementById(\'spinner-3d\').style.display=\'none\'" style="margin-top: 15px; padding: 8px 18px; font-weight: bold; background: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer;">View Demo Model</button>';
+                            }
+                            modelElement.style.opacity = '1';
+                        }, { once: true });
+                        modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
+                        
+                    }, { once: true });
 
-        if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
-            threeSixty.loadModel(targetPath, targetFrames, [false, false], targetExt);
+                    if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
+                    else modelElement.removeAttribute('auto-rotate');
+                    
+                    modelElement.src = sub.src;
+                }
+            }
+        } else {
+            if (v3d) v3d.style.display = 'none';
+            if (v2d) v2d.style.display = 'flex';
+            
+            hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+
+            let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
+            let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
+            let targetExt = (isMobile && sub.mobileExt) ? sub.mobileExt : (sub.ext || ".jpg");
+
+            if (isHDModeEnabled && sub.hdPath) {
+                targetPath = sub.hdPath;
+                targetFrames = sub.hdFrames;
+                targetExt = sub.hdExt || targetExt;
+            }
+
+            window.imagesLoaded = 0;
+            window.totalImagesToLoad = targetFrames[0] * targetFrames[1]; 
+            
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'flex';
+                loadingScreen.style.opacity = '1';
+            }
+
+            if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
+                threeSixty.loadModel(targetPath, targetFrames, [false, false], targetExt);
+            }
         }
     }
 
@@ -202,59 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toggle 2D/3D
     robotSelector.addEventListener('change', (e) => {
-        const val = e.target.value;
-        const v2d = document.getElementById('viewer');
-        const v3d = document.getElementById('viewer-3d');
-        const spinner3d = document.getElementById('spinner-3d');
-        const modelElement = document.getElementById('model-element');
-
-        if (val === '3D_LIVE') {
-            if (v2d) v2d.style.display = 'none';
-            if (v3d) {
-                v3d.style.display = 'flex';
-                if (spinner3d) spinner3d.style.display = 'flex';
-                
-                // --- UPDATE INTERFACE FOR 3D ---
-                navContainer.innerHTML = ''; // Clear bottom 2D nav buttons
-                document.getElementById('panel-title').innerHTML = '3D Interactive Model';
-                document.getElementById('panel-left-content').innerHTML = '<p>Explore the fully interactive 3D model of our robot.</p><p>Use your mouse or touch to rotate, zoom, and pan around the assembly.</p>';
-                document.getElementById('panel-right-content').innerHTML = '<ul><li><b>Rotate:</b> Left Click + Drag</li><li><b>Zoom:</b> Mouse Wheel</li><li><b>Pan:</b> Right Click + Drag</li></ul>';
-                
-                // Hide 2D specific controls
-                hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
-                spinBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
-                
-                if (modelElement) {
-                    if (!modelElement.src || modelElement.src === "" || !modelElement.getAttribute('src')) {
-                        modelElement.addEventListener('load', () => {
-                            if (spinner3d) spinner3d.style.display = 'none';
-                            modelElement.style.opacity = '1';
-                        }, { once: true });
-                        
-                        modelElement.addEventListener('error', (error) => {
-                            console.error('Error loading 3D model:', error);
-                            if (spinner3d) spinner3d.innerHTML = '<div class="loader-text" style="color: #ff4444;">ERROR: 3D MODEL NOT FOUND</div><div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px;">Check the console or verify your .glb file exists at the path.</div>';
-                        }, { once: true });
-
-                        // IMPORTANT: Using an online file to GUARANTEE it works.
-                        // Once you successfully see the astronaut, change this back to your "2026/Robot/3D/rico.glb" path.
-                        modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb"; 
-                    } else if (modelElement.style.opacity === '1') {
-                        if (spinner3d) spinner3d.style.display = 'none';
-                        modelElement.style.opacity = '1';
-                    }
-                }
-            }
-        } else {
-            if (v3d) v3d.style.display = 'none';
-            if (v2d) v2d.style.display = 'flex';
-            
-            // Restore 2D specific controls (clearing inline style lets CSS media queries take over)
-            hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
-            spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
-            
-            loadRobotProfile(val);
-        }
+        loadRobotProfile(e.target.value);
     });
 
     // HD Toggle logic
@@ -279,6 +290,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.play();
         else if (typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.pause();
+        
+        // Connect Spin to 3D Viewer
+        const modelElement = document.getElementById('model-element');
+        if (modelElement) {
+            if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
+            else modelElement.removeAttribute('auto-rotate');
+        }
     }));
 
     // Start-up sequence
