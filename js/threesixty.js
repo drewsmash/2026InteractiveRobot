@@ -1,10 +1,10 @@
-
-threeSixty = {
-    currentModel: 'images',
-    currentFrames: [30, 8],
+var threeSixty = {
+    currentModel: '',
+    currentFrames: [], // <-- Removed hardcoded [30, 8]
     currentInvert: [false, false],
+    _vr: null,
+
     init: function () {
-        // Automatically use the first button as the default starting model
         var firstButton = document.querySelector('.nav-btn');
         if (firstButton && !this._vr) {
             var defaultModel = firstButton.getAttribute('data-model');
@@ -20,34 +20,74 @@ threeSixty = {
             if (title) title.textContent = "Viewing " + firstButton.textContent;
         }
         
-        this.loadModel(this.currentModel, this.currentFrames, this.currentInvert);
+        // Only load if we actually have data
+        if (this.currentModel && this.currentFrames.length > 0) {
+            this.loadModel(this.currentModel, this.currentFrames, this.currentInvert);
+        }
     },
+
     loadModel: function (modelFolder, frames, invert) {
+        var self = this; 
+        
         if (this._vr) {
             this.willHide();
             var viewerEl = document.getElementById('viewer');
-            if (viewerEl) {
-                // Clear previous VR elements and show a loading text while downloading
-                viewerEl.innerHTML = '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#888; font-family:sans-serif; font-size:18px; font-weight:bold; z-index: -1;">Loading Model...</div>';
-            }
+            if (viewerEl) viewerEl.innerHTML = ''; 
         }
+
         this.currentModel = modelFolder;
-        this.currentFrames = frames || [30, 8];
+        this.currentFrames = frames; // <-- Strictly uses the database array now!
         this.currentInvert = invert || [false, false];
-        this._vr = new AC.VR('viewer', modelFolder + '/Frame######.jpg', this.currentFrames, {
+
+        // ==========================================
+        // THE NATIVE AUTO-DETECTOR
+        // ==========================================
+        const formatsToTest = ['.webp', '.jpg', '.png'];
+        let formatIndex = 0;
+
+        function testFormat() {
+            if (formatIndex >= formatsToTest.length) {
+                self.startEngine('.jpg');
+                return;
+            }
+
+            const testExt = formatsToTest[formatIndex];
+            const img = new Image();
+
+            img.onload = () => {
+                self.startEngine(testExt);
+            };
+
+            img.onerror = () => {
+                formatIndex++;
+                testFormat();
+            };
+
+            img.src = modelFolder + '/Frame000000' + testExt;
+        }
+
+        testFormat();
+    },
+
+    startEngine: function(detectedExtension) {
+        this._vr = new AC.VR('viewer', this.currentModel + '/Frame######' + detectedExtension, this.currentFrames, {
             invert: this.currentInvert
         });
     },
+
     didShow: function() {
         this.init();
     },
+    
     willHide: function() {
         recycleObjectValueForKey(this, "_vr");
     },
+    
     shouldCache: function() {
         return false;
     }
-}
+};
+
 if (!window.isLoaded) {
     window.addEventListener("load", function() {
         threeSixty.init();
