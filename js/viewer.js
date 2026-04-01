@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "2026/rico.glb" }
+                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "rico.glb" }
             ],
             specs: {
                 "FullRobot": {
@@ -201,10 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         
                         modelElement.removeEventListener('error', onModelError);
+                        modelElement.removeEventListener('load', onModelLoad);
                         modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
                         modelElement.addEventListener('load', onModelLoad, { once: true });
                     };
 
+                    modelElement.removeAttribute('src');
                     modelElement.addEventListener('load', onModelLoad, { once: true });
                     modelElement.addEventListener('error', onModelError, { once: true });
 
