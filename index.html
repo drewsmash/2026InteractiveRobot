@@ -26,10 +26,7 @@
             align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.7); z-index: 10; flex-shrink: 0; border-bottom: 2px solid #FFD700; 
         }
         .header-left { display: flex; align-items: center; justify-content: flex-start; gap: 15px; flex-wrap: wrap; }
-        
-        /* Reverted Logos to fixed sizes */
         .header-logo { height: 35px !important; width: auto !important; max-width: 150px !important; object-fit: contain; }
-        .ramtech-logo { height: 75px !important; width: auto !important; max-width: 300px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
         
         .robot-selector {
             background: #1A212D; color: #FFD700; border: 2px solid #FFD700; padding: 6px 12px;
@@ -41,6 +38,7 @@
         .robot-selector option { background: #1A212D; color: #e0e0e0; font-weight: bold; }
         
         .header-center { display: flex; align-items: center; justify-content: center; }
+        .ramtech-logo { height: 75px !important; width: auto !important; max-width: 300px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
         .header-right { display: flex; justify-content: flex-end; align-items: center; }
 
@@ -52,6 +50,11 @@
         .btn-spin:hover { background: #FFD700; color: #11151C; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
         .btn-spin.active-mode { background: #00ff88 !important; color: #11151C !important; border-color: #00ff88 !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
         
+        @media (min-width: 769px) { 
+            #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
+            .mobile-floating-controls { display: none !important; }
+        }
+
         .model-nav { 
             background: #1A212D; 
             padding: 15px 20px; 
@@ -64,12 +67,10 @@
         .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
         .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
 
-        /* Reverted Nav Buttons to fixed padding */
         .nav-btn { 
             font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 6px; 
             transition: all 0.2s ease-in-out; outline: none; background: #2A3441; color: #A0B0C0; border: 2px solid transparent; 
-            padding: 10px 25px; 
-            font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
+            padding: 10px 25px; font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
         }
         .nav-btn:hover { background: #3B485A; color: #fff; }
         .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
@@ -77,31 +78,27 @@
 
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
-        /* ========================================= */
-        /* SAFE UNIVERSAL IMAGE SCALING */
-        /* ========================================= */
-        #viewer { 
-            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; 
-            display: flex; justify-content: center; align-items: center;
+        /* SAFE IMAGE WRAPPER */
+        #viewer, #viewer-3d { 
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
         }
+        #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
-        .vr { 
-            position: absolute !important; width: 100% !important; height: 100% !important; 
-            margin: 0 !important; top: 0 !important; left: 0 !important;
-            display: flex !important; justify-content: center !important; align-items: center !important;
-            cursor: grab; 
-        }
+        .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
         .vr:active { cursor: grabbing; }
         
+        /* Factor in Aspect Ratio and Center everything without stretching */
         #viewer img, .vr img { 
-            width: 100% !important; height: 100% !important; 
-            max-width: 100% !important; max-height: 100% !important; 
+            max-width: 95% !important; 
+            max-height: 95% !important; 
+            width: auto !important; 
+            height: auto !important; 
             object-fit: contain !important; 
-            margin: 0 !important; padding: 0 !important;
-            user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); 
+            user-select: none; 
+            -webkit-user-drag: none; 
+            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); 
         }
-        /* ========================================= */
 
         #loading-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
@@ -120,26 +117,9 @@
         .side-panel li { margin-bottom: 10px; }
         .side-panel b { color: #00a8ff; } 
 
-        /* Reverted Side Panels to Original Safe Fixed Measurements */
-        @media (min-width: 769px) { 
-            #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
-            .mobile-floating-controls { display: none !important; }
-            .side-panel { 
-                position: absolute; 
-                top: 20px; 
-                bottom: 20px; 
-                width: 280px; 
-                background: rgba(26, 33, 45, 0.85); 
-                backdrop-filter: blur(10px); 
-                border: 1px solid rgba(255, 215, 0, 0.3); 
-                border-radius: 8px; 
-                padding: 20px; 
-                overflow-y: auto; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            }
-            .left-panel { left: 20px; } 
-            .right-panel { right: 20px; } 
-            #mobile-info-btn { display: none; }
+        @media (min-width: 769px) {
+            .side-panel { position: absolute; top: 20px; bottom: 20px; width: 280px; background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 20px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            .left-panel { left: 20px; } .right-panel { right: 20px; } #mobile-info-btn { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -183,6 +163,7 @@
                 <option value="2026_rico">2026 RICO</option>
                 <option value="2025_offseason">2025 Offseason</option>
                 <option value="2023_Robot">2023 Robot</option>
+                <option value="3D_LIVE">LIVE 3D (BETA)</option>
             </select>
         </div>
 
@@ -199,9 +180,11 @@
     <div id="main-content">
         <div id="viewer"></div>
 
+        <div id="viewer-3d" style="display: none;"></div>
+
         <div id="loading-screen" style="display: none;">
             <div class="loading-box">
-                <div id="progress-text" class="progress-text">DOWNLOADING HD ASSETS... 0%</div>
+                <div id="progress-text" class="progress-text">READY.</div>
                 <div class="progress-bar-container">
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
