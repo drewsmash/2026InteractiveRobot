@@ -140,7 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "rico1.glb" }
+                {
+                    id: "FullRobot",
+                    label: "Full Assembly",
+                    is3D: true,
+                    src: "rico2.glb",
+                    srcCandidates: ["rico2.glb", "rico1.glb", "rico.glb"]
+                }
             ],
             specs: {
                 "FullRobot": {
@@ -182,6 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
                 
                 if (modelElement) {
+                    const sourceCandidates = [...(sub.srcCandidates || [sub.src])];
+
                     modelElement.style.opacity = '0';
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
 
@@ -220,19 +228,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const onModelError = (error) => {
                         console.error('Error loading 3D model:', error);
+                        const currentFileName = modelElement.src.split('/').pop();
+                        const currentIndex = sourceCandidates.indexOf(currentFileName);
+                        const remainingCandidates = currentIndex >= 0 ? sourceCandidates.slice(currentIndex + 1) : [];
+
+                        modelElement.removeEventListener('error', onModelError);
+                        modelElement.removeEventListener('load', onModelLoad);
+
+                        if (remainingCandidates.length > 0) {
+                            const nextSrc = remainingCandidates[0];
+                            sub.srcCandidates = remainingCandidates;
+
+                            if (spinner3d) {
+                                spinner3d.innerHTML = `
+                                    <div class="loader-circle"></div>
+                                    <div class="loader-text">TRYING ${nextSrc.toUpperCase()}...</div>
+                                `;
+                                spinner3d.style.display = 'flex';
+                            }
+
+                            modelElement.addEventListener('load', onModelLoad, { once: true });
+                            modelElement.addEventListener('error', onModelError, { once: true });
+                            modelElement.src = nextSrc;
+                            return;
+                        }
+
                         if (spinner3d) {
                             spinner3d.innerHTML = `
                                 <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D MODEL FAILED TO LOAD</div>
                                 <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
-                                    Browser security rules blocked your file, or <b>${sub.src}</b> is missing.<br>
+                                    Browser security rules blocked your file, or none of these files could load:<br>
+                                    <b>${sourceCandidates.join(', ')}</b><br>
                                     Loading Demo Astronaut automatically.<br><br>
                                     <span style="color: #FFD700; font-weight: bold;">(You MUST run via a Local Web Server to see your own files)</span>
                                 </div>
                             `;
                         }
-                        
-                        modelElement.removeEventListener('error', onModelError);
-                        modelElement.removeEventListener('load', onModelLoad);
+
                         modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
                         modelElement.addEventListener('load', onModelLoad, { once: true });
                     };
@@ -244,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                     else modelElement.removeAttribute('auto-rotate');
                     
-                    modelElement.src = sub.src;
+                    modelElement.src = sourceCandidates[0] || sub.src;
                 }
             }
         } else {
