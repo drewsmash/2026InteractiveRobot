@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "rico.glb" }
                 { id: "FullRobot", label: "Full Assembly", is3D: true, src: "2026/Robot/3D/rico.glb" }
             ],
             specs: {
@@ -183,77 +182,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     modelElement.style.opacity = '0';
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
 
-                    // --- SECURITY FAILSAFE ---
-                    // Web browsers strictly block 3D engines when running locally via double-click.
-                    // This explicitly checks the URL so it doesn't falsely trigger on slow Wi-Fi!
-                    if (window.location.protocol === 'file:') {
-                    // 1. Check if the Google Model Viewer script actually loaded (Requires Internet)
-                    if (!customElements.get('model-viewer')) {
-                        if (spinner3d) spinner3d.innerHTML = `
-                            <div class="loader-text" style="color: #ff4444; text-align: center; font-size: 1.1rem; line-height: 1.4;">ERROR: BROWSER SECURITY BLOCK</div>
-                            <div class="loader-text" style="color: #ff4444; text-align: center; font-size: 1.1rem; line-height: 1.4;">NO INTERNET CONNECTION</div>
-                            <div style="color: #A0B0C0; font-size: 0.85rem; margin-top: 15px; text-align:center; padding: 0 20px; line-height: 1.6;">
-                                Look at your web browser's address bar.<br>Because it starts with <b>file:///</b>, your browser is actively deleting the 3D engine.<br><br>
-                                <span style="color: #FFD700; font-weight: bold;">You MUST run this through a Local Web Server.</span><br>
-                                Do not double-click the HTML file. Open VS Code, install "Live Server", right-click index.html and click "Open with Live Server".
-                                The 3D engine requires an internet connection to download from Google's servers.<br>Please connect to the internet and refresh the page.
-                            </div>`;
-                        return;
-                    }
-
-                    modelElement.addEventListener('load', () => {
+                    const onModelLoad = () => {
                         if (spinner3d) spinner3d.style.display = 'none';
                         modelElement.style.opacity = '1';
-                    }, { once: true });
+                    };
                     
-                    modelElement.addEventListener('error', (error) => {
+                    const onModelError = (error) => {
                         console.error('Error loading 3D model:', error);
-                        
-                        // Fallback to online demo model
-                        modelElement.addEventListener('load', () => {
-                            if (spinner3d) {
-                                spinner3d.innerHTML = '<div class="loader-text" style="color: #ffaa00; text-align: center;">ENGINE WORKS!<br>BUT YOUR FILE WAS NOT FOUND</div><div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px; text-align:center; padding: 0 20px; line-height: 1.4;">The 3D engine is running perfectly, but it couldn\'t find <b>rico.glb</b>.<br>Ensure the file is named exactly that and is in the exact same folder as index.html!</div><button onclick="document.getElementById(\'spinner-3d\').style.display=\'none\'" style="margin-top: 15px; padding: 8px 18px; font-weight: bold; background: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer;">View Demo Model</button>';
-                        // Fallback: Local file picker bypasses browser security rules entirely!
                         if (spinner3d) {
                             spinner3d.innerHTML = `
-                                <div class="loader-text" style="color: #ffaa00; text-align: center;">LOCAL FILE BLOCKED</div>
-                                <div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px; text-align:center; padding: 0 20px; line-height: 1.4;">
-                                    Your web browser's security rules blocked the automatic loading of the 3D model.<br>
-                                    You can manually load it by clicking the button below, or use a local web server!
+                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">LOCAL FILE BLOCKED</div>
+                                <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
+                                    Browser security rules blocked your file, or <b>rico.glb</b> is missing.<br>
+                                    Loading Demo Astronaut automatically.<br><br>
+                                    <span style="color: #FFD700; font-weight: bold;">(You MUST run via a Local Web Server to see your own files)</span>
                                 </div>
-                                <label style="margin-top: 15px; padding: 8px 18px; font-weight: bold; background: #0078d7; color: white; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-                                    Select .glb File
-                                    <input type="file" id="local-file-loader" accept=".glb,.gltf" style="display: none;">
-                                </label>
-                                <button id="load-demo-btn" style="margin-top: 10px; padding: 6px 15px; font-weight: bold; background: #3B485A; color: white; border: none; border-radius: 4px; cursor: pointer;">View Demo Astronaut</button>
                             `;
-                            
-                            const fileLoader = document.getElementById('local-file-loader');
-                            if(fileLoader) {
-                                fileLoader.addEventListener('change', function(event) {
-                                    const file = event.target.files[0];
-                                    if (file) {
-                                        spinner3d.style.display = 'none';
-                                        modelElement.src = URL.createObjectURL(file);
-                                        modelElement.style.opacity = '1';
-                                    }
-                                });
-                            }
-                            modelElement.style.opacity = '1';
-                        }, { once: true });
-                        modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
-                            
-                            const demoBtn = document.getElementById('load-demo-btn');
-                            if(demoBtn) {
-                                demoBtn.addEventListener('click', function() {
-                                    spinner3d.style.display = 'none';
-                                    modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
-                                    modelElement.style.opacity = '1';
-                                });
-                            }
                         }
                         
-                    }, { once: true });
+                        modelElement.removeEventListener('error', onModelError);
+                        modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
+                        modelElement.addEventListener('load', onModelLoad, { once: true });
+                    };
+
+                    modelElement.addEventListener('load', onModelLoad, { once: true });
+                    modelElement.addEventListener('error', onModelError, { once: true });
 
                     if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                     else modelElement.removeAttribute('auto-rotate');
