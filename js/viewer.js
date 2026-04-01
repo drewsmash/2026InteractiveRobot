@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navContainer = document.getElementById('dynamic-nav-container');
     const headerLogo = document.getElementById('header-logo');
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
+    const spinBtns = document.querySelectorAll('.btn-spin:not(#btn-hd-desktop):not(#btn-hd-mobile)');
 
     function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
@@ -213,8 +214,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 v3d.style.display = 'flex';
                 if (spinner3d) spinner3d.style.display = 'flex';
                 
+                // --- UPDATE INTERFACE FOR 3D ---
+                navContainer.innerHTML = ''; // Clear bottom 2D nav buttons
+                document.getElementById('panel-title').innerHTML = '3D Interactive Model';
+                document.getElementById('panel-left-content').innerHTML = '<p>Explore the fully interactive 3D model of our robot.</p><p>Use your mouse or touch to rotate, zoom, and pan around the assembly.</p>';
+                document.getElementById('panel-right-content').innerHTML = '<ul><li><b>Rotate:</b> Left Click + Drag</li><li><b>Zoom:</b> Mouse Wheel</li><li><b>Pan:</b> Right Click + Drag</li></ul>';
+                
+                // Hide 2D specific controls
+                hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+                spinBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+                
                 if (modelElement) {
-                    if (!modelElement.getAttribute('src')) {
+                    if (!modelElement.src || modelElement.src === "" || !modelElement.getAttribute('src')) {
                         modelElement.addEventListener('load', () => {
                             if (spinner3d) spinner3d.style.display = 'none';
                             modelElement.style.opacity = '1';
@@ -225,17 +236,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (spinner3d) spinner3d.innerHTML = '<div class="loader-text" style="color: #ff4444;">ERROR: 3D MODEL NOT FOUND</div><div style="color: #A0B0C0; font-size: 0.8rem; margin-top: 10px;">Check the console or verify your .glb file exists at the path.</div>';
                         }, { once: true });
 
-                        // Changed to a live test model to prove the viewer works!
-                        // Once you see the astronaut, change this back to your "2026/Robot/3D/rico.glb" path.
-                        modelElement.src = "2026/Robot/3D/rico.glb"; 
+                        // IMPORTANT: Using an online file to GUARANTEE it works.
+                        // Once you successfully see the astronaut, change this back to your "2026/Robot/3D/rico.glb" path.
+                        modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb"; 
                     } else if (modelElement.style.opacity === '1') {
                         if (spinner3d) spinner3d.style.display = 'none';
+                        modelElement.style.opacity = '1';
                     }
                 }
             }
         } else {
             if (v3d) v3d.style.display = 'none';
             if (v2d) v2d.style.display = 'flex';
+            
+            // Restore 2D specific controls (clearing inline style lets CSS media queries take over)
+            hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            
             loadRobotProfile(val);
         }
     });
@@ -253,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Auto-Spin logic
-    const spinBtns = document.querySelectorAll('.btn-spin:not(#btn-hd-desktop):not(#btn-hd-mobile)');
     let autoSpinMode = false;
     spinBtns.forEach(btn => btn.addEventListener('click', () => {
         autoSpinMode = !autoSpinMode;
