@@ -11,13 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 1. ENGINE OVERRIDE & PERFECT CENTERING
+    // 1. ENGINE OVERRIDE & APPLE MATH KILLER
     // =========================================
     window.imagesLoaded = 0;
     window.totalImagesToLoad = 0; 
     window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
+        
+        // KILL APPLE'S DIRTY RESIZE MATH (Stops it from shoving off-center or stretching)
+        AC.VR.prototype.updateSizes = function() {};
+        AC.VR.prototype.resize = function() {};
+        
         AC.VR.options.introDuration = 2.5; 
         
         AC.VR.prototype.gotoNextFrame = function() {
@@ -28,43 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (this.playing) return;
             this.playing = true;
             this.playInterval = setInterval(this.gotoNextFrame.bind(this), 85); 
-        };
-
-        // DOM Thrashing Fix & JS-BASED CENTERING
-        AC.VR.prototype.gotoPos = function(pos, force) {
-            pos = this.validatePos(pos);
-            if (!force && this.atPosition(pos)) return;
-            this.currentPos = pos;
-
-            this.frame = this.frames[pos[0]][pos[1]];
-            if (typeof this.frame !== 'undefined' && this.frame.nodeType) {
-                if (!this.masterImage) {
-                    this.masterImage = document.createElement('img');
-                    
-                    // THE FIX: Force scaling and centering dynamically in JS!
-                    this.masterImage.style.position = 'absolute';
-                    this.masterImage.style.top = '0';
-                    this.masterImage.style.left = '0';
-                    this.masterImage.style.width = '100%';
-                    this.masterImage.style.height = '100%';
-                    this.masterImage.style.objectFit = 'contain';
-                    this.masterImage.style.margin = 'auto';
-                    this.masterImage.draggable = false;
-                    
-                    // Nuke Apple's inline offsets
-                    this.vr.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; padding: 0; transform: none; display: flex; justify-content: center; align-items: center;";
-                    
-                    this.vr.innerHTML = ''; 
-                    this.vr.appendChild(this.masterImage);
-                    this.currentFrame = this.masterImage; 
-                }
-
-                if (this.masterImage.src !== this.frame.src) {
-                    this.masterImage.src = this.frame.src;
-                }
-            } else {
-                this.loader.loadNow(pos);
-            }
         };
 
         if (AC.VR.Loader) {
@@ -118,8 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     label: "Main Assembly", 
                     path: "2026/Robot/images", 
                     frames: [30, 8], 
+                    ext: ".jpg",
                     hdPath: "2026/Robot/HD/images",
                     hdFrames: [90, 8],
+                    hdExt: ".webp",
                     useLogo: true 
                 },
                 { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], useLogo: false },
@@ -164,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "2025_offseason": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], useLogo: false }
+                { id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], ext: ".jpg", useLogo: false }
             ],
             specs: {
                 "Robot": {
@@ -182,8 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     label: "Main Assembly", 
                     path: "2023/Robot/images", 
                     frames: [38, 8], 
+                    ext: ".jpg",
                     mobilePath: "2023/Robot/Mobile/images",
                     mobileFrames: [36, 1],
+                    mobileExt: ".jpg",
                     useLogo: false 
                 }
             ],
@@ -215,10 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
         let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
+        let targetExt = (isMobile && sub.mobileExt) ? sub.mobileExt : sub.ext; // Grab the extension
 
         if (isHDModeEnabled && sub.hdPath) {
             targetPath = sub.hdPath;
             targetFrames = sub.hdFrames;
+            targetExt = sub.hdExt || targetExt; // Fallback to standard if no HD extension provided
         }
 
         window.imagesLoaded = 0;
@@ -239,10 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(window.loadingFailsafe);
         window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 4000); 
 
-        // Pass directly to threesixty.js, which now handles the auto-detecting
         if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
             setTimeout(() => {
-                threeSixty.loadModel(targetPath, targetFrames, [false, false]);
+                // Pass directly to threesixty.js with the extension!
+                threeSixty.loadModel(targetPath, targetFrames, [false, false], targetExt);
             }, 50);
         }
 
