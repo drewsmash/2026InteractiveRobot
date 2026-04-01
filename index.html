@@ -56,16 +56,16 @@
         }
 
         .model-nav { 
-    background: #1A212D; 
-    
-    /* Standard padding for top, left, right */
-    padding: 15px 20px; 
-    /* Dynamically adds extra space at the bottom for the phone's swipe bar */
-    padding-bottom: calc(1px + env(safe-area-inset-bottom)); 
-    
-    display: flex; gap: 20px; justify-content: center; overflow-x: auto;
-    -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
-}
+            background: #1A212D; 
+            
+            /* Standard padding for top, left, right */
+            padding: 15px 20px; 
+            /* Dynamically adds extra space at the bottom for the phone's swipe bar */
+            padding-bottom: calc(1px + env(safe-area-inset-bottom)); 
+            
+            display: flex; gap: 20px; justify-content: center; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
+        }
         .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
         .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
@@ -123,6 +123,7 @@
             .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
             
             #btn-spin-desktop { display: none !important; }
+            #btn-hd-desktop { display: none !important; }
 
             .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
             .info-overlay.open { transform: translateY(0); visibility: visible; }
@@ -162,6 +163,7 @@
         </div>
 
         <div class="header-right viewer-controls">
+            <button id="btn-hd-desktop" class="btn-spin" style="margin-right: 15px;">HD: OFF</button>
             <button id="btn-spin-desktop" class="btn-spin">Auto-Spin: OFF</button>
         </div>
     </header>
@@ -171,7 +173,7 @@
 
         <div id="loading-screen" style="display: none;">
             <div class="loading-box">
-                <div id="progress-text" class="progress-text">DOWNLOADING HD ASSETS... 0%</div>
+                <div id="progress-text" class="progress-text">DOWNLOADING ASSETS... 0%</div>
                 <div class="progress-bar-container">
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
@@ -191,6 +193,7 @@
         </div>
 
         <div class="mobile-floating-controls">
+            <button id="btn-hd-mobile" class="btn-spin" style="margin-right: 5px;">HD</button>
             <button id="btn-spin-mobile" class="btn-spin">Auto-Spin: OFF</button>
             <button id="mobile-info-btn">View Specs</button>
         </div>
