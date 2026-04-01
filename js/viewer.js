@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     window.imagesLoaded = 0;
     window.totalImagesToLoad = 240; 
-    window.loadingFailsafe = null; // The new timer variable
+    window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
         AC.VR.options.introDuration = 2.5; 
@@ -35,10 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalOnLoad = AC.VR.Loader.prototype.onLoad;
             
             AC.VR.Loader.prototype.onLoad = function(event) {
-                // 1. Run Apple's original code so the image actually gets added to the 3D engine
                 if (originalOnLoad) originalOnLoad.apply(this, arguments);
                 
-                // 2. Run our Custom Loading Bar logic
                 if (window.totalImagesToLoad > 0) {
                     window.imagesLoaded++;
                     
@@ -51,13 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         progressBar.style.width = percent + '%';
                         progressText.innerText = 'DOWNLOADING HD ASSETS... ' + percent + '%';
                         
-                        // CLEAR AND RESET THE FAILSAFE TIMER
                         clearTimeout(window.loadingFailsafe);
                         window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 1500);
                         
-                        // When fully loaded, hide the black screen to reveal the images!
                         if (window.imagesLoaded >= window.totalImagesToLoad) {
-                            clearTimeout(window.loadingFailsafe); // Turn off the timer since it finished perfectly
+                            clearTimeout(window.loadingFailsafe); 
                             setTimeout(() => {
                                 loadingScreen.style.opacity = '0';
                                 setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
@@ -69,15 +65,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     // =========================================
-    // 2. THE MULTI-YEAR DATABASE
+    // 2. THE MULTI-YEAR DATABASE (WITH HD SUPPORT)
     // =========================================
     const robotDatabase = {
         "2026_rico": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], useLogo: true },
+                { 
+                    id: "Robot", 
+                    label: "Main Assembly", 
+                    
+                    // Standard Fast Version
+                    path: "2026/Robot/images", 
+                    frames: [30, 8], 
+                    
+                    // NEW: The "Super Butter" HD Version
+                    hdPath: "2026/Robot/HD/images",
+                    hdFrames: [90, 8],
+                    
+                    useLogo: true 
+                },
                 { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], useLogo: false },
                 { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], useLogo: false },
                 { id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], useLogo: false },
@@ -138,9 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     label: "Main Assembly", 
                     path: "2023/Robot/images", 
                     frames: [38, 8], 
-                    // ---> ADDED MOBILE VARS HERE <---
                     mobilePath: "2023/Robot/Mobile/images",
-                    mobileFrames: [30, 8],
+                    mobileFrames: [36, 1],
                     useLogo: false 
                 }
             ],
@@ -156,11 +163,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // 3. DYNAMIC UI GENERATOR
+    // 3. STATE TRACKING & DYNAMIC LOADER
     // =========================================
+    let currentActiveSubsystem = null;
+    let isHDModeEnabled = false;
+
     const robotSelector = document.getElementById('robot-selector');
     const navContainer = document.getElementById('dynamic-nav-container');
     const headerLogo = document.getElementById('header-logo');
+    const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
+
+    // Master function to load models based on current screen size AND HD toggle state
+    function executeModelLoad(sub) {
+        currentActiveSubsystem = sub;
+        
+        const isMobile = window.innerWidth <= 768;
+        
+        // 1. Determine base path (Desktop vs Mobile)
+        let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
+        let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
+
+        // 2. HD OVERRIDE: If HD mode is ON and this robot has an HD folder, upgrade it!
+        if (isHDModeEnabled && sub.hdPath) {
+            targetPath = sub.hdPath;
+            targetFrames = sub.hdFrames;
+            // (Optional: If you ever make a mobileHdPath, you can add it here!)
+        }
+
+        window.imagesLoaded = 0;
+        window.totalImagesToLoad = targetFrames[0] * targetFrames[1]; 
+        
+        const loadingScreen = document.getElementById('loading-screen');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        
+        if (loadingScreen && progressFill && progressText) {
+            progressFill.style.width = '0%';
+            progressText.innerText = isHDModeEnabled ? 'DOWNLOADING HD ASSETS... 0%' : 'DOWNLOADING ASSETS... 0%';
+            loadingScreen.style.display = 'flex';
+            loadingScreen.offsetHeight; 
+            loadingScreen.style.opacity = '1';
+        }
+
+        clearTimeout(window.loadingFailsafe);
+        window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 4000); // Gives HD models a little more time
+
+        if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
+            setTimeout(() => {
+                threeSixty.loadModel(targetPath, targetFrames, [false, false]);
+            }, 50);
+        }
+
+        if (autoSpinMode) resetIdleTimer();
+    }
+
 
     function loadRobotProfile(robotKey) {
         const data = robotDatabase[robotKey];
@@ -195,37 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
                 document.getElementById('panel-right-content').innerHTML = specs.rightContent;
 
-                // ---> ADDED MOBILE DETECTOR HERE <---
-                const isMobile = window.innerWidth <= 768;
-                const targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
-                const targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
-
-                window.imagesLoaded = 0;
-                window.totalImagesToLoad = targetFrames[0] * targetFrames[1]; // Using the target frames
-                const loadingScreen = document.getElementById('loading-screen');
-                const progressFill = document.getElementById('progress-fill');
-                const progressText = document.getElementById('progress-text');
-                
-                if (loadingScreen && progressFill && progressText) {
-                    progressFill.style.width = '0%';
-                    progressText.innerText = 'DOWNLOADING HD ASSETS... 0%';
-                    loadingScreen.style.display = 'flex';
-                    loadingScreen.offsetHeight; 
-                    loadingScreen.style.opacity = '1';
-                }
-
-                // Turn on the Failsafe the exact moment the button is clicked, just in case 0 images load
-                clearTimeout(window.loadingFailsafe);
-                window.loadingFailsafe = setTimeout(window.forceHideLoadingScreen, 3000);
-
-                if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
-                    setTimeout(() => {
-                        // Pass the target path and target frames to the engine
-                        threeSixty.loadModel(targetPath, targetFrames, [false, false]);
-                    }, 50);
-                }
-
-                if (autoSpinMode) resetIdleTimer();
+                // Trigger the smart loader
+                executeModelLoad(sub);
             });
 
             item.appendChild(span);
@@ -243,9 +270,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // 4. SAFE EXTERNAL AUTO-SPIN 
+    // 4. HD TOGGLE LOGIC
     // =========================================
-    const spinBtns = document.querySelectorAll('.btn-spin');
+    function toggleHDMode() {
+        isHDModeEnabled = !isHDModeEnabled;
+        
+        hdBtns.forEach(btn => {
+            if (!btn) return;
+            if (isHDModeEnabled) {
+                btn.classList.add('active-mode');
+                btn.textContent = btn.id.includes('desktop') ? 'HD: ON' : 'HD';
+                btn.style.boxShadow = "0 0 15px rgba(0, 255, 136, 0.4)";
+            } else {
+                btn.classList.remove('active-mode');
+                btn.textContent = btn.id.includes('desktop') ? 'HD: OFF' : 'SD';
+                btn.style.boxShadow = "none";
+            }
+        });
+
+        // If a robot is currently on screen, instantly reload it with the new quality!
+        if (currentActiveSubsystem) {
+            executeModelLoad(currentActiveSubsystem);
+        }
+    }
+
+    hdBtns.forEach(btn => {
+        if(btn) btn.addEventListener('click', toggleHDMode);
+    });
+
+
+    // =========================================
+    // 5. SAFE EXTERNAL AUTO-SPIN 
+    // =========================================
+    const spinBtns = document.querySelectorAll('.btn-spin:not(#btn-hd-desktop):not(#btn-hd-mobile)');
     const viewerContainer = document.getElementById('viewer');
     
     let autoSpinMode = false; 
@@ -325,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================
-    // 5. MOBILE DRAWER TOGGLE
+    // 6. MOBILE DRAWER TOGGLE
     // =========================================
     const toggleMobileBtn = document.getElementById('mobile-info-btn');
     const overlay = document.getElementById('info-overlay');
