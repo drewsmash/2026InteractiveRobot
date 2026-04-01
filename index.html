@@ -82,17 +82,31 @@
 
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
+        /* THE ULTIMATE SIZING FIX IS HERE */
         #viewer { 
             flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
         }
-        #viewer > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
-        .vr { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; }
+        /* 1. Nuke Apple's inline Javascript margins and force a full-screen flex container */
+        .vr { 
+            position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+            width: 100% !important; height: 100% !important; 
+            margin: 0 !important; padding: 0 !important; transform: none !important; 
+            display: flex !important; justify-content: center !important; align-items: center !important;
+            cursor: grab; 
+        }
         .vr:active { cursor: grabbing; }
         
-        /* THE ULTIMATE IMAGE SCALE FIX IS RIGHT HERE: width: 100% and height: 100% */
-        #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 95% !important; max-height: 95% !important; object-fit: contain !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+        /* 2. Force the image to maintain perfect aspect ratio and lock it dead center */
+        #viewer img, .vr img { 
+            width: 95% !important; height: 95% !important; 
+            max-width: none !important; max-height: none !important; 
+            object-fit: contain !important; object-position: center center !important; 
+            margin: 0 auto !important; padding: 0 !important; 
+            left: auto !important; top: auto !important; right: auto !important; bottom: auto !important;
+            user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); 
+        }
 
         #loading-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
