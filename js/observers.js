@@ -78,30 +78,7 @@
 
 			n.dispatchEvent(new CustomEvent('wheelzoom.updateSize'));
 		});
-
-		document.querySelectorAll("img").forEach(setSizeConstraints);
 	});
 
 	resObserver.observe(viewer);
-
-	// Nearly identical to the function of the same name in vr.js
-	function setSizeConstraints(img) {
-		// Aspect Ratio of the Image
-		
-		var arImage = img.naturalWidth / img.naturalHeight;
-
-		// Aspect Ratio of the Viewer
-
-		var arViewer = $(viewer).getWidth() / $(viewer).getHeight();
-
-		if (arViewer >= arImage) {
-			// Image is constrained by height
-			img.style.height = "100%";
-			img.style.width = "auto";
-		} else {
-			// Image is constrained by width
-			img.style.width = "100%";
-			img.style.height = "auto";
-		}
-	}
 })();

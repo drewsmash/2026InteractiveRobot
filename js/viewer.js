@@ -204,13 +204,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const val = e.target.value;
         const v2d = document.getElementById('viewer');
         const v3d = document.getElementById('viewer-3d');
+        const spinner3d = document.getElementById('spinner-3d');
 
         if (val === '3D_LIVE') {
-            v2d.style.display = 'none';
-            v3d.style.display = 'block';
+            if (v2d) v2d.style.display = 'none';
+            if (v3d) {
+                v3d.style.display = 'flex';
+                if (spinner3d) spinner3d.style.display = 'flex';
+                
+                // Simulated load time for the 3D viewer (1.5 seconds)
+                setTimeout(() => {
+                    if (spinner3d) spinner3d.style.display = 'none';
+                }, 1500); 
+            }
         } else {
-            v3d.style.display = 'none';
-            v2d.style.display = 'block';
+            if (v3d) v3d.style.display = 'none';
+            if (v2d) v2d.style.display = 'flex';
             loadRobotProfile(val);
         }
     });
@@ -242,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start-up sequence
     let initCheck = setInterval(() => {
-        if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
+        if (typeof threeSixty !== 'undefined') {
             clearInterval(initCheck);
             loadRobotProfile(robotSelector.value);
         }

@@ -819,8 +819,6 @@ AC.VR.Loader = Class.create({
 		this.controller.vr.frames[this.pos[0]][this.pos[1]] = event.target;
 		delete event.target.onload;
 
-		this.setSizeConstraints(event.target);
-
 		// should we show this now?
 		if (this.controller.vr.atPosition(this.pos)) {
 			this.controller.vr.gotoPos(this.pos, true);
@@ -829,25 +827,6 @@ AC.VR.Loader = Class.create({
 		// load next
 		// (delay by 1ms to prevent IE's Stack Overflow error)
 		this.loadNext.defer(this);
-	},
-	setSizeConstraints: function (img) {
-		// Aspect Ratio of the Image
-		
-		var arImage = img.naturalWidth / img.naturalHeight;
-
-		// Aspect Ratio of the Viewer
-
-		var arViewer = this.controller.vr.container.getWidth() / this.controller.vr.container.getHeight();
-
-		if (arViewer >= arImage) {
-			// Image is constrained by height
-			img.style.height = "100%";
-			img.style.width = "auto";
-		} else {
-			// Image is constrained by width
-			img.style.width = "100%";
-			img.style.height = "auto";
-		}
 	}
 	/*,
 
