@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "rico.glb" }
+                { id: "FullRobot", label: "Full Assembly", is3D: true, src: "rico2.glb" }
             ],
             specs: {
                 "FullRobot": {
