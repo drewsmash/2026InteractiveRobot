@@ -1,6 +1,6 @@
-var threeSixty = {
+threeSixty = {
     currentModel: '',
-    currentFrames: [], // <-- Removed hardcoded [30, 8]
+    currentFrames: [30, 8],
     currentInvert: [false, false],
     _vr: null,
 
@@ -16,25 +16,52 @@ var threeSixty = {
             if (defaultInvert) this.currentInvert = JSON.parse(defaultInvert);
             
             firstButton.classList.add('active');
-            var title = document.querySelector('.project-name');
-            if (title) title.textContent = "Viewing " + firstButton.textContent;
         }
         
-        // Only load if we actually have data
-        if (this.currentModel && this.currentFrames.length > 0) {
+        // Only trigger if data actually exists
+        if (this.currentModel) {
             this.loadModel(this.currentModel, this.currentFrames, this.currentInvert);
         }
     },
 
-    loadModel: function (modelFolder, frames, invert) {
-        var self = this; 
-        
+    // Natively handles dynamic frames and file extensions
+    loadModel: function (modelFolder, frames, invert, ext) {
         if (this._vr) {
             this.willHide();
             var viewerEl = document.getElementById('viewer');
             if (viewerEl) viewerEl.innerHTML = ''; 
         }
 
+        this.currentModel = modelFolder;
+        this.currentFrames = frames || [30, 8];
+        this.currentInvert = invert || [false, false];
+        
+        // Fallback to .jpg if no format is provided
+        var format = ext || '.jpg'; 
+
+        this._vr = new AC.VR('viewer', modelFolder + '/Frame######' + format, this.currentFrames, {
+            invert: this.currentInvert
+        });
+    },
+
+    didShow: function() {
+        this.init();
+    },
+    
+    willHide: function() {
+        recycleObjectValueForKey(this, "_vr");
+    },
+    
+    shouldCache: function() {
+        return false;
+    }
+};
+
+if (!window.isLoaded) {
+    window.addEventListener("load", function() {
+        threeSixty.init();
+    }, false);
+}
         this.currentModel = modelFolder;
         this.currentFrames = frames; // <-- Strictly uses the database array now!
         this.currentInvert = invert || [false, false];
