@@ -11,18 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 1. ENGINE OVERRIDE & APPLE MATH KILLER
+    // 1. SAFE ENGINE LOADER 
     // =========================================
     window.imagesLoaded = 0;
     window.totalImagesToLoad = 0; 
     window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
-        
-        // KILL APPLE'S DIRTY RESIZE MATH (Stops it from shoving off-center or stretching)
-        AC.VR.prototype.updateSizes = function() {};
-        AC.VR.prototype.resize = function() {};
-        
         AC.VR.options.introDuration = 2.5; 
         
         AC.VR.prototype.gotoNextFrame = function() {
@@ -82,21 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 { 
-                    id: "Robot", 
-                    label: "Main Assembly", 
-                    path: "2026/Robot/images", 
-                    frames: [30, 8], 
-                    ext: ".jpg",
-                    hdPath: "2026/Robot/HD/images",
-                    hdFrames: [90, 8],
-                    hdExt: ".webp",
-                    useLogo: true 
+                    id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], ext: ".jpg",
+                    hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp", useLogo: true 
                 },
-                { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], useLogo: false },
-                { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], useLogo: false },
-                { id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], useLogo: false },
-                { id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], useLogo: false },
-                { id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], useLogo: false }
+                { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg", useLogo: false },
+                { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg", useLogo: false },
+                { id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], ext: ".jpg", useLogo: false },
+                { id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg", useLogo: false },
+                { id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg", useLogo: false }
             ],
             specs: {
                 "Robot": {
@@ -148,15 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Ramtech_logo.png", 
             subsystems: [
                 { 
-                    id: "Robot", 
-                    label: "Main Assembly", 
-                    path: "2023/Robot/images", 
-                    frames: [38, 8], 
-                    ext: ".jpg",
-                    mobilePath: "2023/Robot/Mobile/images",
-                    mobileFrames: [36, 1],
-                    mobileExt: ".jpg",
-                    useLogo: false 
+                    id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg",
+                    mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false 
                 }
             ],
             specs: {
@@ -187,12 +168,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
         let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
-        let targetExt = (isMobile && sub.mobileExt) ? sub.mobileExt : sub.ext; // Grab the extension
+        let targetExt = (isMobile && sub.mobileExt) ? sub.mobileExt : (sub.ext || ".jpg");
 
         if (isHDModeEnabled && sub.hdPath) {
             targetPath = sub.hdPath;
             targetFrames = sub.hdFrames;
-            targetExt = sub.hdExt || targetExt; // Fallback to standard if no HD extension provided
+            targetExt = sub.hdExt || targetExt;
         }
 
         window.imagesLoaded = 0;
@@ -215,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (typeof threeSixty !== 'undefined' && threeSixty.loadModel) {
             setTimeout(() => {
-                // Pass directly to threesixty.js with the extension!
+                // Safely passes everything, including the extension, directly to the engine
                 threeSixty.loadModel(targetPath, targetFrames, [false, false], targetExt);
             }, 50);
         }
@@ -234,19 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
         data.subsystems.forEach((sub) => {
             const item = document.createElement('div');
             item.className = 'nav-item';
-
-            const span = document.createElement('span');
-            span.className = 'nav-label';
-            span.textContent = sub.label;
-
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn';
+            const span = document.createElement('span'); span.className = 'nav-label'; span.textContent = sub.label;
+            const btn = document.createElement('button'); btn.className = 'nav-btn';
             
-            if (sub.useLogo && data.logo) {
-                btn.innerHTML = `<img src="${data.logo}" class="nav-logo">`;
-            } else {
-                btn.textContent = sub.label;
-            }
+            if (sub.useLogo && data.logo) { btn.innerHTML = `<img src="${data.logo}" class="nav-logo">`; } 
+            else { btn.textContent = sub.label; }
 
             btn.addEventListener('click', () => {
                 navContainer.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -269,138 +242,60 @@ document.addEventListener('DOMContentLoaded', () => {
         if (firstBtn) firstBtn.click();
     }
 
-    robotSelector.addEventListener('change', (e) => {
-        loadRobotProfile(e.target.value);
-    });
+    robotSelector.addEventListener('change', (e) => loadRobotProfile(e.target.value));
 
     // =========================================
     // 4. HD TOGGLE LOGIC
     // =========================================
     function toggleHDMode() {
         isHDModeEnabled = !isHDModeEnabled;
-        
         hdBtns.forEach(btn => {
             if (!btn) return;
             if (isHDModeEnabled) {
-                btn.classList.add('active-mode');
-                btn.textContent = btn.id.includes('desktop') ? 'HD: ON' : 'HD';
-                btn.style.boxShadow = "0 0 15px rgba(0, 255, 136, 0.4)";
+                btn.classList.add('active-mode'); btn.textContent = btn.id.includes('desktop') ? 'HD: ON' : 'HD'; btn.style.boxShadow = "0 0 15px rgba(0, 255, 136, 0.4)";
             } else {
-                btn.classList.remove('active-mode');
-                btn.textContent = btn.id.includes('desktop') ? 'HD: OFF' : 'SD';
-                btn.style.boxShadow = "none";
+                btn.classList.remove('active-mode'); btn.textContent = btn.id.includes('desktop') ? 'HD: OFF' : 'SD'; btn.style.boxShadow = "none";
             }
         });
-
-        if (currentActiveSubsystem) {
-            executeModelLoad(currentActiveSubsystem);
-        }
+        if (currentActiveSubsystem) executeModelLoad(currentActiveSubsystem);
     }
-
-    hdBtns.forEach(btn => {
-        if(btn) btn.addEventListener('click', toggleHDMode);
-    });
+    hdBtns.forEach(btn => { if(btn) btn.addEventListener('click', toggleHDMode); });
 
     // =========================================
-    // 5. SAFE EXTERNAL AUTO-SPIN 
+    // 5. AUTO-SPIN & MOBILE 
     // =========================================
     const spinBtns = document.querySelectorAll('.btn-spin:not(#btn-hd-desktop):not(#btn-hd-mobile)');
     const viewerContainer = document.getElementById('viewer');
-    
-    let autoSpinMode = false; 
-    let idleTimer = null;
-    const idleDelay = 8000; 
+    let autoSpinMode = false, idleTimer = null; const idleDelay = 8000; 
 
-    function startSpinning() {
-        if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            if (threeSixty._vr.grabbing) {
-                resetIdleTimer();
-            } else {
-                threeSixty._vr.play(); 
-            }
-        }
-    }
-
-    function stopSpinning() {
-        if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            threeSixty._vr.pause(); 
-            if (threeSixty._vr.onGrabStart) {
-                threeSixty._vr.onGrabStart.playing = false; 
-            }
-        }
-    }
-
-    function resetIdleTimer() {
-        stopSpinning();
-        clearTimeout(idleTimer);
-        if (autoSpinMode) {
-            idleTimer = setTimeout(startSpinning, idleDelay);
-        }
-    }
+    function startSpinning() { if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) { if (threeSixty._vr.grabbing) resetIdleTimer(); else threeSixty._vr.play(); } }
+    function stopSpinning() { if (typeof threeSixty !== 'undefined' && threeSixty._vr) { threeSixty._vr.pause(); if (threeSixty._vr.onGrabStart) threeSixty._vr.onGrabStart.playing = false; } }
+    function resetIdleTimer() { stopSpinning(); clearTimeout(idleTimer); if (autoSpinMode) idleTimer = setTimeout(startSpinning, idleDelay); }
 
     function toggleAutoSpinMode() {
         autoSpinMode = !autoSpinMode;
-        
         spinBtns.forEach(btn => {
-            if (autoSpinMode) {
-                btn.classList.add('active-mode');
-                btn.textContent = 'Auto-Spin: ON';
-            } else {
-                btn.classList.remove('active-mode');
-                btn.textContent = 'Auto-Spin: OFF';
-            }
+            if (autoSpinMode) { btn.classList.add('active-mode'); btn.textContent = 'Auto-Spin: ON'; } 
+            else { btn.classList.remove('active-mode'); btn.textContent = 'Auto-Spin: OFF'; }
         });
-
-        if (autoSpinMode) {
-            resetIdleTimer();
-        } else {
-            stopSpinning();
-            clearTimeout(idleTimer);
-        }
+        if (autoSpinMode) resetIdleTimer(); else { stopSpinning(); clearTimeout(idleTimer); }
     }
 
-    let initCheck = setInterval(() => {
-        if (typeof threeSixty !== 'undefined' && threeSixty._vr) {
-            clearInterval(initCheck);
-            loadRobotProfile(robotSelector.value);
-        }
-    }, 250);
+    let initCheck = setInterval(() => { if (typeof threeSixty !== 'undefined' && threeSixty._vr) { clearInterval(initCheck); loadRobotProfile(robotSelector.value); } }, 250);
 
-    ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
-        viewerContainer.addEventListener(evt, (e) => {
-            if (e.isTrusted && autoSpinMode) {
-                resetIdleTimer();
-            }
-        }, { passive: true, capture: true });
-    });
-
+    ['mousedown', 'touchstart', 'wheel'].forEach(evt => { viewerContainer.addEventListener(evt, (e) => { if (e.isTrusted && autoSpinMode) resetIdleTimer(); }, { passive: true, capture: true }); });
     spinBtns.forEach(btn => btn.addEventListener('click', toggleAutoSpinMode));
 
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-            e.preventDefault(); 
-            toggleAutoSpinMode();
-        }
-    });
+    document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); toggleAutoSpinMode(); } });
 
-    // =========================================
-    // 6. MOBILE DRAWER TOGGLE
-    // =========================================
     const toggleMobileBtn = document.getElementById('mobile-info-btn');
     const overlay = document.getElementById('info-overlay');
-
     if(toggleMobileBtn) {
         toggleMobileBtn.addEventListener('click', () => {
             overlay.classList.toggle('open');
             toggleMobileBtn.textContent = overlay.classList.contains('open') ? 'Close Specs' : 'View Specs';
-            
-            if(overlay.classList.contains('open')) {
-                toggleMobileBtn.style.background = '#FFD700';
-                toggleMobileBtn.style.color = '#11151C';
-            } else {
-                toggleMobileBtn.style.background = '#0078d7';
-                toggleMobileBtn.style.color = 'white';
-            }
+            if(overlay.classList.contains('open')) { toggleMobileBtn.style.background = '#FFD700'; toggleMobileBtn.style.color = '#11151C'; } 
+            else { toggleMobileBtn.style.background = '#0078d7'; toggleMobileBtn.style.color = 'white'; }
         });
     }
 });
