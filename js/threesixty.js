@@ -18,15 +18,13 @@ var threeSixty = {
             firstButton.classList.add('active');
         }
         
-        // Only trigger if data actually exists
         if (this.currentModel) {
             this.loadModel(this.currentModel, this.currentFrames, this.currentInvert);
         }
     },
 
-    loadModel: function (modelFolder, frames, invert) {
-        var self = this; 
-        
+    // Safely takes the ext parameter from viewer.js
+    loadModel: function (modelFolder, frames, invert, ext) {
         if (this._vr) {
             this.willHide();
             var viewerEl = document.getElementById('viewer');
@@ -36,44 +34,11 @@ var threeSixty = {
         this.currentModel = modelFolder;
         this.currentFrames = frames || [30, 8];
         this.currentInvert = invert || [false, false];
+        
+        // Use the requested format, or fallback to .jpg
+        var format = ext || '.jpg'; 
 
-        // ==========================================
-        // THE NATIVE AUTO-DETECTOR
-        // ==========================================
-        var formatsToTest = ['.webp', '.jpg', '.png'];
-        var formatIndex = 0;
-
-        function testFormat() {
-            if (formatIndex >= formatsToTest.length) {
-                // Failsafe: Default to .jpg so it doesn't hang forever
-                self.startEngine('.jpg');
-                return;
-            }
-
-            var testExt = formatsToTest[formatIndex];
-            var img = new Image();
-
-            img.onload = function() {
-                // Format found! Boot the engine.
-                self.startEngine(testExt);
-            };
-
-            img.onerror = function() {
-                // Failed, try the next format
-                formatIndex++;
-                testFormat();
-            };
-
-            // Ping Frame 1 (Solidworks defaults to starting at 000001)
-            img.src = modelFolder + '/Frame000001' + testExt;
-        }
-
-        // Kick off the ping test
-        testFormat();
-    },
-
-    startEngine: function(detectedExtension) {
-        this._vr = new AC.VR('viewer', this.currentModel + '/Frame######' + detectedExtension, this.currentFrames, {
+        this._vr = new AC.VR('viewer', modelFolder + '/Frame######' + format, this.currentFrames, {
             invert: this.currentInvert
         });
     },
@@ -83,10 +48,8 @@ var threeSixty = {
     },
     
     willHide: function() {
-        if (this._vr && typeof recycleObjectValueForKey !== 'undefined') {
+        if (typeof recycleObjectValueForKey !== 'undefined') {
             recycleObjectValueForKey(this, "_vr");
-        } else {
-            this._vr = null;
         }
     },
     
