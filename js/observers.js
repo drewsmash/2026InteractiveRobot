@@ -24,7 +24,7 @@
 			// Transfer the removed node properties to the new node
 			if (m.removedNodes && m.removedNodes.length > 0) {
 				m.removedNodes.forEach(removedN => {
-					if (!removedN.classList.contains('zoomableNode')) { return; }
+					if (!removedN || removedN.nodeType !== Node.ELEMENT_NODE || !removedN.classList || !removedN.classList.contains('zoomableNode')) { return; }
 
 					document.querySelectorAll(".zoomableNode").forEach(n => {
 						n.style["background-size"] = removedN.style["background-size"];
@@ -38,7 +38,9 @@
 			// This fixes an issue with vr and wheelzoom not playing well together
 			if (m.addedNodes && m.addedNodes.length > 0) {
 				m.addedNodes.forEach(n => {
-					if (n.nodeName != 'IMG' ||
+					if (!n ||
+						n.nodeType !== Node.ELEMENT_NODE ||
+						n.nodeName != 'IMG' ||
 						(!n.src && !n.currentSrc) ||
 						(n.src && n.src.startsWith("data:image")) ||
 						n.classList.contains('zoomableNode')) { return; }
@@ -49,6 +51,7 @@
 					zoomableNode.classList.add('zoomableNode');
 
 					let vr = document.getElementsByClassName("vr")[0];
+					if (!vr) { return; }
 					vr.appendChild(zoomableNode);
 					wheelzoom(zoomableNode);
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rt59-viewer-v2';
+const CACHE_NAME = 'rt59-viewer-v3';
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
@@ -10,8 +10,16 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
+    const isRangeRequest = event.request.headers.has('range');
+    const isBinaryModel = requestUrl.pathname.endsWith('.glb') || requestUrl.pathname.endsWith('.gltf');
 
     if (requestUrl.origin !== self.location.origin) {
+        return;
+    }
+
+    // Large 3D assets should come straight from the network. Caching partial/range
+    // responses can corrupt subsequent full-file loads in Safari/model-viewer.
+    if (isRangeRequest || isBinaryModel) {
         return;
     }
 

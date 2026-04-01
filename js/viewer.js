@@ -2,6 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const modelViewerReadyPromise = window.modelViewerReady || Promise.resolve(
         typeof customElements !== 'undefined' && !!customElements.get('model-viewer')
     );
+    const canCreateWebGLContext = (() => {
+        try {
+            const canvas = document.createElement('canvas');
+            return !!(
+                window.WebGLRenderingContext &&
+                (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+            );
+        } catch (error) {
+            return false;
+        }
+    })();
 
     window.forceHideLoadingScreen = function() {
         const loadingScreen = document.getElementById('loading-screen');
@@ -144,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "FullRobot",
                     label: "Full Assembly",
                     is3D: true,
-                    src: "rico2.glb",
+                    src: "rico1.glb",
                     srcCandidates: ["rico2.glb", "rico1.glb", "rico.glb"]
                 }
             ],
@@ -192,6 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     modelElement.style.opacity = '0';
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
+
+                    if (!canCreateWebGLContext) {
+                        if (spinner3d) {
+                            spinner3d.innerHTML = `
+                                <div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">WEBGL UNAVAILABLE</div>
+                                <div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">
+                                    This browser session cannot create a WebGL context, so the 3D viewer cannot start.<br>
+                                    Try a normal browser window with hardware acceleration enabled, or a different browser/device.
+                                </div>
+                            `;
+                        }
+                        return;
+                    }
 
                     try {
                         await modelViewerReadyPromise;
