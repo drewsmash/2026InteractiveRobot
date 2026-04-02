@@ -171,55 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerLogo = document.getElementById('header-logo');
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
-    const uploadBtns = [document.getElementById('btn-upload-desktop'), document.getElementById('btn-upload-mobile')];
-    const fileInput = document.getElementById('file-input');
-
-    let currentObjectURL = null;
-
-    if (fileInput) {
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // Clean up the PREVIOUS file's memory before loading the new one
-            if (currentObjectURL) {
-                URL.revokeObjectURL(currentObjectURL);
-            }
-
-            currentObjectURL = URL.createObjectURL(file);
-            const modelElement = document.getElementById('model-element');
-            if (modelElement) {
-                const onModelLoad = () => {
-                    const progressBar = modelElement.querySelector('.progress-bar');
-                    if (progressBar) progressBar.classList.add('hide');
-                };
-
-                const updateBar = modelElement.querySelector('.update-bar');
-                if (updateBar) updateBar.style.width = '0%';
-                
-                const progressBar = modelElement.querySelector('.progress-bar');
-                if (progressBar) progressBar.classList.remove('hide');
-
-                modelElement.removeAttribute('src');
-                modelElement.addEventListener('load', onModelLoad, { once: true });
-                modelElement.src = currentObjectURL;
-
-                // Dynamically update the Spec panel to show info about the uploaded file
-                document.getElementById('panel-title').innerHTML = "Custom Upload";
-                document.getElementById('panel-left-content').innerHTML = "<p>Viewing a locally uploaded 3D model.</p>";
-                document.getElementById('panel-right-content').innerHTML = `<ul><li><b>File:</b> ${file.name}</li><li><b>Size:</b> ${(file.size / 1024 / 1024).toFixed(2)} MB</li></ul>`;
-            }
-            
-            // Clear input so selecting the same file consecutively still triggers the 'change' event
-            fileInput.value = '';
-        });
-    }
-
-    uploadBtns.forEach(btn => {
-        if (btn) btn.addEventListener('click', () => {
-            if (fileInput) fileInput.click();
-        });
-    });
 
     async function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
@@ -237,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (spinner3d) spinner3d.style.display = 'flex';
                 
                 hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
-                uploadBtns.forEach(btn => { if(btn) btn.style.display = ''; });
                 
                 if (modelElement) {
                     if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
@@ -252,6 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         const updateBar = modelElement.querySelector('.update-bar');
                         if (updateBar) {
                             updateBar.style.width = `${progress * 100}%`;
+                        }
+                        if (progress >= 1) {
+                            // Safety timeout: If progress finishes but the load event gets stuck, force hide
+                            setTimeout(() => {
+                                const progressBar = modelElement.querySelector('.progress-bar');
+                                if (progressBar) progressBar.classList.add('hide');
+                            }, 400);
                         }
                     };
 
@@ -303,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (v2d) v2d.style.display = 'flex';
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
-            uploadBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
