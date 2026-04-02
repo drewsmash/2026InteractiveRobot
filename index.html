@@ -122,6 +122,34 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-text { color: #FFD700; font-weight: bold; letter-spacing: 2px; }
         
+        /* model-viewer Progress Bar */
+        .progress-bar {
+            display: block;
+            width: 33%;
+            height: 10%;
+            max-height: 8px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            border-radius: 25px;
+            box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            background-color: #1A212D;
+        }
+        .progress-bar.hide {
+            visibility: hidden;
+            transition: visibility 0.3s;
+        }
+        .update-bar {
+            background-color: #FFD700;
+            width: 0%;
+            height: 100%;
+            border-radius: 25px;
+            float: left;
+            transition: width 0.3s;
+        }
+
         /* AR Button & Prompt */
         #ar-button {
             background-color: rgba(0, 120, 215, 0.85);
@@ -271,6 +299,8 @@
         </div>
 
         <div class="header-right viewer-controls">
+            <button id="btn-upload-desktop" class="btn-spin" style="margin-right: 15px; display: none;">Upload .GLB</button>
+            <input type="file" id="file-input" accept=".glb, .gltf" style="display: none;">
             <button id="btn-hd-desktop" class="btn-spin" style="margin-right: 15px;">HD: OFF</button>
             <button id="btn-spin-desktop" class="btn-spin">Auto-Spin: OFF</button>
         </div>
@@ -283,7 +313,7 @@
                 <div class="loader-circle"></div>
                 <div class="loader-text">LOADING 3D ENVIRONMENT...</div>
             </div>
-           <model-viewer id="model-element" alt="3D model of the robot" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" shadow-intensity="1" style="width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s ease-in; background-color: transparent;">
+           <model-viewer id="model-element" alt="3D model of the robot" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" shadow-intensity="1" style="width: 100%; height: 100%; background-color: transparent;">
     <div class="progress-bar hide" slot="progress-bar">
         <div class="update-bar"></div>
     </div>
@@ -319,6 +349,7 @@
         </div>
 
         <div class="mobile-floating-controls">
+            <button id="btn-upload-mobile" class="btn-spin" style="margin-right: 5px; display: none;">Upload</button>
             <button id="btn-hd-mobile" class="btn-spin" style="margin-right: 5px;">HD</button>
             <button id="btn-spin-mobile" class="btn-spin">Auto-Spin: OFF</button>
             <button id="mobile-info-btn">View Specs</button>
