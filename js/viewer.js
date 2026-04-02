@@ -256,6 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
 
                     const onModelLoad = () => {
+                        const progressBar = modelElement.querySelector('.progress-bar');
+                        if (progressBar) progressBar.classList.add('hide');
                         modelElement.removeEventListener('progress', onModelProgress);
                     };
                     
