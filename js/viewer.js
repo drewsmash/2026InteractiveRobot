@@ -23,12 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     // =========================================
-    // Explicitly Configure Draco GLB Decoder
-    // =========================================
-    window.ModelViewerElement = window.ModelViewerElement || {};
-    window.ModelViewerElement.dracoDecoderLocation = 'https://www.gstatic.com/draco/versioned/decoders/1.4.1/';
-
-    // =========================================
     // 1. ENGINE OVERRIDE (SAFE VERSION)
     // =========================================
     window.imagesLoaded = 0;
