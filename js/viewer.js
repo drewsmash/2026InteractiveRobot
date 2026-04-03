@@ -2,13 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const canCreateWebGLContext = (() => {
         try {
             const canvas = document.createElement('canvas');
-            return !!(
-                window.WebGLRenderingContext &&
-                (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-            );
-        } catch (error) {
-            return false;
-        }
+            return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+        } catch (error) { return false; }
     })();
 
     window.forceHideLoadingScreen = function() {
@@ -20,19 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     // =========================================
-    // 1. ENGINE OVERRIDE (SAFE VERSION)
+    // 1. ENGINE OVERRIDE & APPLE MATH KILLER
     // =========================================
     window.imagesLoaded = 0;
     window.totalImagesToLoad = 0; 
     window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
+        // Stops Apple from stretching images
+        AC.VR.prototype.updateSizes = function() {};
+        AC.VR.prototype.resize = function() {};
+
         AC.VR.options.introDuration = 2.5; 
-        
-        AC.VR.prototype.gotoNextFrame = function() {
-            this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]);
-        };
-        
+        AC.VR.prototype.gotoNextFrame = function() { this.gotoPos([ this.currentPos[0] + 1, this.currentPos[1] ]); };
         AC.VR.prototype.play = function(){
             if (this.playing) return;
             this.playing = true;
@@ -146,8 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "FullRobot",
                     label: "Full Assembly",
                     is3D: true,
-                    src: "https://media.githubusercontent.com/media/drewsmash/2026InteractiveRobot/refs/heads/main/rico1.glb",
-                    srcCandidates: ["https://media.githubusercontent.com/media/drewsmash/2026InteractiveRobot/refs/heads/main/rico1.glb", "rico1.glb", "https://media.githubusercontent.com/media/drewsmash/2026InteractiveRobot/refs/heads/main/rico1.glb"]
+                    src: "https://github.com/drewsmash/2026InteractiveRobot/raw/refs/heads/main/rico1.glb",
+                    srcCandidates: ["rico2.glb", "rico1.glb", "https://github.com/drewsmash/2026InteractiveRobot/raw/refs/heads/main/rico.glb"]
                 }
             ],
             specs: {
@@ -171,95 +166,194 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerLogo = document.getElementById('header-logo');
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
+    const uploadBtns = [document.getElementById('btn-upload-desktop'), document.getElementById('btn-upload-mobile')];
+    const fileInput = document.getElementById('file-input');
+
+    let currentObjectURL = null;
+
+    if (fileInput) {
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (currentObjectURL) {
+                URL.revokeObjectURL(currentObjectURL);
+            }
+
+            currentObjectURL = URL.createObjectURL(file);
+            const modelElement = document.getElementById('model-element');
+            if (modelElement) {
+                const onModelLoad = () => {
+                    const progressBar = modelElement.querySelector('.progress-bar');
+                    if (progressBar) progressBar.classList.add('hide');
+                };
+
+                const updateBar = modelElement.querySelector('.update-bar');
+                if (updateBar) updateBar.style.width = '0%';
+                
+                const progressBar = modelElement.querySelector('.progress-bar');
+                if (progressBar) progressBar.classList.remove('hide');
+
+                modelElement.removeAttribute('src');
+                modelElement.addEventListener('load', onModelLoad, { once: true });
+                modelElement.src = currentObjectURL;
+
+                document.getElementById('panel-title').innerHTML = "Custom Upload";
+                document.getElementById('panel-left-content').innerHTML = "<p>Viewing a locally uploaded 3D model.</p>";
+                document.getElementById('panel-right-content').innerHTML = `<ul><li><b>File:</b> ${file.name}</li><li><b>Size:</b> ${(file.size / 1024 / 1024).toFixed(2)} MB</li></ul>`;
+            }
+            
+            fileInput.value = '';
+        });
+    }
+
+    uploadBtns.forEach(btn => {
+        if (btn) btn.addEventListener('click', () => {
+            if (fileInput) fileInput.click();
+        });
+    });
 
     async function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
         const isMobile = window.innerWidth <= 768;
         
         const v2d = document.getElementById('viewer');
-        const v3d = document.getElementById('viewer-3d');
         const spinner3d = document.getElementById('spinner-3d');
         const modelElement = document.getElementById('model-element');
 
         if (sub.is3D) {
+            // HIDE 2D, SHOW 3D directly
             if (v2d) v2d.style.display = 'none';
-            if (v3d) {
-                v3d.style.display = 'flex';
-                if (spinner3d) spinner3d.style.display = 'flex';
+            if (modelElement) modelElement.style.display = 'block'; 
+            
+            if (spinner3d) spinner3d.style.display = 'flex';
                 
-                hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+            hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+            uploadBtns.forEach(btn => { if(btn) btn.style.display = ''; });
                 
-                if (modelElement) {
-                    if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
+            if (modelElement) {
+                const sourceCandidates = [...(sub.srcCandidates || [sub.src])];
 
+                if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
+
+                if (!canCreateWebGLContext) {
+                    if (spinner3d) {
+                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">WEBGL UNAVAILABLE</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">This browser session cannot create a WebGL context, so the 3D viewer cannot start.<br>Try a normal browser window with hardware acceleration enabled, or a different browser/device.</div>`;
+                    }
+                    return;
+                }
+
+                try {
                     if (window.modelViewerReady) await window.modelViewerReady;
                     if (typeof customElements !== 'undefined') await customElements.whenDefined('model-viewer');
+                } catch (error) {
+                    if (spinner3d) {
+                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D VIEWER FAILED TO LOAD</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">The browser could not load the <b>model-viewer</b> component.<br>This usually means the page is offline, the CDN request was blocked, or an old service worker cached a bad response.</div>`;
+                    }
+                    return;
+                }
 
-                    if (spinner3d) spinner3d.style.display = 'none';
+                if (spinner3d) spinner3d.style.display = 'none';
 
-                    const onModelProgress = (event) => {
-                        const progress = event.detail.totalProgress;
-                        const updateBar = modelElement.querySelector('.update-bar');
-                        if (updateBar) {
-                            updateBar.style.width = `${progress * 100}%`;
-                        }
-                        if (progress >= 1) {
-                            // Safety timeout: If progress finishes but the load event gets stuck, force hide
-                            setTimeout(() => {
-                                const progressBar = modelElement.querySelector('.progress-bar');
-                                if (progressBar) progressBar.classList.add('hide');
-                            }, 400);
-                        }
-                    };
-
-                    const onModelLoad = () => {
-                        const progressBar = modelElement.querySelector('.progress-bar');
-                        if (progressBar) progressBar.classList.add('hide');
-                        modelElement.removeEventListener('progress', onModelProgress);
-                    };
+                const onModelProgress = (event) => {
+                    const progress = event.detail.totalProgress;
+                    const updateBar = modelElement.querySelector('.update-bar');
+                    if (updateBar) updateBar.style.width = `${progress * 100}%`;
                     
-                    const targetSrc = sub.src;
-
-                    if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
-                    else modelElement.removeAttribute('auto-rotate');
-                    
-                    // If this exact source is already loading or loaded, don't reset it
-                    const currentUrlObj = new URL(modelElement.src || "about:blank", window.location.href);
-                    const targetUrlObj = new URL(targetSrc, window.location.href);
-                    
-                    if (currentUrlObj.href === targetUrlObj.href) {
-                        if (modelElement.loaded || modelElement.modelIsVisible) {
-                            const updateBar = modelElement.querySelector('.update-bar');
-                            if (updateBar) updateBar.style.width = '100%';
+                    if (progress >= 1) {
+                        setTimeout(() => {
                             const progressBar = modelElement.querySelector('.progress-bar');
                             if (progressBar) progressBar.classList.add('hide');
+                        }, 400);
+                    }
+                };
 
-                            onModelLoad();
-                        } else {
-                            modelElement.addEventListener('progress', onModelProgress);
-                            modelElement.addEventListener('load', onModelLoad, { once: true });
-                        }
+                const onModelLoad = () => {
+                    const progressBar = modelElement.querySelector('.progress-bar');
+                    if (progressBar) progressBar.classList.add('hide');
+                    modelElement.removeEventListener('progress', onModelProgress);
+                };
+                
+                const onModelError = (error) => {
+                    modelElement.removeEventListener('progress', onModelProgress);
+                    
+                    const fullSrc = modelElement.src || "";
+                    const urlObj = new URL(fullSrc, window.location.href);
+                    const currentFileName = urlObj.pathname.split('/').pop();
+                    
+                    const currentIndex = sourceCandidates.findIndex(c => currentFileName === c || currentFileName === encodeURIComponent(c));
+                    const remainingCandidates = currentIndex >= 0 ? sourceCandidates.slice(currentIndex + 1) : [];
+
+                    modelElement.removeEventListener('error', onModelError);
+                    modelElement.removeEventListener('load', onModelLoad);
+
+                    if (remainingCandidates.length > 0) {
+                        const nextSrc = remainingCandidates[0];
+                        sub.srcCandidates = remainingCandidates;
+
+                        modelElement.addEventListener('progress', onModelProgress);
+                        modelElement.addEventListener('load', onModelLoad, { once: true });
+                        modelElement.addEventListener('error', onModelError, { once: true });
+                        modelElement.src = nextSrc;
                         return;
                     }
 
-                    const updateBar = modelElement.querySelector('.update-bar');
-                    if (updateBar) updateBar.style.width = '0%';
-                    
                     const progressBar = modelElement.querySelector('.progress-bar');
-                    if (progressBar) progressBar.classList.remove('hide');
+                    if (progressBar) progressBar.classList.add('hide');
 
-                    modelElement.removeAttribute('src');
-                    modelElement.addEventListener('progress', onModelProgress);
+                    if (spinner3d) {
+                        spinner3d.style.display = 'flex';
+                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D MODEL FAILED TO LOAD</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">Browser security rules blocked your file, or none of these files could load:<br><b>${sourceCandidates.join(', ')}</b><br>Loading Demo Astronaut automatically.</div>`;
+                    }
+
+                    modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
                     modelElement.addEventListener('load', onModelLoad, { once: true });
-                    
-                    modelElement.src = targetSrc;
+                };
+
+                const targetSrc = sourceCandidates[0] || sub.src;
+
+                if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
+                else modelElement.removeAttribute('auto-rotate');
+                
+                const currentUrlObj = new URL(modelElement.src || "about:blank", window.location.href);
+                const targetUrlObj = new URL(targetSrc, window.location.href);
+                
+                if (currentUrlObj.href === targetUrlObj.href) {
+                    if (modelElement.loaded || modelElement.modelIsVisible) {
+                        const updateBar = modelElement.querySelector('.update-bar');
+                        if (updateBar) updateBar.style.width = '100%';
+                        const progressBar = modelElement.querySelector('.progress-bar');
+                        if (progressBar) progressBar.classList.add('hide');
+                        onModelLoad();
+                    } else {
+                        modelElement.addEventListener('progress', onModelProgress);
+                        modelElement.addEventListener('load', onModelLoad, { once: true });
+                        modelElement.addEventListener('error', onModelError, { once: true });
+                    }
+                    return;
                 }
+
+                const updateBar = modelElement.querySelector('.update-bar');
+                if (updateBar) updateBar.style.width = '0%';
+                
+                const progressBar = modelElement.querySelector('.progress-bar');
+                if (progressBar) progressBar.classList.remove('hide');
+
+                modelElement.removeAttribute('src');
+                modelElement.addEventListener('progress', onModelProgress);
+                modelElement.addEventListener('load', onModelLoad, { once: true });
+                modelElement.addEventListener('error', onModelError, { once: true });
+                
+                modelElement.src = targetSrc;
             }
         } else {
-            if (v3d) v3d.style.display = 'none';
+            // HIDE 3D, SHOW 2D
+            if (modelElement) modelElement.style.display = 'none';
+            if (spinner3d) spinner3d.style.display = 'none';
             if (v2d) v2d.style.display = 'flex';
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            uploadBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
@@ -303,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                // Update Spec Panels
                 const specs = data.specs[sub.id] || { title: sub.label, leftContent: "Data coming soon.", rightContent: "" };
                 document.getElementById('panel-title').innerHTML = specs.title;
                 document.getElementById('panel-left-content').innerHTML = specs.leftContent;
@@ -317,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navContainer.querySelector('.nav-btn')) navContainer.querySelector('.nav-btn').click();
     }
 
-    // Toggle 2D/3D
     robotSelector.addEventListener('change', (e) => {
         loadRobotProfile(e.target.value);
     });
@@ -345,7 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.play();
         else if (typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.pause();
         
-        // Connect Spin to 3D Viewer
         const modelElement = document.getElementById('model-element');
         if (modelElement) {
             if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
@@ -353,24 +444,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }));
 
-    // =========================================
-    // 7. START-UP SEQUENCE (RICO FIX)
-    // =========================================
-    
-    // We wait for the entire window to load so we don't trip over Apple's engine
+    // Start-up sequence (Rico Fix)
     window.addEventListener('load', () => {
         if (typeof threeSixty !== 'undefined') {
-            
-            // KILLER: We overwrite threesixty.js's default init function 
-            // so it stops randomly blanking out the screen on page load!
             threeSixty.init = function() {}; 
-            
-            // Now we safely load Rico
             loadRobotProfile(robotSelector.value);
         }
     });
 
-    // Mobile drawer logic remains the same
+    // Mobile drawer
     const toggleMobileBtn = document.getElementById('mobile-info-btn');
     const overlay = document.getElementById('info-overlay');
     if(toggleMobileBtn) {
