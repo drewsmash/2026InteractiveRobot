@@ -15,9 +15,7 @@
 
     <style>
         /* Global Font Scaler */
-        html {
-            font-size: clamp(14px, 1vw, 22px); 
-        }
+        html { font-size: clamp(14px, 1vw, 22px); }
 
         body { 
             margin: 0; padding: 0; font-family: "SF Mono", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
@@ -32,7 +30,6 @@
         }
         .header-left { display: flex; align-items: center; justify-content: flex-start; gap: 15px; flex-wrap: wrap; }
         
-        /* Fluid Logos */
         .header-logo { height: clamp(28px, 4vh, 55px) !important; width: auto !important; max-width: 150px !important; object-fit: contain; }
         .ramtech-logo { height: clamp(50px, 8vh, 120px) !important; width: auto !important; max-width: 300px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
         
@@ -46,8 +43,7 @@
         .robot-selector option { background: #1A212D; color: #e0e0e0; font-weight: bold; }
         
         .header-center { display: flex; align-items: center; justify-content: center; }
-
-        .header-right { display: flex; justify-content: flex-end; align-items: center; }
+        .header-right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
 
         .btn-spin { 
             font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; 
@@ -58,9 +54,7 @@
         .btn-spin.active-mode { background: #00ff88 !important; color: #11151C !important; border-color: #00ff88 !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
         
         .model-nav { 
-            background: #1A212D; 
-            padding: 15px 20px; 
-            padding-bottom: calc(1px + env(safe-area-inset-bottom)); 
+            background: #1A212D; padding: 15px 20px; padding-bottom: calc(1px + env(safe-area-inset-bottom)); 
             display: flex; gap: 20px; justify-content: center; overflow-x: auto;
             -webkit-overflow-scrolling: touch; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); z-index: 10; flex-shrink: 0; border-top: 1px solid #FFD700; 
         }
@@ -69,12 +63,10 @@
         .nav-label { font-size: 0.7rem; font-weight: bold; color: #FFD700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
         .nav-item:has(.active) .nav-label { color: #00a8ff; text-shadow: 0 0 8px rgba(0, 168, 255, 0.4); }
 
-        /* Fluid Nav Buttons */
         .nav-btn { 
             font-family: inherit; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 6px; 
             transition: all 0.2s ease-in-out; outline: none; background: #2A3441; color: #A0B0C0; border: 2px solid transparent; 
-            padding: clamp(10px, 1.5vh, 20px) clamp(20px, 2vw, 40px); 
-            font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
+            padding: clamp(10px, 1.5vh, 20px) clamp(20px, 2vw, 40px); font-size: 0.95rem; min-width: 120px; display: flex; justify-content: center; align-items: center;
         }
         .nav-btn:hover { background: #3B485A; color: #fff; }
         .nav-btn.active { background: #0078d7; color: #ffffff; border-color: #00a8ff; box-shadow: 0 0 15px rgba(0, 120, 215, 0.6); transform: translateY(-2px); }
@@ -82,37 +74,16 @@
 
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
-        /* ========================================= */
-        /* THE ULTIMATE SIZING FIX (UNIVERSAL SCALE) */
-        /* ========================================= */
+        /* 2D VIEWER SCALING */
         #viewer { 
-            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; 
-            display: flex; justify-content: center; align-items: center;
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
         }
-
-        .vr { 
-            position: absolute !important; width: 100% !important; height: 100% !important; 
-            margin: 0 !important; top: 0 !important; left: 0 !important;
-            display: flex !important; justify-content: center !important; align-items: center !important;
-            cursor: grab; 
-        }
+        .vr { position: absolute !important; width: 100% !important; height: 100% !important; margin: 0 !important; top: 0 !important; left: 0 !important; display: flex !important; justify-content: center !important; align-items: center !important; cursor: grab; }
         .vr:active { cursor: grabbing; }
-        
-        #viewer img, .vr img { 
-            width: 100% !important; height: 100% !important; 
-            max-width: 100% !important; max-height: 100% !important; 
-            object-fit: contain !important; 
-            margin: 0 !important; padding: 0 !important;
-            user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); 
-        }
-        /* ========================================= */
-        
-        /* 3D Spinner & Viewer */
-        #viewer-3d {
-            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden;
-            display: flex; justify-content: center; align-items: center; background: #11151C;
-        }
+        #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important; object-fit: contain !important; margin: 0 !important; padding: 0 !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
+
+        /* 3D SPINNER */
         .spinner-3d {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -121,39 +92,24 @@
         .loader-circle { width: 60px; height: 60px; border: 6px solid #1A212D; border-top: 6px solid #FFD700; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-text { color: #FFD700; font-weight: bold; letter-spacing: 2px; }
-        
-        /* model-viewer Progress Bar */
-        .progress-bar {
-            display: block;
-            width: 33%;
-            height: 10%;
-            max-height: 8px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate3d(-50%, -50%, 0);
-            border-radius: 25px;
-            box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 215, 0, 0.5);
-            background-color: #1A212D;
-        }
-        .progress-bar.hide {
-            visibility: hidden;
-            transition: visibility 0.3s;
-        }
-        .update-bar {
-            background-color: #FFD700;
-            width: 0%;
-            height: 100%;
-            border-radius: 25px;
-            float: left;
-            transition: width 0.3s;
-        }
 
-        #loading-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; 
-            z-index: 4; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease;
-        }
+        /* MODEL-VIEWER CSS */
+        model-viewer { width: 100%; height: 100%; background-color: transparent; outline: none; flex: 1; }
+        .progress-bar { display: block; width: 33%; height: 10%; max-height: 8px; position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; }
+        .progress-bar.hide { visibility: hidden; transition: visibility 0.3s; }
+        .update-bar { background-color: #FFD700; width: 0%; height: 100%; border-radius: 25px; float: left; transition: width 0.3s; }
+        #ar-button { background-image: url(ar_icon.png); background-repeat: no-repeat; background-size: 20px 20px; background-position: 12px 50%; background-color: #fff; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; bottom: 16px; padding: 0px 16px 0px 40px; font-family: inherit; font-size: 14px; color:#4285f4; height: 36px; line-height: 36px; border-radius: 18px; border: 1px solid #DADCE0; cursor: pointer; }
+        #ar-button:active { background-color: #E8EAED; }
+        #ar-button:focus { outline: none; }
+        #ar-button:focus-visible { outline: 1px solid #4285f4; }
+        @keyframes circle { from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); } }
+        @keyframes elongate { from { transform: translateX(100px); } to { transform: translateX(-100px); } }
+        model-viewer > #ar-prompt { position: absolute; left: 50%; bottom: 60px; animation: elongate 2s infinite ease-in-out alternate; display: none; }
+        model-viewer[ar-status="session-started"] > #ar-prompt { display: block; }
+        model-viewer > #ar-prompt > img { animation: circle 4s linear infinite; }
+
+        /* LOADING & OVERLAYS */
+        #loading-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; z-index: 4; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease; }
         .loading-box { width: 80%; max-width: 400px; text-align: center; }
         .progress-text { color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 168, 255, 0.5); }
         .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
@@ -167,35 +123,14 @@
         .side-panel li { margin-bottom: 10px; }
         .side-panel b { color: #00a8ff; } 
 
-        /* Fluid Side Panels for Desktop */
         @media (min-width: 769px) { 
             #btn-spin-desktop::after { content: " (Space)"; font-size: 0.65rem; opacity: 0.7; margin-left: 5px; } 
             .mobile-floating-controls { display: none !important; }
-            
-            #main-content {
-                display: flex; flex-direction: row; align-items: stretch;
-                padding: clamp(15px, 3vh, 30px); gap: clamp(15px, 2vw, 30px);
-                box-sizing: border-box;
-            }
+            #main-content { display: flex; flex-direction: row; align-items: stretch; padding: clamp(15px, 3vh, 30px); gap: clamp(15px, 2vw, 30px); box-sizing: border-box; }
             .info-overlay { display: contents; }
-            
-            #viewer, #viewer-3d { order: 2; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-            
-            .side-panel { 
-                position: relative; 
-                width: clamp(260px, 22vw, 400px); 
-                background: rgba(26, 33, 45, 0.85); 
-                backdrop-filter: blur(10px); 
-                border: 1px solid rgba(255, 215, 0, 0.3); 
-                border-radius: 8px; 
-                padding: clamp(15px, 2vw, 30px); 
-                overflow-y: auto; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-                flex-shrink: 0;
-            }
-            .left-panel { order: 1; } 
-            .right-panel { order: 3; } 
-            #mobile-info-btn { display: none; }
+            #viewer, model-viewer { order: 2; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            .side-panel { position: relative; width: clamp(260px, 22vw, 400px); background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: clamp(15px, 2vw, 30px); overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); flex-shrink: 0; }
+            .left-panel { order: 1; } .right-panel { order: 3; } #mobile-info-btn { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -205,20 +140,31 @@
             .robot-selector { font-size: 0.95rem; padding: 5px 10px; }
             .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
             .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
-            
-            #btn-spin-desktop { display: none !important; }
-            #btn-hd-desktop { display: none !important; }
-
+            #btn-spin-desktop, #btn-hd-desktop, #btn-upload-desktop { display: none !important; }
             .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
             .info-overlay.open { transform: translateY(0); visibility: visible; }
             .side-panel { width: 100%; position: static; background: none; border: none; padding: 0; margin-bottom: 30px; box-shadow: none; }
-
             .mobile-floating-controls { position: absolute; bottom: 20px; right: 20px; z-index: 25; display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
             .btn-spin, #mobile-info-btn { background: #0078d7; color: white; border: 2px solid #00a8ff; padding: 10px 18px; border-radius: 30px; font-weight: bold; font-family: inherit; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.7); cursor: pointer; transition: 0.2s; white-space: nowrap; }
             .btn-spin:active, #mobile-info-btn:active { transform: scale(0.95); }
         }
     </style>
     
+    <script type="module">
+        const modelViewerSources = [
+            'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js',
+            'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js',
+            'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js'
+        ];
+        window.modelViewerReady = (async () => {
+            let lastError = null;
+            for (const src of modelViewerSources) {
+                try { await import(src); return true; } 
+                catch (error) { lastError = error; console.warn('Failed to load model-viewer from', src, error); }
+            }
+            throw lastError || new Error('model-viewer failed to load');
+        })();
+    </script>
     <script src="js/prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/browserdetect.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/apple_core.js" type="text/javascript" charset="utf-8"></script>
@@ -226,29 +172,6 @@
     <script src="js/library.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/threesixty.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/wheelzoom.js" type="text/javascript"></script>
-    <script type="module">
-        const modelViewerSources = [
-            'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js',
-            'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js',
-            'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js'
-        ];
-
-        window.modelViewerReady = (async () => {
-            let lastError = null;
-
-            for (const src of modelViewerSources) {
-                try {
-                    await import(src);
-                    return true;
-                } catch (error) {
-                    lastError = error;
-                    console.warn('Failed to load model-viewer from', src, error);
-                }
-            }
-
-            throw lastError || new Error('model-viewer failed to load');
-        })();
-    </script>
     <script src="js/observers.js" type="text/javascript" defer></script>
     <script src="js/viewer.js" type="text/javascript" charset="utf-8" defer></script>
 </head>
@@ -271,6 +194,8 @@
         </div>
 
         <div class="header-right viewer-controls">
+            <input type="file" id="file-input" accept=".glb,.gltf" style="display: none;">
+            <button id="btn-upload-desktop" class="btn-spin" style="display: none; margin-right: 15px;">Upload GLB</button>
             <button id="btn-hd-desktop" class="btn-spin" style="margin-right: 15px;">HD: OFF</button>
             <button id="btn-spin-desktop" class="btn-spin">Auto-Spin: OFF</button>
         </div>
@@ -278,18 +203,19 @@
 
     <div id="main-content">
         <div id="viewer"></div>
-        <div id="viewer-3d" style="display: none;">
-            <div id="spinner-3d" class="spinner-3d">
-                <div class="loader-circle"></div>
-                <div class="loader-text">LOADING 3D ENVIRONMENT...</div>
-            </div>
-           <model-viewer id="model-element" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1" style="width: 100%; height: 100%; background-color: transparent;">
-    <div class="progress-bar hide" slot="progress-bar">
-        <div class="update-bar"></div>
-    </div>
-</model-viewer>
 
+        <div id="spinner-3d" class="spinner-3d" style="display: none;">
+            <div class="loader-circle"></div>
+            <div class="loader-text">LOADING 3D ENVIRONMENT...</div>
         </div>
+
+        <model-viewer id="model-element" style="display: none;" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1">
+            <div class="progress-bar hide" slot="progress-bar">
+                <div class="update-bar"></div>
+            </div>
+            <button slot="ar-button" id="ar-button">View in your space</button>
+            <div id="ar-prompt"><img src="ar_hand_prompt.png"></div>
+        </model-viewer>
 
         <div id="loading-screen" style="display: none;">
             <div class="loading-box">
@@ -313,6 +239,7 @@
         </div>
 
         <div class="mobile-floating-controls">
+            <button id="btn-upload-mobile" class="btn-spin" style="display: none; margin-right: 5px;">Upload</button>
             <button id="btn-hd-mobile" class="btn-spin" style="margin-right: 5px;">HD</button>
             <button id="btn-spin-mobile" class="btn-spin">Auto-Spin: OFF</button>
             <button id="mobile-info-btn">View Specs</button>
