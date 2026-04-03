@@ -14,7 +14,6 @@
     <link rel="apple-touch-icon" href="app-icon.png">
 
     <style>
-        /* Global Font Scaler */
         html { font-size: clamp(14px, 1vw, 22px); }
 
         body { 
@@ -74,7 +73,7 @@
 
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
-        /* 2D VIEWER SCALING */
+        /* 2D VIEWER */
         #viewer { 
             flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
@@ -83,7 +82,11 @@
         .vr:active { cursor: grabbing; }
         #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important; object-fit: contain !important; margin: 0 !important; padding: 0 !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
-        /* 3D SPINNER */
+        /* 3D VIEWER WRAPPER */
+        #viewer-3d {
+            flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; background: #11151C;
+        }
         .spinner-3d {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -93,15 +96,23 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-text { color: #FFD700; font-weight: bold; letter-spacing: 2px; }
 
-        /* MODEL-VIEWER CSS */
-        model-viewer { width: 100%; height: 100%; background-color: transparent; outline: none; flex: 1; }
-        .progress-bar { display: block; width: 33%; height: 10%; max-height: 8px; position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; }
+        /* NATIVE MODEL-VIEWER CSS */
+        model-viewer { width: 100%; height: 100%; background-color: transparent; outline: none; }
+        
+        .progress-bar { 
+            display: block; width: 33%; height: 8px; position: absolute; left: 50%; top: 50%; 
+            transform: translate3d(-50%, -50%, 0); border-radius: 25px; 
+            box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); 
+            border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; 
+        }
         .progress-bar.hide { visibility: hidden; transition: visibility 0.3s; }
         .update-bar { background-color: #FFD700; width: 0%; height: 100%; border-radius: 25px; float: left; transition: width 0.3s; }
+        
         #ar-button { background-image: url(ar_icon.png); background-repeat: no-repeat; background-size: 20px 20px; background-position: 12px 50%; background-color: #fff; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; bottom: 16px; padding: 0px 16px 0px 40px; font-family: inherit; font-size: 14px; color:#4285f4; height: 36px; line-height: 36px; border-radius: 18px; border: 1px solid #DADCE0; cursor: pointer; }
         #ar-button:active { background-color: #E8EAED; }
         #ar-button:focus { outline: none; }
         #ar-button:focus-visible { outline: 1px solid #4285f4; }
+        
         @keyframes circle { from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); } }
         @keyframes elongate { from { transform: translateX(100px); } to { transform: translateX(-100px); } }
         model-viewer > #ar-prompt { position: absolute; left: 50%; bottom: 60px; animation: elongate 2s infinite ease-in-out alternate; display: none; }
@@ -128,7 +139,7 @@
             .mobile-floating-controls { display: none !important; }
             #main-content { display: flex; flex-direction: row; align-items: stretch; padding: clamp(15px, 3vh, 30px); gap: clamp(15px, 2vw, 30px); box-sizing: border-box; }
             .info-overlay { display: contents; }
-            #viewer, model-viewer { order: 2; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            #viewer, #viewer-3d { order: 2; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
             .side-panel { position: relative; width: clamp(260px, 22vw, 400px); background: rgba(26, 33, 45, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: clamp(15px, 2vw, 30px); overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); flex-shrink: 0; }
             .left-panel { order: 1; } .right-panel { order: 3; } #mobile-info-btn { display: none; }
         }
@@ -180,7 +191,6 @@
     <header>
         <div class="header-left">
             <img id="header-logo" src="Rico_logoSingleColorTrans.png" alt="Robot Logo" class="header-logo">
-            
             <select id="robot-selector" class="robot-selector">
                 <option value="2026_rico">2026 RICO</option>
                 <option value="2025_offseason">2025 Offseason</option>
@@ -204,18 +214,21 @@
     <div id="main-content">
         <div id="viewer"></div>
 
-        <div id="spinner-3d" class="spinner-3d" style="display: none;">
-            <div class="loader-circle"></div>
-            <div class="loader-text">LOADING 3D ENVIRONMENT...</div>
-        </div>
-
-        <model-viewer id="model-element" style="display: none;" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1">
-            <div class="progress-bar hide" slot="progress-bar">
-                <div class="update-bar"></div>
+        <div id="viewer-3d" style="display: none;">
+            
+            <div id="spinner-3d" class="spinner-3d">
+                <div class="loader-circle"></div>
+                <div class="loader-text">INITIALIZING 3D ENGINE...</div>
             </div>
-            <button slot="ar-button" id="ar-button">View in your space</button>
-            <div id="ar-prompt"><img src="ar_hand_prompt.png"></div>
-        </model-viewer>
+           
+            <model-viewer id="model-element" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1">
+                <div class="progress-bar hide" slot="progress-bar">
+                    <div class="update-bar"></div>
+                </div>
+                <button slot="ar-button" id="ar-button">View in your space</button>
+                <div id="ar-prompt"><img src="ar_hand_prompt.png"></div>
+            </model-viewer>
+        </div>
 
         <div id="loading-screen" style="display: none;">
             <div class="loading-box">
