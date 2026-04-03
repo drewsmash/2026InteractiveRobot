@@ -65,39 +65,51 @@ document.addEventListener('DOMContentLoaded', () => {
             subsystems: [
                 { 
                     id: "Robot", label: "Main Assembly", useLogo: true,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    poster: "2026/Robot/images/Frame000014.jpg"
+                    /* Uncomment these to make RICO pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
+                    // poster: "2026/Robot/images/Frame000014.jpg",
+                    path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp"
                 },
                 { 
                     id: "Shooter", label: "Shooter", useLogo: false,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    poster: "2026/Shooter/images/Frame000014.jpg"
+                    /* Uncomment these to make SHOOTER pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
+                    // poster: "2026/Shooter/images/Frame000014.jpg",
+                    path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg"
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
-                    poster: "2026/Tunnel/images/Frame000014.jpg"
+                    /* Uncomment these to make TUNNEL pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
+                    // poster: "2026/Tunnel/images/Frame000014.jpg",
+                    path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg"
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    poster: "2026/Intake/images/Frame000014.jpg"
+                    /* Uncomment these to make INTAKE pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
+                    // poster: "2026/Intake/images/Frame000014.jpg",
+                    path: "2026/Intake/images", frames: [30, 8], ext: ".jpg"
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    poster: "2026/Indexer/images/Frame000014.jpg"
+                    /* Uncomment these to make INDEXER pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
+                    // poster: "2026/Indexer/images/Frame000014.jpg",
+                    path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg"
                 },
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
-                    is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    poster: "2026/Wheel/images/Frame000014.jpg"
+                    /* Uncomment these to make SWERVE pure 3D */
+                    // is3D: true,
+                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
+                    // poster: "2026/Wheel/images/Frame000014.jpg",
+                    path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg"
                 }
             ],
             specs: {
@@ -170,8 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 {
-                    id: "FullRobot",
-                    label: "Full Assembly",
+                    id: "FullRobot", label: "Full Assembly",
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
                     poster: "2026/Robot/images/Frame000001.jpg"
@@ -214,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerLogo = document.getElementById('header-logo');
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
+    const arMobileBtn = document.getElementById('btn-ar-mobile');
 
     function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
@@ -230,6 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (v3d) v3d.style.display = 'flex'; 
                 
             hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
+            
+            // Show AR Button only on Mobile
+            if (arMobileBtn) arMobileBtn.style.display = '';
                 
             if (modelElement) {
                 if (!canCreateWebGLContext) {
@@ -263,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            if (arMobileBtn) arMobileBtn.style.display = 'none';
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
             let targetFrames = (isMobile && sub.mobileFrames) ? sub.mobileFrames : sub.frames;
@@ -295,6 +311,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (data.logo) headerLogo.src = data.logo;
         navContainer.innerHTML = '';
+
+        // Center Align if only 1 Subsystem is present
+        if (data.subsystems.length === 1) {
+            navContainer.classList.add('single-item');
+        } else {
+            navContainer.classList.remove('single-item');
+        }
 
         data.subsystems.forEach((sub) => {
             const btn = document.createElement('button');
@@ -343,17 +366,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if(autoSpinMode) b.classList.add('active-mode'); else b.classList.remove('active-mode');
         });
         
-        // 2D Engine
         if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.play();
         else if (typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.pause();
         
-        // 3D Engine
         const modelElement = document.getElementById('model-element');
         if (modelElement) {
             if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
             else modelElement.removeAttribute('auto-rotate');
         }
     }));
+
+    // AR Button Logic
+    if (arMobileBtn) {
+        arMobileBtn.addEventListener('click', () => {
+            const modelElement = document.getElementById('model-element');
+            if (modelElement) {
+                modelElement.activateAR();
+            }
+        });
+    }
 
     // Start-up sequence
     window.addEventListener('load', () => {
