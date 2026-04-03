@@ -65,51 +65,63 @@ document.addEventListener('DOMContentLoaded', () => {
             subsystems: [
                 { 
                     id: "Robot", label: "Main Assembly", useLogo: true,
-                    /* Uncomment these to make RICO pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    // poster: "2026/Robot/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
+                    poster: "2026/Robot/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp"
+                    ------------------------------- */
                 },
                 { 
                     id: "Shooter", label: "Shooter", useLogo: false,
-                    /* Uncomment these to make SHOOTER pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    // poster: "2026/Shooter/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
+                    poster: "2026/Shooter/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg"
+                    ------------------------------- */
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
-                    /* Uncomment these to make TUNNEL pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
-                    // poster: "2026/Tunnel/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
+                    poster: "2026/Tunnel/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg"
+                    ------------------------------- */
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
-                    /* Uncomment these to make INTAKE pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    // poster: "2026/Intake/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
+                    poster: "2026/Intake/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Intake/images", frames: [30, 8], ext: ".jpg"
+                    ------------------------------- */
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
-                    /* Uncomment these to make INDEXER pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    // poster: "2026/Indexer/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
+                    poster: "2026/Indexer/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg"
+                    ------------------------------- */
                 },
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
-                    /* Uncomment these to make SWERVE pure 3D */
-                    // is3D: true,
-                    // src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    // poster: "2026/Wheel/images/Frame000014.jpg",
+                    // --- 3D MODE ACTIVE ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
+                    poster: "2026/Wheel/images/Frame000014.jpg",
+                    /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg"
+                    ------------------------------- */
                 }
             ],
             specs: {
@@ -223,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const robotSelector = document.getElementById('robot-selector');
     const navContainer = document.getElementById('dynamic-nav-container');
     const headerLogo = document.getElementById('header-logo');
+    
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
     const arMobileBtn = document.getElementById('btn-ar-mobile');
@@ -243,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             
-            // Show AR Button only on Mobile
+            // Show AR Button ONLY on Mobile when a 3D model is active
             if (arMobileBtn) arMobileBtn.style.display = '';
                 
             if (modelElement) {
@@ -260,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                 else modelElement.removeAttribute('auto-rotate');
                 
+                // Avoid reloading if it's already the active model
                 if (modelElement.src !== sub.src) {
                     const progressBar = modelElement.querySelector('.progress-bar');
                     const updatingBar = modelElement.querySelector('.update-bar');
@@ -267,6 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (updatingBar) updatingBar.style.width = '0%';
 
                     modelElement.addEventListener('progress', onProgress);
+                    
+                    // Assign SRC and Poster directly to the element!
                     modelElement.poster = sub.poster || "";
                     modelElement.src = sub.src;
                 }
@@ -278,6 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
+            
+            // Hide AR Button when looking at 2D sequences
             if (arMobileBtn) arMobileBtn.style.display = 'none';
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
@@ -312,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.logo) headerLogo.src = data.logo;
         navContainer.innerHTML = '';
 
-        // Center Align if only 1 Subsystem is present
+        // Center Nav layout dynamically if only 1 item exists
         if (data.subsystems.length === 1) {
             navContainer.classList.add('single-item');
         } else {
@@ -376,11 +394,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }));
 
-    // AR Button Logic
+    // Mobile AR Trigger
     if (arMobileBtn) {
         arMobileBtn.addEventListener('click', () => {
             const modelElement = document.getElementById('model-element');
-            if (modelElement) {
+            if (modelElement && modelElement.activateAR) {
                 modelElement.activateAR();
             }
         });
