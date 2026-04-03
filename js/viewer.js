@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "FullRobot",
                     label: "Full Assembly",
                     is3D: true,
-                    src: "https://github.com/drewsmash/2026InteractiveRobot/raw/refs/heads/main/rico.glb",
-                    srcCandidates: ["rico2.glb", "rico1.glb", "rico.glb"]
+                    src: "https://github.com/drewsmash/2026InteractiveRobot/raw/refs/heads/main/rico1.glb",
+                    srcCandidates: ["rico2.glb", "rico1.glb", "https://github.com/drewsmash/2026InteractiveRobot/raw/refs/heads/main/rico.glb"]
                 }
             ],
             specs: {
