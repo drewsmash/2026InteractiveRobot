@@ -59,16 +59,59 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     // 2. THE FULL ROBOT DATABASE
     // =========================================
+    // To upgrade a 2D subsystem to a 3D model, simply uncomment the `is3D`, `src`, and `poster` lines!
     const robotDatabase = {
         "2026_rico": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp", useLogo: true },
-                { id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg", useLogo: false },
-                { id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg", useLogo: false },
-                { id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], ext: ".jpg", useLogo: false },
-                { id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg", useLogo: false },
-                { id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg", useLogo: false }
+                { 
+                    id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp", useLogo: true,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
+                    poster: "2026/Robot/images/Frame000001.jpg"
+                    ----------------------------------- */
+                },
+                { 
+                    id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/shooter.glb",
+                    poster: "2026/Shooter/images/Frame000001.jpg"
+                    ----------------------------------- */
+                },
+                { 
+                    id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/tunnel.glb",
+                    poster: "2026/Tunnel/images/Frame000001.jpg"
+                    ----------------------------------- */
+                },
+                { 
+                    id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/intake.glb",
+                    poster: "2026/Intake/images/Frame000001.jpg"
+                    ----------------------------------- */
+                },
+                { 
+                    id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/indexer.glb",
+                    poster: "2026/Indexer/images/Frame000001.jpg"
+                    ----------------------------------- */
+                },
+                { 
+                    id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    /* --- FUTURE 3D IMPLEMENTATION ---
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/wheel.glb",
+                    poster: "2026/Wheel/images/Frame000001.jpg"
+                    ----------------------------------- */
+                }
             ],
             specs: {
                 "Robot": {
@@ -120,10 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "FullRobot",
                     label: "Full Assembly",
                     is3D: true,
-                    // Direct Github Raw link for the GLB
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    // Use the first 2D frame as the seamless poster!
-                    poster: "2026/Robot/images/Frame000001.jpg" 
+                    poster: "2026/Robot/images/Frame000001.jpg"
                 }
             ],
             specs: {
