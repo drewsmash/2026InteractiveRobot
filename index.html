@@ -82,27 +82,56 @@
         .vr:active { cursor: grabbing; }
         #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important; object-fit: contain !important; margin: 0 !important; padding: 0 !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
-        /* 3D VIEWER WRAPPER */
+        /* 3D VIEWER WRAPPER & COOLER SPINNER */
         #viewer-3d { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #11151C; }
-        
         .spinner-3d { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(17, 21, 28, 0.9); z-index: 10; }
-        .loader-circle { width: 60px; height: 60px; border: 6px solid #1A212D; border-top: 6px solid #FFD700; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .loader-circle { 
+            width: 60px; height: 60px; 
+            border: 4px solid rgba(255, 215, 0, 0.1); 
+            border-top: 4px solid #FFD700; 
+            border-bottom: 4px solid #00a8ff; 
+            border-radius: 50%; 
+            animation: techSpin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; 
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            margin-bottom: 15px; 
+        }
+        @keyframes techSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
         .loader-text { color: #FFD700; font-weight: bold; letter-spacing: 2px; }
 
         /* NATIVE MODEL-VIEWER CSS */
         model-viewer { width: 100%; height: 100%; background-color: transparent; outline: none; }
+        /* Hide the default broken AR button inside the model viewer */
+        model-viewer::part(default-ar-button) { display: none; }
         
-        .progress-bar { display: block; width: 33%; height: 8px; position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; }
+        .progress-bar { display: block; width: 33%; height: 8px; position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; overflow: hidden; }
         .progress-bar.hide { visibility: hidden; transition: visibility 0.3s; }
-        .update-bar { background-color: #FFD700; width: 0%; height: 100%; border-radius: 25px; float: left; transition: width 0.3s; }
+        
+        /* Cooler Glowing Update Bar */
+        .update-bar { 
+            background: linear-gradient(90deg, #FFD700, #ffaa00, #FFD700); 
+            background-size: 200% 100%; 
+            animation: gradientShift 2s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            width: 0%; height: 100%; border-radius: 25px; float: left; transition: width 0.3s; 
+        }
 
         /* LOADING & OVERLAYS */
         #loading-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #11151C; z-index: 4; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease; }
         .loading-box { width: 80%; max-width: 400px; text-align: center; }
         .progress-text { color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 168, 255, 0.5); }
         .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
-        .progress-fill { height: 100%; width: 0%; background: #00ff88; box-shadow: 0 0 10px rgba(0, 255, 136, 0.8); transition: width 0.1s linear; }
+        
+        /* Cooler Glowing Progress Fill */
+        .progress-fill { 
+            height: 100%; width: 0%; 
+            background: linear-gradient(90deg, #00ff88, #00a8ff, #00ff88); 
+            background-size: 200% 100%;
+            animation: gradientShift 2s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.8), inset 0 0 5px rgba(255,255,255,0.5); 
+            transition: width 0.1s linear; 
+        }
+        @keyframes gradientShift { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
         .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
         .side-panel { box-sizing: border-box; pointer-events: auto; }
@@ -127,7 +156,11 @@
             .header-center { order: -1; margin-bottom: -5px; } .header-left, .header-right { justify-content: center; }
             .ramtech-logo { height: 45px !important; } .header-logo { height: 28px !important; }
             .robot-selector { font-size: 0.95rem; padding: 5px 10px; }
+            
+            /* Center Nav automatically if only one item exists */
             .model-nav { padding: 12px 10px; justify-content: flex-start; gap: 12px; }
+            .model-nav.single-item { justify-content: center; }
+            
             .nav-btn { padding: 8px 16px; font-size: 0.85rem; min-width: 100px; } .nav-logo { height: 16px !important; }
             #btn-spin-desktop, #btn-hd-desktop { display: none !important; }
             .info-overlay { background: rgba(17, 21, 28, 0.98); display: flex; flex-direction: column; z-index: 20; padding: 25px 20px; overflow-y: auto; pointer-events: auto; transform: translateY(100%); visibility: hidden; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s; }
@@ -171,9 +204,10 @@
             <img id="header-logo" src="Rico_logoSingleColorTrans.png" alt="Robot Logo" class="header-logo">
             <select id="robot-selector" class="robot-selector">
                 <option value="2026_rico">2026 RICO</option>
-                <option value="2025OS_Robot">2025 Offseason</option>
                 <option value="2025_Robot">2025 Robot</option>
+                <option value="2025OS_Robot">2025 Offseason</option>
                 <option value="2023_Robot">2023 Robot</option>
+                <option value="3D_LIVE">3D Live</option>
             </select>
         </div>
 
@@ -191,13 +225,12 @@
         <div id="viewer"></div>
 
         <div id="viewer-3d" style="display: none;">
-            
             <div id="spinner-3d" class="spinner-3d">
                 <div class="loader-circle"></div>
                 <div class="loader-text">INITIALIZING 3D ENGINE...</div>
             </div>
            
-            <model-viewer id="model-element" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1">
+            <model-viewer id="model-element" ar ar-modes="webxr scene-viewer quick-look" alt="3D model of the robot" camera-controls tone-mapping="neutral" shadow-intensity="1">
                 <div class="progress-bar hide" slot="progress-bar">
                     <div class="update-bar"></div>
                 </div>
@@ -226,6 +259,8 @@
         </div>
 
         <div class="mobile-floating-controls">
+            <button id="btn-ar-mobile" class="btn-spin" style="display: none; margin-right: 5px;">AR</button>
+            
             <button id="btn-hd-mobile" class="btn-spin" style="margin-right: 5px;">HD</button>
             <button id="btn-spin-mobile" class="btn-spin">Auto-Spin: OFF</button>
             <button id="mobile-info-btn">View Specs</button>
