@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     window.imagesLoaded = 0;
     window.totalImagesToLoad = 0; 
-    window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
         AC.VR.prototype.updateSizes = function() {};
@@ -74,53 +73,45 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: {
                 "Robot": {
                     title: "RICO - Main Assembly",
-                    leftContent: "<p>Rico's 21.5\" x 33\" chassis is rectangular when stowed, forming a perfect square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity, utilizing vertical 1x1 tubes for unobstructed camera placement.</p>",
-                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Deflectors:</b> 1/16\" polycarb plates</li><li><b>Cameras:</b> 4x ArduCam OV9281</li></ul>"
+                    leftContent: "<p>Rico's 21.5\" x 33\" chassis is rectangular when stowed, forming a perfect square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity.</p>",
+                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Cameras:</b> 4x ArduCam OV9281</li></ul>"
                 },
                 "Shooter": {
                     title: "Shooter & Turret",
-                    leftContent: "<p>A flywheel mechanism capable of firing approximately 6 balls per second. A rotating turret provides independent horizontal aiming.</p><p>Adjustable hood and flywheel speeds control the launch angle and distance, improving accuracy from anywhere on the field.</p>",
-                    rightContent: "<ul><li><b>Turret Motor:</b> 1x Kraken X44 (52:1 Ratio)</li><li><b>Rotation:</b> 720° continuous via cable sleeve</li><li><b>Flywheel Motors:</b> 2x Kraken X60 (3:1 Ratio)</li><li><b>Flywheel:</b> 6\" aluminum with O-rings</li><li><b>Hood Range:</b> 41° (270:1 reduction)</li></ul>"
+                    leftContent: "<p>A flywheel mechanism capable of firing approximately 6 balls per second. A rotating turret provides independent horizontal aiming.</p>",
+                    rightContent: "<ul><li><b>Turret Motor:</b> 1x Kraken X44</li><li><b>Flywheel Motors:</b> 2x Kraken X60</li></ul>"
                 },
                 "Tunnel": {
                     title: "Tunnel & Tower",
-                    leftContent: "<p>The tunnel collects fuel from the lower indexer section and organizes it into a single horizontal row to prevent jamming.</p><p>The tower then shifts the fuel from horizontal to vertical motion, launching it smoothly into the shooter assembly.</p>",
-                    rightContent: "<ul><li><b>Tunnel Motor:</b> 1x Kraken X60</li><li><b>Tunnel System:</b> 3 belts moving at 20 ft/s</li><li><b>Tower Wheels:</b> 2x4\" and 4x2\" Stealth Wheels</li><li><b>Surface Speed:</b> Maintained at 20 ft/s throughout</li></ul>"
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer section and organizes it into a single horizontal row to prevent jamming.</p>",
+                    rightContent: "<ul><li><b>Tunnel Motor:</b> 1x Kraken X60</li><li><b>Surface Speed:</b> 20 ft/s</li></ul>"
                 },
                 "Intake": {
                     title: "Intake Assembly",
-                    leftContent: "<p>A single pivot mechanism designed to gather fuel from the floor immediately after contact to reduce chasing time.</p><p>The gear rack driven pivot allows for controlled deployment, agitation, and stowing within a 92° range of motion.</p>",
-                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 Ratio)</li><li><b>Roller Motors:</b> 2x Kraken X44</li><li><b>Rollers:</b> 2\" HDPE with CatTongue tape</li><li><b>Surface Speed:</b> 12.5 ft/s</li></ul>"
+                    leftContent: "<p>A single pivot mechanism designed to gather fuel from the floor immediately after contact to reduce chasing time.</p>",
+                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44</li><li><b>Rollers:</b> 2\" HDPE with CatTongue tape</li></ul>"
                 },
                 "Indexer": {
                     title: "Indexer Mechanism",
-                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of downward-inclined, lightweight carbon fiber rods.</p><p>The roller bed pivots for maintenance access, while mecanum wheels act as agitators to guarantee streamlined fuel flow.</p>",
-                    rightContent: "<ul><li><b>Roller Motors:</b> Shared with intake (2x Kraken X44)</li><li><b>Roller Speed:</b> 6.5 ft/s</li><li><b>Structure:</b> PET-CF brace blocks</li><li><b>Agitators:</b> Mecanum wheels</li></ul>"
+                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of downward-inclined, lightweight carbon fiber rods.</p>",
+                    rightContent: "<ul><li><b>Roller Motors:</b> Shared with intake</li><li><b>Agitators:</b> Mecanum wheels</li></ul>"
                 },
                 "Wheel": {
                     title: "Swerve Drivetrain",
-                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes to navigate around fuel easily.</p><p>The X1 Ratio set improves torque to reduce power consumption, paired with custom 3D printed treads to improve grip over the bump.</p>",
-                    rightContent: "<ul><li><b>Module:</b> WCP X2S (Lightest in catalog)</li><li><b>Drive Motor:</b> 1x Kraken X60 per module</li><li><b>Steer Motor:</b> 1x Kraken X44 per module</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes.</p>",
+                    rightContent: "<ul><li><b>Module:</b> WCP X2S</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
                 }
             }
         },
         "2025_offseason": {
             logo: "Ramtech_logo.png", 
-            subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], ext: ".jpg", useLogo: false }
-            ],
-            specs: {
-                "Robot": { title: "2025 Offseason Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" }
-            }
+            subsystems: [{ id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], ext: ".jpg", useLogo: false }],
+            specs: { "Robot": { title: "2025 Offseason Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
-            subsystems: [
-                { id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg", mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false }
-            ],
-            specs: {
-                "Robot": { title: "2023 Season Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" }
-            }
+            subsystems: [{ id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg", mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false }],
+            specs: { "Robot": { title: "2023 Season Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "3D_LIVE": {
             logo: "Rico_logoSingleColorTrans.png",
@@ -129,8 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "FullRobot",
                     label: "Full Assembly",
                     is3D: true,
+                    // Direct Github Raw link for the GLB
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    srcCandidates: ["rico2.glb", "rico1.glb", "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb"]
+                    // Use the first 2D frame as the seamless poster!
+                    poster: "2026/Robot/images/Frame000001.jpg" 
                 }
             ],
             specs: {
@@ -144,7 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 3. STATE TRACKING & DYNAMIC LOADER
+    // 3. NATIVE 3D PROGRESS BAR EVENT LISTENER
+    // =========================================
+    const onProgress = (event) => {
+        const progressBar = event.target.querySelector('.progress-bar');
+        const updatingBar = event.target.querySelector('.update-bar');
+        if (updatingBar) updatingBar.style.width = `${event.detail.totalProgress * 100}%`;
+        
+        if (event.detail.totalProgress === 1) {
+            if (progressBar) progressBar.classList.add('hide');
+            // Safely remove listener once loaded
+            event.target.removeEventListener('progress', onProgress);
+        } else {
+            if (progressBar) progressBar.classList.remove('hide');
+        }
+    };
+
+    // =========================================
+    // 4. STATE TRACKING & DYNAMIC LOADER
     // =========================================
     let currentActiveSubsystem = null;
     let isHDModeEnabled = false;
@@ -154,37 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerLogo = document.getElementById('header-logo');
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
-    const uploadBtns = [document.getElementById('btn-upload-desktop'), document.getElementById('btn-upload-mobile')];
-    const fileInput = document.getElementById('file-input');
 
-    let currentObjectURL = null;
-
-    if (fileInput) {
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
-            currentObjectURL = URL.createObjectURL(file);
-            
-            const modelElement = document.getElementById('model-element');
-            if (modelElement) {
-                modelElement.src = currentObjectURL;
-                document.getElementById('panel-title').innerHTML = "Custom Upload";
-                document.getElementById('panel-left-content').innerHTML = "<p>Viewing a locally uploaded 3D model.</p>";
-                document.getElementById('panel-right-content').innerHTML = `<ul><li><b>File:</b> ${file.name}</li><li><b>Size:</b> ${(file.size / 1024 / 1024).toFixed(2)} MB</li></ul>`;
-            }
-            fileInput.value = '';
-        });
-    }
-
-    uploadBtns.forEach(btn => {
-        if (btn) btn.addEventListener('click', () => {
-            if (fileInput) fileInput.click();
-        });
-    });
-
-    async function executeModelLoad(sub) {
+    function executeModelLoad(sub) {
         currentActiveSubsystem = sub;
         const isMobile = window.innerWidth <= 768;
         
@@ -197,59 +178,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // HIDE 2D, SHOW 3D
             if (v2d) v2d.style.display = 'none';
             if (v3d) v3d.style.display = 'flex'; 
-            if (spinner3d) spinner3d.style.display = 'flex';
                 
             hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
-            uploadBtns.forEach(btn => { if(btn) btn.style.display = ''; });
                 
             if (modelElement) {
                 if (!canCreateWebGLContext) {
-                    if (spinner3d) spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00;">WEBGL UNAVAILABLE</div>`;
+                    if (spinner3d) {
+                        spinner3d.style.display = 'flex';
+                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00;">WEBGL UNAVAILABLE</div>`;
+                    }
                     return;
                 }
-
+                
                 if (spinner3d) spinner3d.style.display = 'none';
 
                 if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                 else modelElement.removeAttribute('auto-rotate');
                 
-                const targetSrc = sub.srcCandidates ? sub.srcCandidates[0] : sub.src;
-                
-                // --- THE CUSTOM DOWNLOADER LOGIC ---
-                const progressBar = modelElement.querySelector('.progress-bar');
-                const updateBar = modelElement.querySelector('.update-bar');
-                
-                if (progressBar) progressBar.classList.remove('hide');
-                if (updateBar) updateBar.style.width = '0%';
-                
-                modelElement.removeAttribute('src');
+                // Avoid reloading if it's already the active model
+                if (modelElement.src !== sub.src) {
+                    // Reset progress bar UI
+                    const progressBar = modelElement.querySelector('.progress-bar');
+                    const updatingBar = modelElement.querySelector('.update-bar');
+                    if (progressBar) progressBar.classList.remove('hide');
+                    if (updatingBar) updatingBar.style.width = '0%';
 
-                if (window.ModelDownloader) {
-                    window.ModelDownloader.download(targetSrc, 
-                        (progress) => {
-                            // Update the bar using our own exact math
-                            if (updateBar) updateBar.style.width = `${progress * 100}%`;
-                        }, 
-                        (objectUrl) => {
-                            // Memory Management
-                            if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
-                            currentObjectURL = objectUrl;
-                            
-                            // Load it and hide bar
-                            modelElement.src = objectUrl;
-                            if (progressBar) progressBar.classList.add('hide');
-                        }, 
-                        (error) => {
-                            console.error("Downloader failed", error);
-                            if (progressBar) progressBar.classList.add('hide');
-                            if (spinner3d) {
-                                spinner3d.style.display = 'flex';
-                                spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00;">3D MODEL FAILED TO LOAD</div>`;
-                            }
-                        }
-                    );
-                } else {
-                    console.error("Downloader script not found!");
+                    // Attach progress listener natively
+                    modelElement.addEventListener('progress', onProgress);
+                    
+                    // Assign SRC and Poster directly to the element!
+                    modelElement.poster = sub.poster || "";
+                    modelElement.src = sub.src;
                 }
             }
         } else {
@@ -258,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (v2d) v2d.style.display = 'flex';
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
-            uploadBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
@@ -339,9 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
             b.textContent = autoSpinMode ? 'Auto-Spin: ON' : 'Auto-Spin: OFF';
             if(autoSpinMode) b.classList.add('active-mode'); else b.classList.remove('active-mode');
         });
+        
+        // 2D Engine
         if (autoSpinMode && typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.play();
         else if (typeof threeSixty !== 'undefined' && threeSixty._vr) threeSixty._vr.pause();
         
+        // 3D Engine
         const modelElement = document.getElementById('model-element');
         if (modelElement) {
             if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
