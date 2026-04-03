@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 { 
-                    id: "Robot", label: "Main Assembly", path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp", useLogo: true,
+                    id: "Robot", label: "Main Assembly",useLogo: true,
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                 },
                 { 
-                    id: "Shooter", label: "Shooter", path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    id: "Shooter", label: "Shooter",useLogo: false,
                     /* --- FUTURE 3D IMPLEMENTATION ---*/
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     /*----------------------------------- */
                 },
                 { 
-                    id: "Tunnel", label: "Tunnel", path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    id: "Tunnel", label: "Tunnel", useLogo: false,
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoTunnl.glb",
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    
                 },
                 { 
-                    id: "Intake", label: "Intake", path: "2026/Intake/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    id: "Intake", label: "Intake", useLogo: false,
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   
                 },
                 { 
-                    id: "Indexer", label: "Indexer", path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    id: "Indexer", label: "Indexer", useLogo: false,
                    
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    
                 },
                 { 
-                    id: "Wheel", label: "Swerve Wheel", path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg", useLogo: false,
+                    id: "Wheel", label: "Swerve Wheel", useLogo: false,
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
