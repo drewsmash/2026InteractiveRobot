@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    poster: "2026/Robot/images/Frame000001.jpg"
+                    poster: "2026/Robot/images/Frame000014.jpg"
                     
                 },
                 { 
@@ -77,15 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     /* --- FUTURE 3D IMPLEMENTATION ---*/
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    poster: "2026/Shooter/images/Frame000001.jpg"
+                    poster: "2026/Shooter/images/Frame000014.jpg"
                     /*----------------------------------- */
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
                     
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoTunnl.glb",
-                    poster: "2026/Tunnel/images/Frame000001.jpg"
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
+                    poster: "2026/Tunnel/images/Frame000014.jpg"
                    
                 },
                 { 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    poster: "2026/Intake/images/Frame000001.jpg"
+                    poster: "2026/Intake/images/Frame000014.jpg"
                   
                 },
                 { 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    poster: "2026/Indexer/images/Frame000001.jpg"
+                    poster: "2026/Indexer/images/Frame000014.jpg"
                    
                 },
                 { 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    poster: "2026/Wheel/images/Frame000001.jpg"
+                    poster: "2026/Wheel/images/Frame000014.jpg"
                    
                 }
             ],
