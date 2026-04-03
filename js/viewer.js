@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.loadingFailsafe = null; 
 
     if (typeof AC !== 'undefined' && AC.VR) {
-        // Stops Apple from stretching images
         AC.VR.prototype.updateSizes = function() {};
         AC.VR.prototype.resize = function() {};
 
@@ -111,27 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], ext: ".jpg", useLogo: false }
             ],
             specs: {
-                "Robot": {
-                    title: "2025 Offseason Assembly",
-                    leftContent: "<p>Placeholder text for the 2025 offseason robot.</p>",
-                    rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
-                }
+                "Robot": { title: "2025 Offseason Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" }
             }
         },
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { 
-                    id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg",
-                    mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false 
-                }
+                { id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg", mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false }
             ],
             specs: {
-                "Robot": {
-                    title: "2023 Season Assembly",
-                    leftContent: "<p>Placeholder text for the 2023 robot.</p>",
-                    rightContent: "<ul><li><b>Chassis:</b> TBD</li><li><b>Drive:</b> TBD</li></ul>"
-                }
+                "Robot": { title: "2023 Season Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" }
             }
         },
         "3D_LIVE": {
@@ -176,33 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = event.target.files[0];
             if (!file) return;
 
-            if (currentObjectURL) {
-                URL.revokeObjectURL(currentObjectURL);
-            }
-
+            if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
             currentObjectURL = URL.createObjectURL(file);
+            
             const modelElement = document.getElementById('model-element');
             if (modelElement) {
-                const onModelLoad = () => {
-                    const progressBar = modelElement.querySelector('.progress-bar');
-                    if (progressBar) progressBar.classList.add('hide');
-                };
-
-                const updateBar = modelElement.querySelector('.update-bar');
-                if (updateBar) updateBar.style.width = '0%';
-                
-                const progressBar = modelElement.querySelector('.progress-bar');
-                if (progressBar) progressBar.classList.remove('hide');
-
-                modelElement.removeAttribute('src');
-                modelElement.addEventListener('load', onModelLoad, { once: true });
                 modelElement.src = currentObjectURL;
-
                 document.getElementById('panel-title').innerHTML = "Custom Upload";
                 document.getElementById('panel-left-content').innerHTML = "<p>Viewing a locally uploaded 3D model.</p>";
                 document.getElementById('panel-right-content').innerHTML = `<ul><li><b>File:</b> ${file.name}</li><li><b>Size:</b> ${(file.size / 1024 / 1024).toFixed(2)} MB</li></ul>`;
             }
-            
             fileInput.value = '';
         });
     }
@@ -218,138 +189,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMobile = window.innerWidth <= 768;
         
         const v2d = document.getElementById('viewer');
+        const v3d = document.getElementById('viewer-3d');
         const spinner3d = document.getElementById('spinner-3d');
         const modelElement = document.getElementById('model-element');
 
         if (sub.is3D) {
-            // HIDE 2D, SHOW 3D directly
+            // HIDE 2D, SHOW 3D
             if (v2d) v2d.style.display = 'none';
-            if (modelElement) modelElement.style.display = 'block'; 
-            
+            if (v3d) v3d.style.display = 'flex'; 
             if (spinner3d) spinner3d.style.display = 'flex';
                 
             hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             uploadBtns.forEach(btn => { if(btn) btn.style.display = ''; });
                 
             if (modelElement) {
-                const sourceCandidates = [...(sub.srcCandidates || [sub.src])];
-
-                if (spinner3d) spinner3d.innerHTML = '<div class="loader-circle"></div><div class="loader-text">LOADING 3D ENVIRONMENT...</div>';
-
                 if (!canCreateWebGLContext) {
-                    if (spinner3d) {
-                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">WEBGL UNAVAILABLE</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">This browser session cannot create a WebGL context, so the 3D viewer cannot start.<br>Try a normal browser window with hardware acceleration enabled, or a different browser/device.</div>`;
-                    }
-                    return;
-                }
-
-                try {
-                    if (window.modelViewerReady) await window.modelViewerReady;
-                    if (typeof customElements !== 'undefined') await customElements.whenDefined('model-viewer');
-                } catch (error) {
-                    if (spinner3d) {
-                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D VIEWER FAILED TO LOAD</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">The browser could not load the <b>model-viewer</b> component.<br>This usually means the page is offline, the CDN request was blocked, or an old service worker cached a bad response.</div>`;
-                    }
+                    if (spinner3d) spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00;">WEBGL UNAVAILABLE</div>`;
                     return;
                 }
 
                 if (spinner3d) spinner3d.style.display = 'none';
 
-                const onModelProgress = (event) => {
-                    const progress = event.detail.totalProgress;
-                    const updateBar = modelElement.querySelector('.update-bar');
-                    if (updateBar) updateBar.style.width = `${progress * 100}%`;
-                    
-                    if (progress >= 1) {
-                        setTimeout(() => {
-                            const progressBar = modelElement.querySelector('.progress-bar');
-                            if (progressBar) progressBar.classList.add('hide');
-                        }, 400);
-                    }
-                };
-
-                const onModelLoad = () => {
-                    const progressBar = modelElement.querySelector('.progress-bar');
-                    if (progressBar) progressBar.classList.add('hide');
-                    modelElement.removeEventListener('progress', onModelProgress);
-                };
-                
-                const onModelError = (error) => {
-                    modelElement.removeEventListener('progress', onModelProgress);
-                    
-                    const fullSrc = modelElement.src || "";
-                    const urlObj = new URL(fullSrc, window.location.href);
-                    const currentFileName = urlObj.pathname.split('/').pop();
-                    
-                    const currentIndex = sourceCandidates.findIndex(c => currentFileName === c || currentFileName === encodeURIComponent(c));
-                    const remainingCandidates = currentIndex >= 0 ? sourceCandidates.slice(currentIndex + 1) : [];
-
-                    modelElement.removeEventListener('error', onModelError);
-                    modelElement.removeEventListener('load', onModelLoad);
-
-                    if (remainingCandidates.length > 0) {
-                        const nextSrc = remainingCandidates[0];
-                        sub.srcCandidates = remainingCandidates;
-
-                        modelElement.addEventListener('progress', onModelProgress);
-                        modelElement.addEventListener('load', onModelLoad, { once: true });
-                        modelElement.addEventListener('error', onModelError, { once: true });
-                        modelElement.src = nextSrc;
-                        return;
-                    }
-
-                    const progressBar = modelElement.querySelector('.progress-bar');
-                    if (progressBar) progressBar.classList.add('hide');
-
-                    if (spinner3d) {
-                        spinner3d.style.display = 'flex';
-                        spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00; text-align: center; margin-bottom: 10px;">3D MODEL FAILED TO LOAD</div><div style="color: #A0B0C0; font-size: 0.85rem; text-align:center; padding: 0 20px; line-height: 1.4;">Browser security rules blocked your file, or none of these files could load:<br><b>${sourceCandidates.join(', ')}</b><br>Loading Demo Astronaut automatically.</div>`;
-                    }
-
-                    modelElement.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
-                    modelElement.addEventListener('load', onModelLoad, { once: true });
-                };
-
-                const targetSrc = sourceCandidates[0] || sub.src;
-
                 if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                 else modelElement.removeAttribute('auto-rotate');
                 
-                const currentUrlObj = new URL(modelElement.src || "about:blank", window.location.href);
-                const targetUrlObj = new URL(targetSrc, window.location.href);
+                const targetSrc = sub.srcCandidates ? sub.srcCandidates[0] : sub.src;
                 
-                if (currentUrlObj.href === targetUrlObj.href) {
-                    if (modelElement.loaded || modelElement.modelIsVisible) {
-                        const updateBar = modelElement.querySelector('.update-bar');
-                        if (updateBar) updateBar.style.width = '100%';
-                        const progressBar = modelElement.querySelector('.progress-bar');
-                        if (progressBar) progressBar.classList.add('hide');
-                        onModelLoad();
-                    } else {
-                        modelElement.addEventListener('progress', onModelProgress);
-                        modelElement.addEventListener('load', onModelLoad, { once: true });
-                        modelElement.addEventListener('error', onModelError, { once: true });
-                    }
-                    return;
-                }
-
+                // --- THE CUSTOM DOWNLOADER LOGIC ---
+                const progressBar = modelElement.querySelector('.progress-bar');
                 const updateBar = modelElement.querySelector('.update-bar');
+                
+                if (progressBar) progressBar.classList.remove('hide');
                 if (updateBar) updateBar.style.width = '0%';
                 
-                const progressBar = modelElement.querySelector('.progress-bar');
-                if (progressBar) progressBar.classList.remove('hide');
-
                 modelElement.removeAttribute('src');
-                modelElement.addEventListener('progress', onModelProgress);
-                modelElement.addEventListener('load', onModelLoad, { once: true });
-                modelElement.addEventListener('error', onModelError, { once: true });
-                
-                modelElement.src = targetSrc;
+
+                if (window.ModelDownloader) {
+                    window.ModelDownloader.download(targetSrc, 
+                        (progress) => {
+                            // Update the bar using our own exact math
+                            if (updateBar) updateBar.style.width = `${progress * 100}%`;
+                        }, 
+                        (objectUrl) => {
+                            // Memory Management
+                            if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
+                            currentObjectURL = objectUrl;
+                            
+                            // Load it and hide bar
+                            modelElement.src = objectUrl;
+                            if (progressBar) progressBar.classList.add('hide');
+                        }, 
+                        (error) => {
+                            console.error("Downloader failed", error);
+                            if (progressBar) progressBar.classList.add('hide');
+                            if (spinner3d) {
+                                spinner3d.style.display = 'flex';
+                                spinner3d.innerHTML = `<div class="loader-text" style="color: #ffaa00;">3D MODEL FAILED TO LOAD</div>`;
+                            }
+                        }
+                    );
+                } else {
+                    console.error("Downloader script not found!");
+                }
             }
         } else {
             // HIDE 3D, SHOW 2D
-            if (modelElement) modelElement.style.display = 'none';
-            if (spinner3d) spinner3d.style.display = 'none';
+            if (v3d) v3d.style.display = 'none';
             if (v2d) v2d.style.display = 'flex';
             
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
@@ -444,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }));
 
-    // Start-up sequence (Rico Fix)
+    // Start-up sequence
     window.addEventListener('load', () => {
         if (typeof threeSixty !== 'undefined') {
             threeSixty.init = function() {}; 
