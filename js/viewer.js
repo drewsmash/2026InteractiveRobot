@@ -146,14 +146,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         },
-        "2025_offseason": {
+        "2025_Robot": {
             logo: "Ramtech_logo.png", 
-            subsystems: [{ id: "Robot", label: "Main Assembly", path: "2025Off/Robot/images", frames: [38, 8], ext: ".jpg", useLogo: false }],
+            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
+            id: "Robot", label: "Main Assembly",useLogo: true,
+                    
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/fixed2025robot.glb",
+                    //poster: "2026/Robot/images/Frame000014.jpg",
+            specs: { "Robot": { title: "2025 Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
+        },
+        "2025OS_Robot": {
+            logo: "Ramtech_logo.png", 
+            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
+            id: "Robot", label: "Main Assembly",useLogo: true,
+                    
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2025OSrobot.glb",
+                    //poster: "2026/Robot/images/Frame000014.jpg",
             specs: { "Robot": { title: "2025 Offseason Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
-            subsystems: [{ id: "Robot", label: "Main Assembly", path: "2023/Robot/images", frames: [38, 8], ext: ".jpg", mobilePath: "2023/Robot/Mobile/images", mobileFrames: [36, 1], mobileExt: ".jpg", useLogo: false }],
+            is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2023robot.glb",
+                    //poster: "2026/Robot/images/Frame000014.jpg",
+            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
             specs: { "Robot": { title: "2023 Season Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "3D_LIVE": {
