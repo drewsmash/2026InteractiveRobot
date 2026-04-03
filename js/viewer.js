@@ -59,58 +59,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     // 2. THE FULL ROBOT DATABASE
     // =========================================
-    // To upgrade a 2D subsystem to a 3D model, simply uncomment the `is3D`, `src`, and `poster` lines!
     const robotDatabase = {
         "2026_rico": {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 { 
-                    id: "Robot", label: "Main Assembly",useLogo: true,
-                    
+                    id: "Robot", label: "Main Assembly", useLogo: true,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
                     poster: "2026/Robot/images/Frame000014.jpg"
-                    
                 },
                 { 
-                    id: "Shooter", label: "Shooter",useLogo: false,
-                    /* --- FUTURE 3D IMPLEMENTATION ---*/
+                    id: "Shooter", label: "Shooter", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
                     poster: "2026/Shooter/images/Frame000014.jpg"
-                    /*----------------------------------- */
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
-                    
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
                     poster: "2026/Tunnel/images/Frame000014.jpg"
-                   
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
-                    
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
                     poster: "2026/Intake/images/Frame000014.jpg"
-                  
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
-                   
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
                     poster: "2026/Indexer/images/Frame000014.jpg"
-                   
                 },
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
-                    
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
                     poster: "2026/Wheel/images/Frame000014.jpg"
-                   
                 }
             ],
             specs: {
@@ -148,30 +135,35 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "2025_Robot": {
             logo: "Ramtech_logo.png", 
-            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
-            id: "Robot", label: "Main Assembly",useLogo: true,
-                    
+            subsystems: [
+                { 
+                    id: "Robot", label: "Main Assembly", useLogo: true,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/fixed2025robot.glb",
-                    //poster: "2026/Robot/images/Frame000014.jpg",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/fixed2025robot.glb"
+                }
+            ],
             specs: { "Robot": { title: "2025 Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "2025OS_Robot": {
             logo: "Ramtech_logo.png", 
-            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
-            id: "Robot", label: "Main Assembly",useLogo: true,
-                    
+            subsystems: [
+                { 
+                    id: "Robot", label: "Main Assembly", useLogo: true,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2025OSrobot.glb",
-                    //poster: "2026/Robot/images/Frame000014.jpg",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2025OSrobot.glb"
+                }
+            ],
             specs: { "Robot": { title: "2025 Offseason Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
-            is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2023robot.glb",
-                    //poster: "2026/Robot/images/Frame000014.jpg",
-            subsystems: [{ id: "Robot", label: "Main Assembly", useLogo: false }],
+            subsystems: [
+                { 
+                    id: "Robot", label: "Main Assembly", useLogo: true,
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2023robot.glb"
+                }
+            ],
             specs: { "Robot": { title: "2023 Season Assembly", leftContent: "<p>Placeholder text.</p>", rightContent: "" } }
         },
         "3D_LIVE": {
@@ -205,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (event.detail.totalProgress === 1) {
             if (progressBar) progressBar.classList.add('hide');
-            // Safely remove listener once loaded
             event.target.removeEventListener('progress', onProgress);
         } else {
             if (progressBar) progressBar.classList.remove('hide');
@@ -254,18 +245,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                 else modelElement.removeAttribute('auto-rotate');
                 
-                // Avoid reloading if it's already the active model
                 if (modelElement.src !== sub.src) {
-                    // Reset progress bar UI
                     const progressBar = modelElement.querySelector('.progress-bar');
                     const updatingBar = modelElement.querySelector('.update-bar');
                     if (progressBar) progressBar.classList.remove('hide');
                     if (updatingBar) updatingBar.style.width = '0%';
 
-                    // Attach progress listener natively
                     modelElement.addEventListener('progress', onProgress);
-                    
-                    // Assign SRC and Poster directly to the element!
                     modelElement.poster = sub.poster || "";
                     modelElement.src = sub.src;
                 }
