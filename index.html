@@ -60,7 +60,6 @@
         }
         .model-nav::-webkit-scrollbar { height: 0px; background: transparent; }
         
-        /* The dynamic class added when there is only 1 subsystem */
         .model-nav.single-item { justify-content: center; }
 
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
@@ -78,7 +77,7 @@
 
         #main-content { flex: 1; position: relative; min-height: 0; min-width: 0; width: 100%; display: flex; overflow: hidden; }
 
-        /* 2D VIEWER SCALING */
+        /* 2D VIEWER */
         #viewer { 
             flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;
             background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px;
@@ -87,39 +86,103 @@
         .vr:active { cursor: grabbing; }
         #viewer img, .vr img { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important; object-fit: contain !important; margin: 0 !important; padding: 0 !important; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8)); }
 
-        /* 3D SPINNER (COOL CYBER ANIMATION) */
+        /* ========================================================= */
+        /* 3D SPINNER (ADVANCED CYBER ORBITAL ANIMATION)             */
+        /* ========================================================= */
         #viewer-3d { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #11151C; }
-        .spinner-3d { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(17, 21, 28, 0.9); z-index: 10; }
+        
+        .spinner-3d { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            background: rgba(17, 21, 28, 0.95); backdrop-filter: blur(5px); z-index: 10; 
+        }
         
         .loader-circle { 
-            width: 60px; height: 60px; 
-            border: 4px solid rgba(255, 215, 0, 0.1); 
-            border-top: 4px solid #FFD700; 
-            border-bottom: 4px solid #00a8ff; 
-            border-radius: 50%; 
-            animation: techSpin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; 
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            margin-bottom: 15px; 
+            position: relative;
+            width: 80px; height: 80px; 
+            border: 3px solid transparent;
+            border-top-color: #FFD700;
+            border-bottom-color: #00a8ff;
+            border-radius: 50%;
+            animation: cyberSpin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2), inset 0 0 15px rgba(0, 168, 255, 0.2);
         }
-        @keyframes techSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
-        .loader-text { color: #FFD700; font-weight: bold; letter-spacing: 2px; }
+        
+        /* Inner Counter-Rotating Ring */
+        .loader-circle::before {
+            content: "";
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-left-color: #00ff88;
+            border-right-color: #FFD700;
+            animation: cyberSpinReverse 2s linear infinite;
+        }
+        
+        /* Pulsating Core */
+        .loader-circle::after {
+            content: "";
+            position: absolute;
+            top: 22px; left: 22px; right: 22px; bottom: 22px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700;
+            animation: cyberPulse 1s ease-in-out infinite alternate;
+        }
 
-        /* NATIVE MODEL-VIEWER CSS */
+        @keyframes cyberSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes cyberSpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        @keyframes cyberPulse { 0% { transform: scale(0.5); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
+
+        .loader-text { 
+            color: #00a8ff; 
+            font-family: monospace;
+            font-weight: bold; 
+            letter-spacing: 5px; 
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            animation: textGlitch 1.5s infinite;
+            text-shadow: 0 0 10px rgba(0, 168, 255, 0.8);
+        }
+        @keyframes textGlitch { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* ========================================================= */
+        /* NATIVE MODEL-VIEWER CSS (MOVING CAUTION STRIPES)          */
+        /* ========================================================= */
         model-viewer { width: 100%; height: 100%; background-color: transparent; outline: none; }
+        model-viewer::part(default-ar-button) { display: none !important; } /* Hide default AR button */
         
-        /* Force-hide Google's default AR button so we can use our custom one! */
-        model-viewer::part(default-ar-button) { display: none !important; }
+        .progress-bar { 
+            display: block; width: 40%; height: 12px; 
+            position: absolute; left: 50%; top: 50%; 
+            transform: translate3d(-50%, -50%, 0); 
+            border-radius: 6px; 
+            border: 2px solid rgba(255, 215, 0, 0.8); 
+            background-color: rgba(17, 21, 28, 0.9); 
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.8);
+            overflow: hidden; 
+        }
+        .progress-bar.hide { visibility: hidden; transition: visibility 0.4s; }
         
-        .progress-bar { display: block; width: 33%; height: 8px; position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 215, 0, 0.5); background-color: #1A212D; overflow: hidden; }
-        .progress-bar.hide { visibility: hidden; transition: visibility 0.3s; }
-        
-        /* Glowing 3D Update Bar */
+        /* Animated Warning Stripes */
         .update-bar { 
-            background: linear-gradient(90deg, #FFD700, #ffaa00, #FFD700); 
-            background-size: 200% 100%; 
-            animation: gradientShift 2s linear infinite;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            width: 0%; height: 100%; border-radius: 25px; float: left; transition: width 0.3s; 
+            background: repeating-linear-gradient(
+                -45deg,
+                #FFD700,
+                #FFD700 12px,
+                #ffaa00 12px,
+                #ffaa00 24px
+            );
+            background-size: 34px 34px;
+            animation: stripeMove 0.8s linear infinite;
+            box-shadow: inset 0 -2px 6px rgba(0,0,0,0.4), 0 0 15px rgba(255, 215, 0, 0.8);
+            width: 0%; height: 100%; float: left; transition: width 0.2s ease-out; 
+        }
+        @keyframes stripeMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 34px 0; }
         }
 
         /* AR Prompt CSS */
@@ -134,16 +197,7 @@
         .loading-box { width: 80%; max-width: 400px; text-align: center; }
         .progress-text { color: #00a8ff; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 168, 255, 0.5); }
         .progress-bar-container { width: 100%; height: 6px; background: #1A212D; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0, 168, 255, 0.3); }
-        
-        /* Glowing 2D Progress Fill */
-        .progress-fill { 
-            height: 100%; width: 0%; 
-            background: linear-gradient(90deg, #00ff88, #00a8ff, #00ff88); 
-            background-size: 200% 100%;
-            animation: gradientShift 2s linear infinite;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.8), inset 0 0 5px rgba(255,255,255,0.5); 
-            transition: width 0.1s linear; 
-        }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ff88, #00a8ff, #00ff88); background-size: 200% 100%; animation: gradientShift 2s linear infinite; box-shadow: 0 0 15px rgba(0, 255, 136, 0.8), inset 0 0 5px rgba(255,255,255,0.5); transition: width 0.1s linear; }
         @keyframes gradientShift { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
         .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; box-sizing: border-box; }
