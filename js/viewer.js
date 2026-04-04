@@ -67,37 +67,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "Robot", label: "Main Assembly",useLogo: true,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    poster: "2026/Robot/images/Frame000014.jpg"
+                    //poster: "2026/Robot/images/Frame000014.jpg"
                 },
                 { 
                     id: "Shooter", label: "Shooter",useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    poster: "2026/Shooter/images/Frame000014.jpg"
+                    //poster: "2026/Shooter/images/Frame000014.jpg"
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
-                    poster: "2026/Tunnel/images/Frame000014.jpg"
+                    //poster: "2026/Tunnel/images/Frame000014.jpg"
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    poster: "2026/Intake/images/Frame000014.jpg"
+                    //poster: "2026/Intake/images/Frame000014.jpg"
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    poster: "2026/Indexer/images/Frame000014.jpg"
+                    //poster: "2026/Indexer/images/Frame000014.jpg"
                 },
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    poster: "2026/Wheel/images/Frame000014.jpg"
+                    //poster: "2026/Wheel/images/Frame000014.jpg"
                 }
             ],
             specs: {
