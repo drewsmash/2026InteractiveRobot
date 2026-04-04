@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: "Robot", label: "Main Assembly", useLogo: true,
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026rico.glb",
                     //poster: "2026/Robot/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp"
