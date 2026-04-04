@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026Tunnel.glb",
                     //poster: "2026/Tunnel/images/Frame000014.jpg"
                 },
                 { 
