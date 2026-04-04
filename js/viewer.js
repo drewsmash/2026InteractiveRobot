@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    poster: "2026/Robot/images/Frame000014.jpg",
+                    //poster: "2026/Robot/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp"
                     ------------------------------- */
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    poster: "2026/Shooter/images/Frame000014.jpg",
+                    //oster: "2026/Shooter/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg"
                     ------------------------------- */
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
-                    poster: "2026/Tunnel/images/Frame000014.jpg",
+                    //poster: "2026/Tunnel/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg"
                     ------------------------------- */
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    poster: "2026/Intake/images/Frame000014.jpg",
+                    //poster: "2026/Intake/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Intake/images", frames: [30, 8], ext: ".jpg"
                     ------------------------------- */
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    poster: "2026/Indexer/images/Frame000014.jpg",
+                    //poster: "2026/Indexer/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg"
                     ------------------------------- */
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    poster: "2026/Wheel/images/Frame000014.jpg",
+                    //poster: "2026/Wheel/images/Frame000014.jpg",
                     /* --- 2D FALLBACK DISABLED ---
                     path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg"
                     ------------------------------- */
