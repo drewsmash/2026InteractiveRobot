@@ -64,64 +64,40 @@ document.addEventListener('DOMContentLoaded', () => {
             logo: "Rico_logoSingleColorTrans.png",
             subsystems: [
                 { 
-                    id: "Robot", label: "Main Assembly", useLogo: true,
-                    // --- 3D MODE ACTIVE ---
+                    id: "Robot", label: "Main Assembly",useLogo: true,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/rico.glb",
-                    //poster: "2026/Robot/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Robot/images", frames: [30, 8], ext: ".jpg", hdPath: "2026/Robot/HD/images", hdFrames: [90, 8], hdExt: ".webp"
-                    ------------------------------- */
+                    poster: "2026/Robot/images/Frame000014.jpg"
                 },
                 { 
-                    id: "Shooter", label: "Shooter", useLogo: false,
-                    // --- 3D MODE ACTIVE ---
+                    id: "Shooter", label: "Shooter",useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter.glb",
-                    //oster: "2026/Shooter/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Shooter/images", frames: [30, 8], ext: ".jpg"
-                    ------------------------------- */
+                    poster: "2026/Shooter/images/Frame000014.jpg"
                 },
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
-                    // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/realtunnel.glb",
-                    //poster: "2026/Tunnel/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Tunnel/images", frames: [30, 8], ext: ".jpg"
-                    ------------------------------- */
+                    poster: "2026/Tunnel/images/Frame000014.jpg"
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
-                    // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
-                    //poster: "2026/Intake/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Intake/images", frames: [30, 8], ext: ".jpg"
-                    ------------------------------- */
+                    poster: "2026/Intake/images/Frame000014.jpg"
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
-                    // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
-                    //poster: "2026/Indexer/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Indexer/images", frames: [30, 8], ext: ".jpg"
-                    ------------------------------- */
+                    poster: "2026/Indexer/images/Frame000014.jpg"
                 },
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
-                    // --- 3D MODE ACTIVE ---
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
-                    //poster: "2026/Wheel/images/Frame000014.jpg",
-                    /* --- 2D FALLBACK DISABLED ---
-                    path: "2026/Wheel/images", frames: [30, 8], ext: ".jpg"
-                    ------------------------------- */
+                    poster: "2026/Wheel/images/Frame000014.jpg"
                 }
             ],
             specs: {
@@ -171,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "2025OS_Robot": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { 
+                {
                     id: "Robot", label: "Main Assembly", useLogo: true,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2025OSrobot.glb"
@@ -182,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "2023_Robot": {
             logo: "Ramtech_logo.png", 
             subsystems: [
-                { 
+                {
                     id: "Robot", label: "Main Assembly", useLogo: true,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2023robot.glb"
@@ -218,8 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatingBar = event.target.querySelector('.update-bar');
         if (updatingBar) updatingBar.style.width = `${event.detail.totalProgress * 100}%`;
         
+        // CRITICAL FIX: Wait until progress reaches 100% to hide the geometric spinner!
         if (event.detail.totalProgress === 1) {
             if (progressBar) progressBar.classList.add('hide');
+            
+            const spinner3d = document.getElementById('spinner-3d');
+            if (spinner3d) spinner3d.style.display = 'none';
+            
             event.target.removeEventListener('progress', onProgress);
         } else {
             if (progressBar) progressBar.classList.remove('hide');
@@ -235,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const robotSelector = document.getElementById('robot-selector');
     const navContainer = document.getElementById('dynamic-nav-container');
     const headerLogo = document.getElementById('header-logo');
-    
     const hdBtns = [document.getElementById('btn-hd-desktop'), document.getElementById('btn-hd-mobile')];
     const spinBtns = [document.getElementById('btn-spin-desktop'), document.getElementById('btn-spin-mobile')];
     const arMobileBtn = document.getElementById('btn-ar-mobile');
@@ -256,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             hdBtns.forEach(btn => { if(btn) btn.style.display = 'none'; });
             
-            // Show AR Button ONLY on Mobile when a 3D model is active
+            // Show AR Button ONLY on Mobile
             if (arMobileBtn) arMobileBtn.style.display = '';
                 
             if (modelElement) {
@@ -267,22 +247,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     return;
                 }
-                
-                if (spinner3d) spinner3d.style.display = 'none';
 
                 if (autoSpinMode) modelElement.setAttribute('auto-rotate', '');
                 else modelElement.removeAttribute('auto-rotate');
                 
                 // Avoid reloading if it's already the active model
                 if (modelElement.src !== sub.src) {
+                    // Turn the geometric spinner ON before the new model loads
+                    if (spinner3d) spinner3d.style.display = 'flex';
+
                     const progressBar = modelElement.querySelector('.progress-bar');
                     const updatingBar = modelElement.querySelector('.update-bar');
                     if (progressBar) progressBar.classList.remove('hide');
                     if (updatingBar) updatingBar.style.width = '0%';
 
                     modelElement.addEventListener('progress', onProgress);
-                    
-                    // Assign SRC and Poster directly to the element!
                     modelElement.poster = sub.poster || "";
                     modelElement.src = sub.src;
                 }
@@ -295,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hdBtns.forEach(btn => { if(btn) btn.style.display = ''; });
             spinBtns.forEach(btn => { if(btn) btn.style.display = ''; });
             
-            // Hide AR Button when looking at 2D sequences
+            // Hide AR button when on 2D view
             if (arMobileBtn) arMobileBtn.style.display = 'none';
 
             let targetPath = (isMobile && sub.mobilePath) ? sub.mobilePath : sub.path;
@@ -330,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.logo) headerLogo.src = data.logo;
         navContainer.innerHTML = '';
 
-        // Center Nav layout dynamically if only 1 item exists
+        // Center Align if only 1 Subsystem is present
         if (data.subsystems.length === 1) {
             navContainer.classList.add('single-item');
         } else {
@@ -394,12 +373,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }));
 
-    // Mobile AR Trigger
+    // Safe AR Button Handoff
     if (arMobileBtn) {
         arMobileBtn.addEventListener('click', () => {
-            const modelElement = document.getElementById('model-element');
-            if (modelElement && modelElement.activateAR) {
-                modelElement.activateAR();
+            const realArBtn = document.getElementById('real-ar-btn');
+            if (realArBtn) {
+                realArBtn.click();
             }
         });
     }
