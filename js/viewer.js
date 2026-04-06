@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Robot", label: "Main Assembly",useLogo: true,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/Rico2026V3.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricov5.glb",
                     //poster: "2026/Robot/images/Frame000014.jpg"
                 },
                 { 
