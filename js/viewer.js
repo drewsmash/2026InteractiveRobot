@@ -78,19 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026Tunnel.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5tunnel.glb",
                     //poster: "2026/Tunnel/images/Frame000014.jpg"
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIntake.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5intake.glb",
                     //poster: "2026/Intake/images/Frame000014.jpg"
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoIndexer.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5idexer.glb",
                     //poster: "2026/Indexer/images/Frame000014.jpg"
                 },
                 { 
