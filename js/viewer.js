@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Shooter", label: "Shooter",useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter 2.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026RicoShooter2.glb",
                     //poster: "2026/Shooter/images/Frame000014.jpg"
                 },
                 { 
