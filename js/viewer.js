@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5Swerve.glb",
                     //poster: "2026/Wheel/images/Frame000014.jpg"
                 }
             ],
