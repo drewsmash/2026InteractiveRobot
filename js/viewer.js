@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Robot": {
                     title: "RICO - Main Assembly",
                     leftContent: "<p>Rico's 21.5\" x 33\" chassis is rectangular when stowed, forming a perfect square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity.</p>",
-                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Cameras:</b> 4x ArduCam OV9281</li></ul>"
+                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Cameras:</b> 4x Thrifty Cams</li></ul>"
                 },
                 "Shooter": {
                     title: "Shooter & Turret",
