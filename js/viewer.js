@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Chassis", label: "Chassis", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5chassis.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5chassis2.glb",
                     //poster: "2026/Wheel/images/Frame000014.jpg"
                 },
                 { 
