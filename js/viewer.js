@@ -94,6 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     //poster: "2026/Indexer/images/Frame000014.jpg"
                 },
                 { 
+                    id: "Chassis", label: "Chassis", useLogo: false,
+                    is3D: true,
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5chassis.glb",
+                    //poster: "2026/Wheel/images/Frame000014.jpg"
+                },
+                { 
                     id: "Wheel", label: "Swerve Wheel", useLogo: false,
                     is3D: true,
                     src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoWheel.glb",
@@ -128,6 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 "Wheel": {
                     title: "Swerve Drivetrain",
+                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes.</p>",
+                    rightContent: "<ul><li><b>Module:</b> WCP X2S</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                },
+                "Chassis": {
+                    title: "Chassis",
                     leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes.</p>",
                     rightContent: "<ul><li><b>Module:</b> WCP X2S</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
                 }
@@ -184,7 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    };
+      }
+    }; 
 
     // =========================================
     // 3. NATIVE 3D PROGRESS BAR EVENT LISTENER
