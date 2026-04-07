@@ -195,8 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-      }
-    }; 
+      }; 
 
     // =========================================
     // 3. NATIVE 3D PROGRESS BAR EVENT LISTENER
