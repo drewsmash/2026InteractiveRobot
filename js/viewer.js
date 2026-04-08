@@ -109,38 +109,38 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: {
                 "Robot": {
                     title: "RICO - Main Assembly",
-                    leftContent: "<p>Rico's 21.5\" x 33\" chassis is rectangular when stowed, forming a perfect square when the intake is deployed to maximize storage capacity.</p><p>The battery is positioned opposite the turret to maintain a balanced center of gravity.</p>",
-                    rightContent: "<ul><li><b>Chassis:</b> 1/8\" thick tubes & belly pan</li><li><b>Steering:</b> WCP X2S Swerve Modules</li><li><b>Cameras:</b> 4x Thrifty Cams</li></ul>"
+                    leftContent: "<p>Rico features a 21.5\" x 33\" chassis [cite: 13] that forms a perfect square when the intake is deployed to maximize storage[cite: 14]. The battery is placed opposite the turret for a balanced center of gravity [cite: 23].</p><p>Advanced localization is achieved using four ThriftyCams [cite: 111] and dual RUBIK Pi co-processors [cite: 106, 109] for 360-degree AprilTag recognition[cite: 111].</p>",
+                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" [cite: 13]</li><li><b>Drivetrain:</b> WCP X2S Swerve [cite: 11]</li><li><b>Vision:</b> 4x ThriftyCam & Dual RUBIK Pi [cite: 106, 109, 111]</li><li><b>Auto:</b> 55+ fuel per match [cite: 107]</li></ul>"
                 },
                 "Shooter": {
                     title: "Shooter & Turret",
-                    leftContent: "<p>A flywheel mechanism capable of firing approximately 6 balls per second. A rotating turret provides independent horizontal aiming.</p>",
-                    rightContent: "<ul><li><b>Turret Motor:</b> 1x Kraken X44</li><li><b>Flywheel Motors:</b> 2x Kraken X60</li></ul>"
+                    leftContent: "<p>A flywheel mechanism capable of firing ~6 balls per second[cite: 85]. A rotating turret provides independent horizontal aiming [cite: 86], utilizing a cable sleeve for 720&deg; of continuous rotation [cite: 92].</p><p>An adjustable hood with a 41&deg; range of motion [cite: 98] and adjustable flywheel speeds control launch angle and distance[cite: 87].</p>",
+                    rightContent: "<ul><li><b>Turret:</b> 1x Kraken X44 (52:1 ratio) [cite: 90, 91]</li><li><b>Flywheels:</b> 2x Kraken X60 (3:1 ratio) [cite: 94, 95]</li><li><b>Flywheel Type:</b> 6\" Alum w/ O-rings [cite: 96]</li><li><b>Hood:</b> 41&deg; range (270:1 reduction) [cite: 98, 99]</li></ul>"
                 },
                 "Tunnel": {
                     title: "Tunnel & Tower",
-                    leftContent: "<p>The tunnel collects fuel from the lower indexer section and organizes it into a single horizontal row to prevent jamming.</p>",
-                    rightContent: "<ul><li><b>Tunnel Motor:</b> 1x Kraken X60</li><li><b>Surface Speed:</b> 20 ft/s</li></ul>"
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer and organizes it into a row [cite: 68], providing space for approximately two balls horizontally to prevent jamming[cite: 69]. The tower then moves the fuel vertically into the shooter [cite: 70].</p><p>Stealth wheels with 0.5\" of compression allow for a fast and smooth shift from horizontal to vertical motion[cite: 71].</p>",
+                    rightContent: "<ul><li><b>Motor:</b> 1x Kraken X60 [cite: 73]</li><li><b>Tunnel:</b> Three-belt system [cite: 74]</li><li><b>Tower:</b> 2x4\" and 4x2\" stealth wheels [cite: 77, 78]</li><li><b>Surface Speed:</b> 20 ft/s [cite: 80]</li></ul>"
                 },
                 "Intake": {
                     title: "Intake Assembly",
-                    leftContent: "<p>A single pivot mechanism designed to gather fuel from the floor immediately after contact to reduce chasing time.</p>",
-                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44</li><li><b>Rollers:</b> 2\" HDPE with CatTongue tape</li></ul>"
+                    leftContent: "<p>The intake is a single pivot mechanism designed to gather fuel from the floor immediately after contact[cite: 32, 35]. A gear rack driven pivot provides a 92&deg; range of motion for deployment, ball agitation, and stow positions [cite: 33, 39].</p><p>A passive slot plate acts as a static kicker roller to assist fuel transfer into the system[cite: 46, 47].</p>",
+                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 ratio) [cite: 37, 38]</li><li><b>Roller Motors:</b> 2x Kraken X44 [cite: 41]</li><li><b>Rollers:</b> 2\" HDPE w/ CatTongue tape [cite: 42, 43]</li><li><b>Surface Speed:</b> 12.5 ft/s [cite: 44]</li></ul>"
                 },
                 "Indexer": {
                     title: "Indexer Mechanism",
-                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of downward-inclined, lightweight carbon fiber rods.</p>",
-                    rightContent: "<ul><li><b>Roller Motors:</b> Shared with intake</li><li><b>Agitators:</b> Mecanum wheels</li></ul>"
-                },
-                "Wheel": {
-                    title: "Swerve Drivetrain",
-                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes.</p>",
-                    rightContent: "<ul><li><b>Module:</b> WCP X2S</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of spinning carbon fiber rods heavily inclined downwards[cite: 53, 54, 64]. The roller bed pivots around the primary top rod to provide access to the electronics [cite: 55].</p><p>Mecanum wheels act as agitators to ensure the streamlined flow of fuel to the tower[cite: 60].</p>",
+                    rightContent: "<ul><li><b>Motors:</b> 2x Kraken X44 (Shared) [cite: 62]</li><li><b>Rollers:</b> Carbon Fiber w/ CatTongue tape [cite: 64, 65]</li><li><b>Speed:</b> 6.5 ft/s [cite: 63]</li><li><b>Structure:</b> PET-CF brace blocks [cite: 57]</li></ul>"
                 },
                 "Chassis": {
                     title: "Chassis",
-                    leftContent: "<p>Features WCP's X2S swerve modules for increased maneuverability and instantaneous directional changes.</p>",
-                    rightContent: "<ul><li><b>Module:</b> WCP X2S</li><li><b>Treads:</b> Custom 3D Printed</li></ul>"
+                    leftContent: "<p>The chassis utilizes 1/8\" thick frame tubes and a belly pan with a standardized 1/2\" hole pattern[cite: 20]. Centered 2x1s increase structural stability [cite: 21], and lateral carbon tubes act as support between vertical 1x1s [cite: 26].</p><p>1/16\" polycarbonate plates are installed on the perimeter to keep balls in and increase storage capacity[cite: 29].</p>",
+                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" [cite: 13]</li><li><b>Material:</b> 1/8\" tubes & belly pan [cite: 20]</li><li><b>Deflectors:</b> 1/16\" Polycarbonate plates [cite: 29]</li></ul>"
+                },
+                "Wheel": {
+                    title: "Swerve Drivetrain",
+                    leftContent: "<p>This year's robot features WCP's X2S swerve modules for increased maneuverability and ability to instantaneously move in any direction to efficiently collect fuel [cite: 11, 12].</p><p>The modules were selected for having the longest wheelbase and lowest weight in the WCP catalog[cite: 15].</p>",
+                    rightContent: "<ul><li><b>Drive Motor:</b> 1x Kraken X60 [cite: 17]</li><li><b>Steer Motor:</b> 1x Kraken X44 [cite: 17]</li><li><b>Ratio:</b> X1 Ratio set [cite: 16]</li><li><b>Treads:</b> Custom 3D printed [cite: 18]</li></ul>"
                 }
             }
         },
