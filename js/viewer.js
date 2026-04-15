@@ -109,18 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: {
                 "Robot": {
                     title: "RICO - Main Assembly",
-                    leftContent: "<p>Rico features a 21.5\" x 33\" chassis [cite: 13] that forms a perfect square when the intake is deployed to maximize storage[cite: 14]. The battery is placed opposite the turret for a balanced center of gravity [cite: 23].</p><p>Advanced localization is achieved using four ThriftyCams [cite: 111] and dual RUBIK Pi co-processors [cite: 106, 109] for 360-degree AprilTag recognition[cite: 111].</p>",
-                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" [cite: 13]</li><li><b>Drivetrain:</b> WCP X2S Swerve [cite: 11]</li><li><b>Vision:</b> 4x ThriftyCam & Dual RUBIK Pi [cite: 106, 109, 111]</li><li><b>Auto:</b> 55+ fuel per match [cite: 107]</li></ul>"
+                    leftContent: "<p>Rico features a 21.5\" x 33\" chassis that forms a perfect square when the intake is deployed to maximize storage. The battery is placed opposite the turret for a balanced center of gravity.</p><p>Advanced localization is achieved using four ThriftyCams and dual RUBIK Pi co-processors for 360-degree AprilTag recognition.</p>",
+                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" </li><li><b>Drivetrain:</b> WCP X2S Swerve </li><li><b>Vision:</b> 4x ThriftyCam & Dual RUBIK Pi </li><li><b>Auto:</b> 55+ fuel per match.</li></ul>"
                 },
                 "Shooter": {
                     title: "Shooter & Turret",
-                    leftContent: "<p>A flywheel mechanism capable of firing ~6 balls per second[cite: 85]. A rotating turret provides independent horizontal aiming [cite: 86], utilizing a cable sleeve for 720&deg; of continuous rotation [cite: 92].</p><p>An adjustable hood with a 41&deg; range of motion [cite: 98] and adjustable flywheel speeds control launch angle and distance[cite: 87].</p>",
-                    rightContent: "<ul><li><b>Turret:</b> 1x Kraken X44 (52:1 ratio) [cite: 90, 91]</li><li><b>Flywheels:</b> 2x Kraken X60 (3:1 ratio) [cite: 94, 95]</li><li><b>Flywheel Type:</b> 6\" Alum w/ O-rings [cite: 96]</li><li><b>Hood:</b> 41&deg; range (270:1 reduction) [cite: 98, 99]</li></ul>"
+                    leftContent: "<p>A flywheel mechanism capable of firing ~6 balls per second. A rotating turret provides independent horizontal aiming, utilizing a cable sleeve for 720&deg; of continuous rotation.</p><p>An adjustable hood with a 41&deg; range of motion and adjustable flywheel speeds control launch angle and distance.</p>",
+                    rightContent: "<ul><li><b>Turret:</b> 1x Kraken X44 (52:1 ratio) </li><li><b>Flywheels:</b> 2x Kraken X60 (3:1 ratio) </li><li><b>Flywheel Type:</b> 6\" Alum w/ O-rings </li><li><b>Hood:</b> 41&deg; range (270:1 reduction) </li></ul>"
                 },
                 "Tunnel": {
                     title: "Tunnel & Tower",
-                    leftContent: "<p>The tunnel collects fuel from the lower indexer and organizes it into a row [cite: 68], providing space for approximately two balls horizontally to prevent jamming[cite: 69]. The tower then moves the fuel vertically into the shooter [cite: 70].</p><p>Stealth wheels with 0.5\" of compression allow for a fast and smooth shift from horizontal to vertical motion[cite: 71].</p>",
-                    rightContent: "<ul><li><b>Motor:</b> 1x Kraken X60 [cite: 73]</li><li><b>Tunnel:</b> Three-belt system [cite: 74]</li><li><b>Tower:</b> 2x4\" and 4x2\" stealth wheels [cite: 77, 78]</li><li><b>Surface Speed:</b> 20 ft/s [cite: 80]</li></ul>"
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer and organizes it into a row, providing space for approximately two balls horizontally to prevent jamming. The tower then moves the fuel vertically into the shooter [cite: 70].</p><p>Stealth wheels with 0.5\" of compression allow for a fast and smooth shift from horizontal to vertical motion[cite: 71].</p>",
+                    rightContent: "<ul><li><b>Motor:</b> 1x Kraken X60 </li><li><b>Tunnel:</b> Three-belt system [cite: 74]</li><li><b>Tower:</b> 2x4\" and 4x2\" stealth wheels [cite: 77, 78]</li><li><b>Surface Speed:</b> 20 ft/s [cite: 80]</li></ul>"
                 },
                 "Intake": {
                     title: "Intake Assembly",
