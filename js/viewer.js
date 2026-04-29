@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Robot", label: "Main Assembly",useLogo: true,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/RicoCool.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/Rico.glb",
                     //poster: "2026/Robot/images/Frame000014.jpg"
                 },
                 { 
@@ -78,25 +78,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 { 
                     id: "Tunnel", label: "Tunnel", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5tunnel.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/tunnel.glb",
                     //poster: "2026/Tunnel/images/Frame000014.jpg"
                 },
                 { 
                     id: "Intake", label: "Intake", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5intake.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/intake2.glb",
                     //poster: "2026/Intake/images/Frame000014.jpg"
                 },
                 { 
                     id: "Indexer", label: "Indexer", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5idexer.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/indexer.glb",
                     //poster: "2026/Indexer/images/Frame000014.jpg"
                 },
                 { 
                     id: "Chassis", label: "Chassis", useLogo: false,
                     is3D: true,
-                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/2026ricoV5chassis2.glb",
+                    src: "https://raw.githubusercontent.com/drewsmash/2026InteractiveRobot/refs/heads/main/chasis.glb",
                     //poster: "2026/Wheel/images/Frame000014.jpg"
                 },
                 { 
