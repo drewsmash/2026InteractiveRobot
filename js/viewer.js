@@ -119,28 +119,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 "Tunnel": {
                     title: "Tunnel & Tower",
-                    leftContent: "<p>The tunnel collects fuel from the lower indexer and organizes it into a row, providing space for approximately two balls horizontally to prevent jamming. The tower then moves the fuel vertically into the shooter [cite: 70].</p><p>Stealth wheels with 0.5\" of compression allow for a fast and smooth shift from horizontal to vertical motion[cite: 71].</p>",
-                    rightContent: "<ul><li><b>Motor:</b> 1x Kraken X60 </li><li><b>Tunnel:</b> Three-belt system [cite: 74]</li><li><b>Tower:</b> 2x4\" and 4x2\" stealth wheels [cite: 77, 78]</li><li><b>Surface Speed:</b> 20 ft/s [cite: 80]</li></ul>"
+                    leftContent: "<p>The tunnel collects fuel from the lower indexer and organizes it into a row, providing space for approximately two balls horizontally to prevent jamming. The tower then moves the fuel vertically into the shooter .</p><p>Stealth wheels with 0.5\" of compression allow for a fast and smooth shift from horizontal to vertical motion.</p>",
+                    rightContent: "<ul><li><b>Motor:</b> 1x Kraken X60 </li><li><b>Tunnel:</b> Three-belt system </li><li><b>Tower:</b> 2x4\" and 4x2\" stealth wheels </li><li><b>Surface Speed:</b> 20 ft/s </li></ul>"
                 },
                 "Intake": {
                     title: "Intake Assembly",
-                    leftContent: "<p>The intake is a single pivot mechanism designed to gather fuel from the floor immediately after contact[cite: 32, 35]. A gear rack driven pivot provides a 92&deg; range of motion for deployment, ball agitation, and stow positions [cite: 33, 39].</p><p>A passive slot plate acts as a static kicker roller to assist fuel transfer into the system[cite: 46, 47].</p>",
-                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 ratio) [cite: 37, 38]</li><li><b>Roller Motors:</b> 2x Kraken X44 [cite: 41]</li><li><b>Rollers:</b> 2\" HDPE w/ CatTongue tape [cite: 42, 43]</li><li><b>Surface Speed:</b> 12.5 ft/s [cite: 44]</li></ul>"
+                    leftContent: "<p>The intake is a single pivot mechanism designed to gather fuel from the floor immediately after contact. A gear rack driven pivot provides a 92&deg; range of motion for deployment, ball agitation, and stow positions.</p><p>A passive slot plate acts as a static kicker roller to assist fuel transfer into the system.</p>",
+                    rightContent: "<ul><li><b>Pivot Motor:</b> 1x Kraken X44 (67:1 ratio) </li><li><b>Roller Motors:</b> 2x Kraken X44 </li><li><b>Rollers:</b> 2\" HDPE w/ CatTongue tape </li><li><b>Surface Speed:</b> 12.5 ft/s </li></ul>"
                 },
                 "Indexer": {
                     title: "Indexer Mechanism",
-                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of spinning carbon fiber rods heavily inclined downwards[cite: 53, 54, 64]. The roller bed pivots around the primary top rod to provide access to the electronics [cite: 55].</p><p>Mecanum wheels act as agitators to ensure the streamlined flow of fuel to the tower[cite: 60].</p>",
-                    rightContent: "<ul><li><b>Motors:</b> 2x Kraken X44 (Shared) [cite: 62]</li><li><b>Rollers:</b> Carbon Fiber w/ CatTongue tape [cite: 64, 65]</li><li><b>Speed:</b> 6.5 ft/s [cite: 63]</li><li><b>Structure:</b> PET-CF brace blocks [cite: 57]</li></ul>"
+                    leftContent: "<p>The indexer transitions fuel from the intake to the tower using a series of spinning carbon fiber rods heavily inclined downwards. The roller bed pivots around the primary top rod to provide access to the electronics .</p><p>Mecanum wheels act as agitators to ensure the streamlined flow of fuel to the tower.</p>",
+                    rightContent: "<ul><li><b>Motors:</b> 2x Kraken X44 (Shared) </li><li><b>Rollers:</b> Carbon Fiber w/ CatTongue tape </li><li><b>Speed:</b> 6.5 ft/s [cite: 63]</li><li><b>Structure:</b> PET-CF brace blocks </li></ul>"
                 },
                 "Chassis": {
                     title: "Chassis",
-                    leftContent: "<p>The chassis utilizes 1/8\" thick frame tubes and a belly pan with a standardized 1/2\" hole pattern[cite: 20]. Centered 2x1s increase structural stability [cite: 21], and lateral carbon tubes act as support between vertical 1x1s [cite: 26].</p><p>1/16\" polycarbonate plates are installed on the perimeter to keep balls in and increase storage capacity[cite: 29].</p>",
-                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" [cite: 13]</li><li><b>Material:</b> 1/8\" tubes & belly pan [cite: 20]</li><li><b>Deflectors:</b> 1/16\" Polycarbonate plates [cite: 29]</li></ul>"
+                    leftContent: "<p>The chassis utilizes 1/8\" thick frame tubes and a belly pan with a standardized 1/2\" hole pattern. Centered 2x1s increase structural stability, and lateral carbon tubes act as support between vertical 1x1s.</p><p>1/16\" polycarbonate plates are installed on the perimeter to keep balls in and increase storage capacity.</p>",
+                    rightContent: "<ul><li><b>Dimensions:</b> 21.5\" x 33\" </li><li><b>Material:</b> 1/8\" tubes & belly pan </li><li><b>Deflectors:</b> 1/16\" Polycarbonate plates </li></ul>"
                 },
                 "Wheel": {
                     title: "Swerve Drivetrain",
-                    leftContent: "<p>This year's robot features WCP's X2S swerve modules for increased maneuverability and ability to instantaneously move in any direction to efficiently collect fuel [cite: 11, 12].</p><p>The modules were selected for having the longest wheelbase and lowest weight in the WCP catalog[cite: 15].</p>",
-                    rightContent: "<ul><li><b>Drive Motor:</b> 1x Kraken X60 [cite: 17]</li><li><b>Steer Motor:</b> 1x Kraken X44 [cite: 17]</li><li><b>Ratio:</b> X1 Ratio set [cite: 16]</li><li><b>Treads:</b> Custom 3D printed [cite: 18]</li></ul>"
+                    leftContent: "<p>This year's robot features WCP's X2S swerve modules for increased maneuverability and ability to instantaneously move in any direction to efficiently collect fuel.</p><p>The modules were selected for having the longest wheelbase and lowest weight in the WCP catalog.</p>",
+                    rightContent: "<ul><li><b>Drive Motor:</b> 1x Kraken X60 </li><li><b>Steer Motor:</b> 1x Kraken X44 </li><li><b>Ratio:</b> X1 Ratio set </li><li><b>Treads:</b> Custom 3D printed </li></ul>"
                 }
             }
         },
